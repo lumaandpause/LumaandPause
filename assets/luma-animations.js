@@ -1,0 +1,238 @@
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (typeof gsap === 'undefined') return;
+
+  var hasScrollTrigger = typeof ScrollTrigger !== 'undefined';
+  if (hasScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* Home Hero entrance */
+  var heroItems = document.querySelectorAll(
+    '.luma-hero__eyebrow, .luma-hero__heading, .luma-hero__subheading, .luma-hero__buttons'
+  );
+  if (heroItems.length) {
+    gsap.set(heroItems, { opacity: 0, y: 28 });
+    gsap.to(heroItems, {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      stagger: 0.12,
+      delay: 0.15,
+    });
+  }
+
+  /* About Hero entrance */
+  var aboutHeroElements = document.querySelectorAll(
+    '.luma-about-hero__eyebrow, .luma-about-hero__heading, .luma-about-hero__text'
+  );
+  if (aboutHeroElements.length) {
+    gsap.set(aboutHeroElements, { opacity: 0, y: 32 });
+    gsap.to(aboutHeroElements, {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      stagger: 0.14,
+      delay: 0.15,
+    });
+  }
+
+  var aboutHeroImage = document.querySelector('.luma-about-hero__media');
+  if (aboutHeroImage) {
+    gsap.set(aboutHeroImage, { opacity: 0, scale: 0.96, y: 20 });
+    gsap.to(aboutHeroImage, {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power2.out',
+      delay: 0.35,
+    });
+  }
+
+  var pressBar = document.querySelector('.luma-hero__press');
+  if (pressBar) {
+    gsap.set(pressBar, { opacity: 0, y: 16 });
+    gsap.to(pressBar, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.55 });
+  }
+
+  /* Hero image parallax */
+  var heroImage = document.querySelector('.luma-hero__image');
+  var heroVisual = document.querySelector('.luma-hero__visual');
+  if (heroImage && heroVisual && hasScrollTrigger) {
+    gsap.set(heroImage, { scale: 1.12, transformOrigin: 'center center' });
+    gsap.to(heroImage, {
+      yPercent: 10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: heroVisual,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  }
+
+  if (!hasScrollTrigger) return;
+
+  /* Timeline Items GSAP Scroll Animation */
+  var timelineContainer = document.querySelector('.luma-timeline');
+  var timelineItems = document.querySelectorAll('.luma-timeline__item');
+  if (timelineContainer && timelineItems.length) {
+    timelineItems.forEach(function (item, index) {
+      var date = item.querySelector('.luma-timeline__date-wrapper');
+      var connector = item.querySelector('.luma-timeline__connector-wrapper');
+      var content = item.querySelector('.luma-timeline__content');
+
+      if (date) gsap.set(date, { opacity: 0, y: 24 });
+      if (connector) gsap.set(connector, { opacity: 0, scaleX: 0.7, transformOrigin: 'left center' });
+      if (content) gsap.set(content, { opacity: 0, y: 24 });
+
+      ScrollTrigger.create({
+        trigger: timelineContainer,
+        start: 'top 82%',
+        once: true,
+        onEnter: function () {
+          var delay = index * 0.12;
+          if (date) gsap.to(date, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: delay });
+          if (connector) gsap.to(connector, { opacity: 1, scaleX: 1, duration: 0.8, ease: 'power3.out', delay: delay + 0.08 });
+          if (content) gsap.to(content, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: delay + 0.16 });
+        },
+      });
+    });
+  }
+
+  /* Team Member Cards Animation */
+  var teamMembers = document.querySelectorAll('.luma-team__member');
+  if (teamMembers.length) {
+    teamMembers.forEach(function (member, i) {
+      var photo = member.querySelector('.luma-team__photo');
+      var info = member.querySelectorAll('.luma-team__name, .luma-team__role');
+
+      if (photo) gsap.set(photo, { opacity: 0, scale: 0.92, y: 24 });
+      if (info.length) gsap.set(info, { opacity: 0, y: 16 });
+
+      ScrollTrigger.create({
+        trigger: member,
+        start: 'top 88%',
+        once: true,
+        onEnter: function () {
+          if (photo) {
+            gsap.to(photo, {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              delay: (i % 4) * 0.1,
+            });
+          }
+          if (info.length) {
+            gsap.to(info, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: 'power2.out',
+              stagger: 0.06,
+              delay: (i % 4) * 0.1 + 0.2,
+            });
+          }
+        },
+      });
+    });
+  }
+
+  /* Groups whose direct children stagger in together */
+  document.querySelectorAll('[data-animate="stagger"]').forEach(function (container) {
+    if (container.classList.contains('luma-timeline__list') || container.classList.contains('luma-team__grid')) {
+      return; // Handled specifically above for higher polish
+    }
+    var items = container.children;
+    if (!items.length) return;
+    gsap.set(items, { opacity: 0, y: 36 });
+    ScrollTrigger.create({
+      trigger: container,
+      start: 'top 85%',
+      once: true,
+      onEnter: function () {
+        gsap.to(items, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.08 });
+      },
+    });
+  });
+
+  /* Single fade-up reveals */
+  document.querySelectorAll('[data-animate="fade-up"]').forEach(function (el) {
+    gsap.set(el, { opacity: 0, y: 32 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: function () {
+        gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+      },
+    });
+  });
+
+  /* Side reveals, used for paired columns (e.g. story splits) */
+  document.querySelectorAll('[data-animate="from-left"]').forEach(function (el) {
+    gsap.set(el, { opacity: 0, x: -40 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: function () {
+        gsap.to(el, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' });
+      },
+    });
+  });
+
+  document.querySelectorAll('[data-animate="from-right"]').forEach(function (el) {
+    gsap.set(el, { opacity: 0, x: 40 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: function () {
+        gsap.to(el, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' });
+      },
+    });
+  });
+
+  /* Collection Grid Items Stagger Entrance */
+  var collectionGridItems = document.querySelectorAll('.product-grid .grid__item');
+  if (collectionGridItems.length && hasScrollTrigger) {
+    collectionGridItems.forEach(function (item, i) {
+      gsap.set(item, { opacity: 0, y: 28 });
+      ScrollTrigger.create({
+        trigger: item,
+        start: 'top 88%',
+        once: true,
+        onEnter: function () {
+          gsap.to(item, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+            delay: (i % 4) * 0.08,
+          });
+        },
+      });
+    });
+  }
+
+  /* PDP Section Card Entrance Reveals */
+  var pdpCards = document.querySelectorAll('.luma-pdp-benefits__card, .luma-pdp-ingredients__card, .luma-pdp-how-to-use__card');
+  if (pdpCards.length && hasScrollTrigger) {
+    pdpCards.forEach(function (card) {
+      gsap.set(card, { opacity: 0, y: 30 });
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 86%',
+        once: true,
+        onEnter: function () {
+          gsap.to(card, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+        },
+      });
+    });
+  }
+});

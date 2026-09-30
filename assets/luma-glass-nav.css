@@ -1,0 +1,337 @@
+/* Luma Pause — header, layered over the offer strip */
+
+.shopify-section-group-header-group .header-wrapper {
+  background-color: transparent;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.shopify-section-group-header-group .header-wrapper--border-bottom {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+}
+
+.shopify-section-header-sticky .header-wrapper {
+  background-color: rgba(var(--color-background), 0.78);
+  box-shadow: 0 8px 24px rgba(47, 58, 36, 0.06);
+}
+
+/* High contrast for navbar logo on dark headers */
+.header-wrapper.color-scheme-4 .header__heading-logo,
+.header-wrapper.color-scheme-5 .header__heading-logo,
+.header-wrapper--border-bottom.color-scheme-4 .header__heading-logo {
+  filter: invert(1) hue-rotate(180deg) brightness(1.28) contrast(1.12);
+}
+
+/* ==========================================================================
+   Desktop Header & Navigation Styling (Matching Reference)
+   - Uppercase bold navlinks, no underlines
+   - Right icon sequence: [Account] -> [Cart] -> [Search]
+   - Proportional, clean icon sizing (Cart icon no longer oversized)
+   ========================================================================== */
+@media screen and (min-width: 990px) {
+  .header--middle-left {
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: 'heading navigation icons' !important;
+    align-items: center !important;
+    padding-top: 1.6rem !important;
+    padding-bottom: 1.6rem !important;
+  }
+
+  .header__heading-logo-wrapper {
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .header__heading-logo {
+    max-height: 5.2rem !important;
+    width: auto !important;
+    object-fit: contain;
+  }
+
+  .header--middle-left .header__inline-menu {
+    justify-self: center !important;
+    text-align: center !important;
+  }
+
+  .header--middle-left .header__inline-menu .list-menu--inline {
+    justify-content: center !important;
+    gap: 3.4rem !important;
+  }
+
+  /* Navlinks typography */
+  .header__menu-item {
+    font-family: inherit !important;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: rgb(var(--color-foreground)) !important;
+    padding: 0.8rem 0.4rem !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .header__menu-item span,
+  .header__active-menu-item,
+  .list-menu__item--active {
+    text-decoration: none !important;
+  }
+
+  .header__menu-item:hover,
+  .header__menu-item:hover span,
+  .header__active-menu-item {
+    color: #B66F75 !important;
+    text-decoration: none !important;
+  }
+
+  /* Desktop Right Action Icons: Sequence [Account] -> [Cart] -> [Search] */
+  .header__icons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.4rem !important;
+  }
+
+  /* Account Icon (1st) */
+  .header__icon--account,
+  shopify-account.header__icon,
+  .header__icons .header__icon--account {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    color: rgb(var(--color-foreground)) !important;
+    transition: color 0.2s ease !important;
+  }
+
+  /* Cart Icon (2nd) */
+  .header__icon--cart,
+  .header__icons .header__icon--cart {
+    order: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    position: relative !important;
+    color: rgb(var(--color-foreground)) !important;
+    transition: color 0.2s ease !important;
+  }
+
+  /* Search Icon (3rd) */
+  .header__icons .header__search,
+  .header__icons details-modal.header__search,
+  .header__icons details.modal {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 4rem !important;
+    height: 4rem !important;
+  }
+
+  .header__icons .header__search .header__icon {
+    width: 4rem !important;
+    height: 4rem !important;
+    color: rgb(var(--color-foreground)) !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .header__icon:hover,
+  .header__icon:hover svg,
+  .header__icon:hover .icon {
+    color: #B66F75 !important;
+  }
+
+  /* Desktop Icon Sizes - Balanced & Proportional */
+  .header__icon .icon,
+  .header__icon svg {
+    width: 2.05rem !important;
+    height: 2.05rem !important;
+    display: block !important;
+  }
+
+  .header__icon--cart .icon,
+  .header__icon--cart svg {
+    width: 2.1rem !important;
+    height: 2.1rem !important;
+  }
+
+  .cart-count-bubble {
+    bottom: 2.3rem !important;
+    left: 2.3rem !important;
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    font-size: 1rem !important;
+    background-color: #B66F75 !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile Navbar Layout (Matching Reference: Logo Left, Icons Right)
+   Icon sequence: [Account] -> [Cart] -> [Search] -> [Hamburger Menu]
+   ========================================================================== */
+@media screen and (max-width: 989px) {
+  .header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+    padding-left: 1.6rem !important;
+    padding-right: 1.6rem !important;
+    grid-template-columns: unset !important;
+    grid-template-areas: unset !important;
+  }
+
+  /* 1. Logo on the far left */
+  .header__heading,
+  .header__heading-link {
+    order: 1 !important;
+    margin: 0 !important;
+    margin-right: auto !important;
+    text-align: left !important;
+    justify-self: start !important;
+    display: flex !important;
+    align-items: center !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+
+  .header__heading-logo-wrapper {
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .header__heading-logo {
+    max-height: 4.4rem !important;
+    width: auto !important;
+    object-fit: contain;
+  }
+
+  /* 2. Group Action Icons on the right */
+  .header__icons {
+    order: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.2rem !important;
+    padding-right: 0 !important;
+    margin-left: auto !important;
+    width: auto !important;
+  }
+
+  /* Account Icon (1st in icons group) */
+  .header__icon--account,
+  shopify-account.header__icon,
+  .header__icons .header__icon--account {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    min-width: 3.8rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Cart Icon (2nd in icons group) */
+  .header__icon--cart,
+  .header__icons .header__icon--cart {
+    order: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+  }
+
+  /* Search Icon (3rd in icons group) */
+  .header__icons .header__search,
+  .header__icons details-modal.header__search,
+  .header__icons details.modal {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    margin: 0 !important;
+  }
+
+  .header__icons .header__search .header__icon {
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide redundant left search modal on mobile */
+  .header > .header__search {
+    display: none !important;
+  }
+
+  /* 3. Hamburger Menu Drawer (4th - Far Right) */
+  header-drawer {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 0 0 0.1rem !important;
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+  }
+
+  header-drawer .header__icon--menu {
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .header__icon .icon,
+  .header__icon svg {
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+    display: block !important;
+  }
+
+  .header__icon--cart .icon,
+  .header__icon--cart svg {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+
+  .cart-count-bubble {
+    bottom: 2.2rem !important;
+    left: 2.2rem !important;
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    font-size: 1rem !important;
+    background-color: #B66F75 !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile menu drawer — GSAP-driven open/close
+   `luma-drawer-gsap` is set on <html> by assets/luma-menu-drawer-animation.js
+   only while it is actually driving the panel, so Dawn's CSS slide stays as
+   the fallback when GSAP is unavailable or motion is reduced. Dawn's
+   transform transition has to be off here, or it fights GSAP's per-frame
+   inline transforms. Submenus (.menu-drawer__submenu) keep Dawn's slide.
+   ========================================================================== */
+html.luma-drawer-gsap .menu-drawer {
+  transition: none !important;
+}

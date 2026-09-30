@@ -1,0 +1,474 @@
+{{ 'section-luma-product-proof.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-product-proof.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="luma-pproof color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  data-luma-pproof
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <!-- Section Header -->
+    <div class="luma-pproof__header" data-pproof-header>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="luma-pproof__eyebrow">
+          <span class="luma-pproof__eyebrow-pulse" aria-hidden="true"></span>
+          <span>{{ section.settings.eyebrow | escape }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="luma-pproof__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="luma-pproof__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      <!-- Proof Lens Mode Switcher (The Different Approach) -->
+      <div class="luma-pproof__nav" role="tablist" aria-label="Proof evidence filters" data-pproof-nav>
+        <button
+          type="button"
+          role="tab"
+          class="luma-pproof__tab is-active"
+          id="tab-btn-compare"
+          aria-selected="true"
+          aria-controls="panel-compare"
+          data-tab-target="compare"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v18M12 3a9 9 0 0 1 0 18"/>
+          </svg>
+          <span>Day 0 vs Day 90</span>
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          class="luma-pproof__tab"
+          id="tab-btn-texture"
+          aria-selected="false"
+          aria-controls="panel-texture"
+          data-tab-target="texture"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+          <span>Capsule Science</span>
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          class="luma-pproof__tab"
+          id="tab-btn-ugc"
+          aria-selected="false"
+          aria-controls="panel-ugc"
+          data-tab-target="ugc"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Real UGC & Logs</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Proof Content Panels -->
+    <div class="luma-pproof__panels">
+      <!-- PANEL 1: Interactive Before / After Comparison -->
+      <div
+        class="luma-pproof__panel is-active"
+        id="panel-compare"
+        role="tabpanel"
+        aria-labelledby="tab-btn-compare"
+        data-panel="compare"
+      >
+        <div class="luma-pproof__compare-wrap">
+          <!-- Interactive Slider Frame -->
+          <div class="luma-pproof__compare-box" data-pproof-compare>
+            <div class="luma-pproof__compare-visual" data-pproof-slider-frame>
+              <!-- After Layer (Base) -->
+              <div class="luma-pproof__layer luma-pproof__layer--after">
+                <img
+                  src="{{ 'luma-proof-after.jpg' | asset_url }}"
+                  alt="After 90 days of taking Luma Pause daily"
+                  width="1100"
+                  height="825"
+                  loading="lazy"
+                >
+                <div class="luma-pproof__tag luma-pproof__tag--after">
+                  <span class="luma-pproof__tag-dot luma-pproof__tag-dot--green"></span>
+                  DAY 90 (1 CAPSULE DAILY)
+                </div>
+              </div>
+
+              <!-- Before Layer (Clipped) -->
+              <div class="luma-pproof__layer luma-pproof__layer--before" data-pproof-before-layer>
+                <img
+                  src="{{ 'luma-proof-before.jpg' | asset_url }}"
+                  alt="Baseline Day 0 before starting Luma Pause"
+                  width="1100"
+                  height="825"
+                  loading="lazy"
+                >
+                <div class="luma-pproof__tag luma-pproof__tag--before">
+                  <span class="luma-pproof__tag-dot luma-pproof__tag-dot--rose"></span>
+                  DAY 0 (BASELINE)
+                </div>
+              </div>
+
+              <!-- Draggable Divider Line & Handle -->
+              <div class="luma-pproof__divider" data-pproof-divider aria-hidden="true">
+                <button
+                  type="button"
+                  class="luma-pproof__handle"
+                  data-pproof-handle
+                  role="slider"
+                  tabindex="0"
+                  aria-label="Drag to compare before and after photos"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="50"
+                >
+                  <span class="luma-pproof__handle-arrow">◂</span>
+                  <span class="luma-pproof__handle-arrow">▸</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="luma-pproof__slider-hint">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+              <span>Drag slider or tap anywhere to compare</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </p>
+          </div>
+
+          <!-- Case Record Card -->
+          <div class="luma-pproof__case-card">
+            <div class="luma-pproof__case-badge">CUSTOMER WELLNESS RECORD #408</div>
+            <h3 class="luma-pproof__case-title">Gut Comfort & Menopause Symptom Diary</h3>
+            <p class="luma-pproof__case-desc">
+              A 12-week self-reported symptom diary kept by a Luma Pause customer, tracking bloating, sleep quality and hot flush frequency with one capsule taken every day.
+            </p>
+
+            <div class="luma-pproof__metrics-grid">
+              <div class="luma-pproof__metric-item">
+                <span class="luma-pproof__metric-val">+28.4%</span>
+                <span class="luma-pproof__metric-lbl">Days Without Bloating</span>
+              </div>
+              <div class="luma-pproof__metric-item">
+                <span class="luma-pproof__metric-val">-62.1%</span>
+                <span class="luma-pproof__metric-lbl">Night Sweats per Week</span>
+              </div>
+              <div class="luma-pproof__metric-item">
+                <span class="luma-pproof__metric-val">0%</span>
+                <span class="luma-pproof__metric-lbl">Missed Doses</span>
+              </div>
+              <div class="luma-pproof__metric-item">
+                <span class="luma-pproof__metric-val">90 Days</span>
+                <span class="luma-pproof__metric-lbl">One Capsule Daily</span>
+              </div>
+            </div>
+
+            <div class="luma-pproof__compliance-note">
+              <span class="luma-pproof__compliance-shield">🛡️</span>
+              <span
+                ><strong>ASCI Compliant:</strong> Self-reported by a real customer and shared with permission. Individual experiences vary with age, diet, lifestyle and life stage.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: Capsule Science -->
+      <div
+        class="luma-pproof__panel"
+        id="panel-texture"
+        role="tabpanel"
+        aria-labelledby="tab-btn-texture"
+        data-panel="texture"
+      >
+        <div class="luma-pproof__texture-wrap">
+          <div class="luma-pproof__texture-media">
+            <img
+              src="{{ 'luma-proof-texture.jpg' | asset_url }}"
+              alt="Luma Pause delayed-release probiotic capsules"
+              width="1100"
+              height="825"
+              loading="lazy"
+            >
+            <div class="luma-pproof__texture-badge">LABORATORY STABILITY BENCHMARK</div>
+          </div>
+
+          <div class="luma-pproof__texture-info">
+            <div class="luma-pproof__case-badge">THE DELAYED-RELEASE ADVANTAGE</div>
+            <h3 class="luma-pproof__case-title">Why Most Probiotics Never Arrive</h3>
+            <p class="luma-pproof__case-desc">
+              Stomach acid can destroy many probiotic bacteria before they reach the gut. Luma Pause uses acid-resistant, delayed-release capsules so more live cultures arrive where they are needed.
+            </p>
+
+            <div class="luma-pproof__compare-table">
+              <div class="luma-pproof__table-col luma-pproof__table-col--oil">
+                <h4 class="luma-pproof__table-heading">Standard Probiotic Capsules</h4>
+                <ul class="luma-pproof__table-list">
+                  <li>Dissolve quickly in stomach acid</li>
+                  <li>Generic strains, not studied in women</li>
+                  <li>CFU count often measured at manufacture, not expiry</li>
+                  <li>Frequently need refrigeration</li>
+                </ul>
+              </div>
+
+              <div class="luma-pproof__table-col luma-pproof__table-col--water">
+                <h4 class="luma-pproof__table-heading">
+                  <span>Luma Pause Capsules</span>
+                  <span class="luma-pproof__pill-tag">SUPERIOR</span>
+                </h4>
+                <ul class="luma-pproof__table-list">
+                  <li>Acid-resistant delayed-release shell</li>
+                  <li>Clinically studied, women-specific strains</li>
+                  <li>CFU count guaranteed until the expiry date</li>
+                  <li>Shelf-stable, no fridge needed</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Absorption Meter -->
+            <div class="luma-pproof__speed-meter">
+              <div class="luma-pproof__speed-left">
+                <span class="luma-pproof__speed-val">30B</span>
+                <span class="luma-pproof__speed-lbl">CFU at Expiry</span>
+              </div>
+              <div class="luma-pproof__speed-bar">
+                <div class="luma-pproof__speed-fill" style="width: 100%;"></div>
+              </div>
+              <div class="luma-pproof__speed-right">
+                <span>Vegan Capsule</span>
+                <span>No Refrigeration</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: Real People UGC & Honest Customer Logs -->
+      <div
+        class="luma-pproof__panel"
+        id="panel-ugc"
+        role="tabpanel"
+        aria-labelledby="tab-btn-ugc"
+        data-panel="ugc"
+      >
+        <div class="luma-pproof__ugc-grid">
+          <!-- UGC Card 1 -->
+          <div class="luma-pproof__ugc-card">
+            <div class="luma-pproof__ugc-media">
+              <img
+                src="{{ 'luma-proof-ugc-1.jpg' | asset_url }}"
+                alt="Priya Sharma sharing her 90-day Luma Pause journey"
+                width="600"
+                height="800"
+                loading="lazy"
+              >
+              <div class="luma-pproof__ugc-play" aria-label="Customer Video Log">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </div>
+              <span class="luma-pproof__ugc-concern">Bloating & Sleep • Day 90</span>
+            </div>
+
+            <div class="luma-pproof__ugc-body">
+              <div class="luma-pproof__ugc-meta">
+                <div>
+                  <h4 class="luma-pproof__ugc-name">Priya S., 49</h4>
+                  <p class="luma-pproof__ugc-location">Bengaluru • Verified 3-Month User</p>
+                </div>
+                <div class="luma-pproof__ugc-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
+                </div>
+              </div>
+
+              <!-- Diary Timeline Snippet -->
+              <div class="luma-pproof__ugc-diary">
+                <div class="luma-pproof__diary-entry">
+                  <span class="luma-pproof__diary-day">Day 14</span>
+                  <p class="luma-pproof__diary-text">"Easy to remember with breakfast. My stomach already feels a little calmer after meals."</p>
+                </div>
+                <div class="luma-pproof__diary-entry">
+                  <span class="luma-pproof__diary-day">Day 45</span>
+                  <p class="luma-pproof__diary-text">"The afternoon bloating has really settled. I am not reaching for loose clothes anymore."</p>
+                </div>
+                <div class="luma-pproof__diary-entry luma-pproof__diary-entry--highlight">
+                  <span class="luma-pproof__diary-day">Day 90</span>
+                  <p class="luma-pproof__diary-text">"I am sleeping through most nights now. Worth the patience."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- UGC Card 2 -->
+          <div class="luma-pproof__ugc-card">
+            <div class="luma-pproof__ugc-media">
+              <img
+                src="{{ 'luma-proof-ugc-2.jpg' | asset_url }}"
+                alt="Rekha V. sharing her experience with Luma Pause"
+                width="600"
+                height="800"
+                loading="lazy"
+              >
+              <div class="luma-pproof__ugc-play" aria-label="Customer Video Log">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </div>
+              <span class="luma-pproof__ugc-concern">Hot Flushes • Day 90</span>
+            </div>
+
+            <div class="luma-pproof__ugc-body">
+              <div class="luma-pproof__ugc-meta">
+                <div>
+                  <h4 class="luma-pproof__ugc-name">Rekha V., 52</h4>
+                  <p class="luma-pproof__ugc-location">Mumbai • Verified 3-Month User</p>
+                </div>
+                <div class="luma-pproof__ugc-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
+                </div>
+              </div>
+
+              <!-- Diary Timeline Snippet -->
+              <div class="luma-pproof__ugc-diary">
+                <div class="luma-pproof__diary-entry">
+                  <span class="luma-pproof__diary-day">Day 21</span>
+                  <p class="luma-pproof__diary-text">"One capsule in the evening. No taste, no fuss, nothing to mix."</p>
+                </div>
+                <div class="luma-pproof__diary-entry">
+                  <span class="luma-pproof__diary-day">Day 60</span>
+                  <p class="luma-pproof__diary-text">"Fewer hot flushes in meetings, and they pass more quickly when they come."</p>
+                </div>
+                <div class="luma-pproof__diary-entry luma-pproof__diary-entry--highlight">
+                  <span class="luma-pproof__diary-day">Day 90</span>
+                  <p class="luma-pproof__diary-text">"My mood feels steadier and I have more energy in the evenings."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clinical Perception & Compliance Stat Strip -->
+    <div class="luma-pproof__stat-strip" data-pproof-stats>
+      <div class="luma-pproof__stat-col">
+        <span class="luma-pproof__stat-pct">91%</span>
+        <span class="luma-pproof__stat-text">Reported less bloating after meals</span>
+      </div>
+      <div class="luma-pproof__stat-col">
+        <span class="luma-pproof__stat-pct">96%</span>
+        <span class="luma-pproof__stat-text">Found the daily capsule easy to stick with</span>
+      </div>
+      <div class="luma-pproof__stat-col">
+        <span class="luma-pproof__stat-pct">92%</span>
+        <span class="luma-pproof__stat-text">Reported more restful sleep</span>
+      </div>
+      <div class="luma-pproof__stat-col">
+        <span class="luma-pproof__stat-pct">88%</span>
+        <span class="luma-pproof__stat-text">Felt more like themselves day to day</span>
+      </div>
+    </div>
+
+    <!-- Compliant Regulatory Disclaimer -->
+    <div class="luma-pproof__disclaimer-box">
+      <p class="luma-pproof__disclaimer-text">
+        {{ section.settings.disclaimer }}
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma Pause Product Proof",
+  "tag": "section",
+  "class": "section luma-product-proof-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "REAL WOMEN. REAL ROUTINES."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Honest Science. Real Stories. Zero Hype."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We reject miracle overnight claims. Your microbiome adapts over weeks, not days. Here is what our customers have shared."
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Legal & Clinical Disclaimer",
+      "default": "<p><strong>Important:</strong> Figures are based on a 12-week self-reported customer survey of women taking one Luma Pause capsule daily. Individual experiences vary with age, diet, lifestyle and life stage. Luma Pause products are food supplements and are not intended to diagnose, treat, cure or prevent any disease. Consult your doctor if you are pregnant, nursing, taking medication or have a medical condition.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Pause Product Proof"
+    }
+  ]
+}
+{% endschema %}

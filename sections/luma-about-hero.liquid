@@ -1,0 +1,201 @@
+{{ 'section-luma-about-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="luma-about-hero{% if section.settings.image != blank %} luma-about-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="luma-about-hero__inner page-width" data-animate="fade-up">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="luma-about-hero__badge">
+        <span class="luma-about-hero__dot" aria-hidden="true"></span>
+        <span class="luma-about-hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="luma-about-hero__heading">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+    {%- if section.settings.lead_text != blank -%}
+      <div class="luma-about-hero__lead rte">{{ section.settings.lead_text }}</div>
+    {%- elsif section.settings.text != blank and section.blocks.size == 0 -%}
+      <div class="luma-about-hero__lead rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="luma-about-hero__pillars page-width" data-animate="stagger">
+      {%- for block in section.blocks -%}
+        <div class="luma-about-hero__pillar-card" {{ block.shopify_attributes }}>
+          <div class="luma-about-hero__pillar-header">
+            <span class="luma-about-hero__pillar-num">{{ block.settings.number | escape }}</span>
+            <span class="luma-about-hero__pillar-label">{{ block.settings.title | escape }}</span>
+          </div>
+          {%- if block.settings.subtitle != blank -%}
+            <h2 class="luma-about-hero__pillar-title">{{ block.settings.subtitle | escape }}</h2>
+          {%- endif -%}
+          {%- if block.settings.content != blank -%}
+            <p class="luma-about-hero__pillar-content">{{ block.settings.content | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.principle_quote != blank -%}
+    <div class="luma-about-hero__principle-wrapper page-width" data-animate="fade-up">
+      <div class="luma-about-hero__principle-card">
+        <div class="luma-about-hero__principle-badge">
+          <span class="luma-about-hero__principle-dot" aria-hidden="true"></span>
+          <span>{{ section.settings.principle_tag | default: "CORE PRINCIPLE" | escape }}</span>
+        </div>
+        <blockquote class="luma-about-hero__principle-quote">
+          “{{ section.settings.principle_quote | escape }}”
+        </blockquote>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.image != blank -%}
+    <div class="luma-about-hero__media page-width">
+      {{
+        section.settings.image
+        | image_url: width: 2000
+        | image_tag:
+          loading: 'eager',
+          widths: '750, 1100, 1500, 2000',
+          class: 'luma-about-hero__image',
+          alt: section.settings.image.alt | default: section.settings.heading | escape
+      }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Luma Pause about hero",
+  "tag": "section",
+  "class": "section luma-about-hero-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "About Luma Pause"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made for the pause. <strong>Made for you.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "lead_text",
+      "label": "Lead Intro Text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Fallback text (if no blocks)",
+      "default": "<p>At Luma Pause, we believe confidence is built on visible results, credible science and products that earn their place in your routine.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Core Principle Statement"
+    },
+    {
+      "type": "text",
+      "id": "principle_tag",
+      "label": "Principle Tag",
+      "default": "OUR FOUNDING PRINCIPLE"
+    },
+    {
+      "type": "textarea",
+      "id": "principle_quote",
+      "label": "Principle Quote",
+      "default": "Every claim should have a reason, every ingredient should have a role, and every product should have something to Luma Pause."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Optional. Leave blank for a text-only hero."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Brand Pillar",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number / Index",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Pillar Category",
+          "default": "PURPOSE"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Pillar Title",
+          "default": "Visible Confidence"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Pillar Content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Pause about hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,176 @@
+{{ 'section-luma-process-steps.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="luma-process color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="luma-process__header page-width page-width--narrow" data-animate="fade-up">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="luma-process__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="luma-process__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="luma-process__text rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="luma-process__list page-width" data-animate="stagger">
+      {%- for block in section.blocks -%}
+        {%- assign step_number = forloop.index | prepend: '0' | slice: -2, 2 -%}
+        <div class="luma-process__step" {{ block.shopify_attributes }}>
+          <span class="luma-process__number" aria-hidden="true">{{ step_number }}</span>
+          <div class="luma-process__step-content">
+            {%- if block.settings.title != blank -%}
+              <h3 class="luma-process__step-title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="luma-process__step-description">{{ block.settings.description }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Luma Pause process steps",
+  "tag": "section",
+  "class": "section luma-process-steps-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our Process"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Insight-led. <strong>Intentionally built.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Every formula follows the same disciplined path from question to shelf.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Listen first"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We start by listening to women about what perimenopause and menopause actually feel like, before a single strain is chosen."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Luma Pause process steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Listen first",
+            "description": "We start by listening to women about what perimenopause and menopause actually feel like, before a single strain is chosen."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Define the challenge",
+            "description": "Insights are shaped into a structured brief with clear, measurable performance goals."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Engineer with intent",
+            "description": "Clinically studied strains are selected and combined based on the evidence for how they support women’s health."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Test for performance",
+            "description": "Each formula runs through stability, potency and safety testing before it goes anywhere near a customer."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Validate at scale",
+            "description": "Formulas are refined through real-world use by women at different stages of the transition."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Deliver with precision",
+            "description": "Capsules are produced in GMP-certified facilities, with the same quality and potency checks on every batch."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,325 @@
+{{ 'section-luma-timeline.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="luma-timeline color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding" data-section-id="{{ section.id }}">
+  <div class="luma-timeline__header page-width page-width--narrow" data-animate="fade-up">
+    <div class="luma-timeline__header-text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="luma-timeline__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="luma-timeline__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="luma-timeline__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="luma-timeline__container" data-timeline-container>
+      <div class="luma-timeline__track" data-timeline-track tabindex="0" role="region" aria-label="Timeline milestones">
+        {%- for block in section.blocks -%}
+          <div class="luma-timeline__item" {{ block.shopify_attributes }} data-timeline-item data-index="{{ forloop.index0 }}">
+            <div class="luma-timeline__date-wrapper">
+              {%- if block.settings.year != blank -%}
+                <span class="luma-timeline__year">{{ block.settings.year | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.label != blank -%}
+                <span class="luma-timeline__label">{{ block.settings.label | escape }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="luma-timeline__connector-wrapper" aria-hidden="true">
+              <div class="luma-timeline__node">
+                <span class="luma-timeline__node-dot"></span>
+                <span class="luma-timeline__node-pulse"></span>
+              </div>
+              {%- unless forloop.last -%}
+                <div class="luma-timeline__rail">
+                  <div class="luma-timeline__line"></div>
+                  <div class="luma-timeline__arrow-stream">
+                    <span class="luma-timeline__animated-arrow arrow-1">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </span>
+                    <span class="luma-timeline__animated-arrow arrow-2">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              {%- else -%}
+                <div class="luma-timeline__rail luma-timeline__rail--end">
+                  <div class="luma-timeline__line luma-timeline__line--fade"></div>
+                </div>
+              {%- endunless -%}
+            </div>
+
+            <div class="luma-timeline__content">
+              {%- if block.settings.title != blank -%}
+                <h3 class="luma-timeline__item-title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="luma-timeline__item-description">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="luma-timeline__progress-wrapper" aria-hidden="true">
+        <div class="luma-timeline__progress-bar">
+          <div class="luma-timeline__progress-thumb" data-timeline-progress></div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function() {
+    function initTimeline(section) {
+      const track = section.querySelector('[data-timeline-track]');
+      if (!track) return;
+
+      const progressThumb = section.querySelector('[data-timeline-progress]');
+      const items = section.querySelectorAll('[data-timeline-item]');
+
+      function updateControls() {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        const currentScroll = track.scrollLeft;
+
+        if (progressThumb && maxScroll > 0) {
+          const percentage = Math.min(Math.max((currentScroll / maxScroll) * 100, 0), 100);
+          progressThumb.style.width = Math.max(percentage, 15) + '%';
+          progressThumb.style.transform = 'translateX(' + (currentScroll / maxScroll * (100 - parseFloat(progressThumb.style.width))) + '%)';
+        }
+      }
+
+      track.addEventListener('scroll', updateControls, { passive: true });
+      window.addEventListener('resize', updateControls);
+      setTimeout(updateControls, 100);
+
+      function scrollByCard(direction) {
+        const itemWidth = items[0] ? items[0].getBoundingClientRect().width + 32 : 360;
+        track.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
+      }
+
+      // Mouse drag to scroll
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      track.addEventListener('mousedown', function(e) {
+        isDown = true;
+        track.classList.add('is-dragging');
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', function() {
+        if (!isDown) return;
+        isDown = false;
+        track.classList.remove('is-dragging');
+      });
+
+      track.addEventListener('mousemove', function(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 1.6;
+        track.scrollLeft = scrollLeft - walk;
+      });
+
+      // Keyboard navigation
+      track.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') {
+          scrollByCard(1);
+        } else if (e.key === 'ArrowLeft') {
+          scrollByCard(-1);
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.luma-timeline').forEach(initTimeline);
+    });
+
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function(e) {
+        if (e.target.classList.contains('luma-timeline-section') || e.target.querySelector('.luma-timeline')) {
+          const el = e.target.classList.contains('luma-timeline') ? e.target : e.target.querySelector('.luma-timeline');
+          if (el) initTimeline(el);
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Luma Pause timeline",
+  "tag": "section",
+  "class": "section luma-timeline-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Journey So Far"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shaped by listening and <strong>a commitment to real care.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year",
+          "default": "2019"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Month / label",
+          "default": "FEBRUARY"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "The beginning"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Why is menopause care still so hard to talk about, so confusing to shop for, and so rarely designed around how women actually feel?"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Luma Pause timeline",
+      "blocks": [
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "01",
+            "label": "",
+            "title": "It Started With a Question",
+            "description": "Why is menopause care still so hard to talk about, so confusing to shop for, and so rarely designed around how women actually feel?"
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "02",
+            "label": "",
+            "title": "We Chose to Build Differently",
+            "description": "Luma Pause was created around a simple idea: combine credible microbiome science, gentle formulation and calm, beautiful design — without fear-based claims."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "03",
+            "label": "",
+            "title": "We Looked at the Whole Picture",
+            "description": "Bloating. Hot flushes. Poor sleep. Mood changes. Intimate discomfort. We looked at how these connect through the microbiome, rather than treating each in isolation."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "04",
+            "label": "",
+            "title": "The System Took Shape",
+            "description": "From that thinking came our first probiotic ritual: BALANCE · SUPPORT · RESTORE — three focused steps for the gut, the body and intimate flora."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "05",
+            "label": "",
+            "title": "Every Detail Was Refined",
+            "description": "Strains, doses, capsules, packaging and claims were repeatedly reviewed with one standard in mind: every ingredient should have a role, and every product should earn its place in your day."
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "06",
+            "label": "",
+            "title": "This Is Only the Beginning",
+            "description": "Luma Pause begins with probiotics, but the ambition is broader: to be a trusted companion for women through every stage of midlife."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,162 @@
+/* Luma Pause PDP — Bio-Active Ingredients Spotlight */
+
+.luma-pdp-ingredients {
+  padding: 5.6rem 0;
+}
+
+.luma-pdp-ingredients__header {
+  text-align: center;
+  max-width: 64rem;
+  margin: 0 auto 4rem;
+}
+
+.luma-pdp-ingredients__eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin: 0 0 0.8rem;
+}
+
+.luma-pdp-ingredients__title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(3rem, 4.5vw, 4.2rem);
+  line-height: 1.05;
+  font-weight: 400;
+  color: #2F3A24;
+  margin: 0 0 1.2rem;
+  text-wrap: balance;
+}
+
+.luma-pdp-ingredients__subtitle {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.5rem;
+  color: #8C9479;
+  margin: 0;
+}
+
+.luma-pdp-ingredients__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+
+@media screen and (min-width: 640px) {
+  .luma-pdp-ingredients__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .luma-pdp-ingredients__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.4rem;
+  }
+}
+
+.luma-pdp-ingredients__card {
+  background-color: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.08);
+  border-radius: 2rem;
+  padding: 2.8rem 2.2rem;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 16px -2px rgba(47, 58, 36, 0.03);
+}
+
+.luma-pdp-ingredients__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -6px rgba(47, 58, 36, 0.08);
+  border-color: rgba(182, 111, 117, 0.3);
+}
+
+.luma-pdp-ingredients__badge {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #B66F75;
+  background-color: rgba(182, 111, 117, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  margin-bottom: 1.4rem;
+}
+
+.luma-pdp-ingredients__name {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2F3A24;
+  margin: 0 0 0.4rem;
+}
+
+.luma-pdp-ingredients__role {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin: 0 0 1.2rem;
+}
+
+.luma-pdp-ingredients__desc {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.55;
+  color: #8C9479;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile: swipeable card row instead of a tall stacked column.
+   CSS only — no markup change. The negative inline margin lets the track bleed
+   out of .page-width's 1.5rem gutter to the viewport edge, while the matching
+   padding keeps the first card optically aligned with the heading above it.
+   The card width leaves the next card peeking, which is what signals "swipe".
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-pdp-ingredients__grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 1.2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* stop a horizontal swipe triggering browser back-navigation */
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 0.4rem;
+    scroll-padding-left: 1.5rem;
+    scroll-padding-inline-start: 1.5rem;
+  }
+
+  .luma-pdp-ingredients__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .luma-pdp-ingredients__card {
+    flex: 0 0 78%;
+    max-width: 30rem;
+    scroll-snap-align: start;
+    scroll-margin-left: 1.5rem;
+    scroll-margin-inline-start: 1.5rem;
+  }
+
+  /* A flex row already equalises card heights; make sure a hover transform
+     left over from the desktop grid cannot nudge cards mid-scroll. */
+  .luma-pdp-ingredients__card:hover {
+    transform: none;
+  }
+}

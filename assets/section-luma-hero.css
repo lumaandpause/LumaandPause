@@ -1,0 +1,750 @@
+/* ==========================================================================
+   Luma Pause — Modern Responsive Hero Section with Art Direction & Promo Features
+   ========================================================================== */
+
+.luma-hero-section {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.luma-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: rgb(var(--color-foreground));
+  overflow: hidden;
+}
+
+.luma-hero__visual {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop Heights
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 750px) {
+  .luma-hero--desk-small .luma-hero__visual {
+    min-height: 60vh;
+  }
+  .luma-hero--desk-medium .luma-hero__visual {
+    min-height: 75vh;
+  }
+  .luma-hero--desk-large .luma-hero__visual {
+    min-height: 92vh;
+  }
+  .luma-hero--desk-full .luma-hero__visual {
+    min-height: 100vh;
+  }
+  .luma-hero--desk-adapt .luma-hero__visual {
+    min-height: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Heights
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-hero--mob-small .luma-hero__visual {
+    min-height: 55vh;
+  }
+  .luma-hero--mob-medium .luma-hero__visual {
+    min-height: 70vh;
+  }
+  .luma-hero--mob-large .luma-hero__visual {
+    min-height: 85vh;
+  }
+  .luma-hero--mob-full .luma-hero__visual {
+    min-height: 100vh;
+  }
+  .luma-hero--mob-adapt .luma-hero__visual {
+    min-height: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Background Media & Picture Art Direction
+   -------------------------------------------------------------------------- */
+.luma-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.luma-hero__picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.luma-hero__image,
+.luma-hero__media .placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.luma-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Content Container & Grid Layout
+   -------------------------------------------------------------------------- */
+.luma-hero__container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 140rem;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .luma-hero__container {
+    padding: 8rem 5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.luma-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 64rem;
+  width: 100%;
+  transition: transform 0.2s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Freeform Canvas Positioning Mode
+   -------------------------------------------------------------------------- */
+.luma-hero--mode-canvas .luma-hero__visual {
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.luma-hero--mode-canvas .luma-hero__container {
+  position: absolute;
+  inset: 0;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  pointer-events: none;
+  display: block !important;
+}
+
+.luma-hero--mode-canvas .luma-hero__content {
+  position: absolute;
+  pointer-events: auto;
+  left: var(--hero-pos-x);
+  top: var(--hero-pos-y);
+  transform: translate(calc(-1 * var(--hero-pos-x)), calc(-1 * var(--hero-pos-y))) !important;
+  max-width: var(--hero-max-width);
+  width: 100%;
+  padding: 2.5rem 3.5rem !important;
+  z-index: 2;
+  margin: 0 !important;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-hero--mode-canvas .luma-hero__content {
+    left: var(--hero-mob-pos-x) !important;
+    top: var(--hero-mob-pos-y) !important;
+    transform: translate(calc(-1 * var(--hero-mob-pos-x)), calc(-1 * var(--hero-mob-pos-y))) !important;
+    max-width: var(--hero-mob-max-width) !important;
+    width: 92% !important;
+    padding: 1.5rem !important;
+  }
+
+  /* Grid Mode - Mobile Vertical Placement Options */
+  .luma-hero--mode-grid.luma-hero--mob-pos-top .luma-hero__visual {
+    align-items: flex-start !important;
+  }
+  .luma-hero--mode-grid.luma-hero--mob-pos-top .luma-hero__container {
+    justify-content: flex-start !important;
+  }
+
+  .luma-hero--mode-grid.luma-hero--mob-pos-middle .luma-hero__visual {
+    align-items: center !important;
+  }
+  .luma-hero--mode-grid.luma-hero--mob-pos-middle .luma-hero__container {
+    justify-content: center !important;
+  }
+
+  .luma-hero--mode-grid.luma-hero--mob-pos-bottom .luma-hero__visual {
+    align-items: flex-end !important;
+  }
+  .luma-hero--mode-grid.luma-hero--mob-pos-bottom .luma-hero__container {
+    justify-content: flex-end !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
+.luma-hero__eyebrow {
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin: 0 0 1.4rem;
+}
+
+.luma-hero__heading {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 0 0 1.8rem;
+  text-wrap: balance;
+}
+
+.luma-hero__heading strong,
+.luma-hero__heading b {
+  font-style: normal;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.luma-hero__heading--small {
+  font-size: clamp(2.8rem, 4.2vw, 4.4rem);
+}
+
+.luma-hero__heading--medium {
+  font-size: clamp(3.4rem, 5.2vw, 5.6rem);
+}
+
+.luma-hero__heading--large {
+  font-size: clamp(4.0rem, 6.4vw, 6.8rem);
+}
+
+.luma-hero__heading--xlarge {
+  font-size: clamp(4.6rem, 7.8vw, 8.4rem);
+}
+
+.luma-hero__subheading {
+  font-size: 1.7rem;
+  line-height: 1.55;
+  max-width: 48ch;
+  opacity: 0.94;
+  margin: 0 0 2.6rem;
+}
+
+.luma-hero__content--align-center .luma-hero__subheading,
+.luma-hero__content--align-right .luma-hero__subheading {
+  margin-inline: auto;
+}
+
+/* Coupon badge */
+.luma-hero__coupon-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.4rem;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px dashed rgba(255, 255, 255, 0.45);
+  border-radius: 9999px;
+  margin-bottom: 2.4rem;
+  width: fit-content;
+}
+
+.luma-hero__coupon-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   CTA Buttons
+   -------------------------------------------------------------------------- */
+.luma-hero__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.luma-hero__content--align-center .luma-hero__buttons {
+  justify-content: center;
+}
+
+.luma-hero__content--align-right .luma-hero__buttons {
+  justify-content: flex-end;
+}
+
+.button.button--hero,
+a.button.button--hero,
+.button--hero {
+  position: relative;
+  z-index: 2;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1.3rem 2.8rem !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: auto !important;
+  min-height: auto !important;
+  line-height: 1.2 !important;
+  border-radius: 9999px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.button.button--hero::before,
+.button.button--hero::after,
+a.button.button--hero::before,
+a.button.button--hero::after,
+.button--hero::before,
+.button--hero::after {
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
+}
+
+/* Pill Black (Deep Olive / Soft Rich Dark) */
+.button.button--hero-pill-black,
+a.button.button--hero-pill-black,
+.button--hero-pill-black,
+.button.button--hero:not([class*="button--hero-pill-"]):not([class*="button--hero-solid-"]):not([class*="button--hero-outline"]),
+a.button.button--hero:not([class*="button--hero-pill-"]):not([class*="button--hero-solid-"]):not([class*="button--hero-outline"]) {
+  border-radius: 9999px !important;
+  background: #2F3A24 !important;
+  background-color: #2F3A24 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  opacity: 1 !important;
+}
+
+.button.button--hero-pill-black:hover,
+a.button.button--hero-pill-black:hover,
+.button--hero-pill-black:hover,
+.button.button--hero:not([class*="button--hero-pill-"]):not([class*="button--hero-solid-"]):not([class*="button--hero-outline"]):hover,
+a.button.button--hero:not([class*="button--hero-pill-"]):not([class*="button--hero-solid-"]):not([class*="button--hero-outline"]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38) !important;
+  background: #3A4630 !important;
+  background-color: #3A4630 !important;
+  border-color: rgba(255, 255, 255, 0.32) !important;
+  color: #ffffff !important;
+}
+
+/* Pill Primary / Accent */
+.button.button--hero-pill-primary,
+a.button.button--hero-pill-primary,
+.button--hero-pill-primary {
+  border-radius: 9999px !important;
+  background: #B66F75 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(182, 111, 117, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+.button.button--hero-pill-primary:hover,
+a.button.button--hero-pill-primary:hover,
+.button--hero-pill-primary:hover {
+  transform: translateY(-2px);
+  background: #9A5963 !important;
+  box-shadow: 0 10px 28px rgba(182, 111, 117, 0.55) !important;
+}
+
+/* Pill White */
+.button.button--hero-pill-white,
+a.button.button--hero-pill-white,
+.button--hero-pill-white {
+  border-radius: 9999px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #121212 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+}
+
+.button.button--hero-pill-white:hover,
+a.button.button--hero-pill-white:hover,
+.button--hero-pill-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28) !important;
+  background: #f7f7f8 !important;
+  background-color: #f7f7f8 !important;
+  color: #121212 !important;
+}
+
+/* Outline */
+.button.button--hero-outline,
+a.button.button--hero-outline,
+.button--hero-outline {
+  border-radius: 9999px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.button.button--hero-outline:hover,
+a.button.button--hero-outline:hover,
+.button--hero-outline:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px);
+  color: #ffffff !important;
+}
+
+/* Solid */
+.button.button--hero-solid-primary,
+a.button.button--hero-solid-primary,
+.button--hero-solid-primary {
+  border-radius: 6px !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.button.button--hero-solid-secondary,
+a.button.button--hero-solid-secondary,
+.button--hero-solid-secondary {
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Promotional Graphic / Discount Offer Badge
+   -------------------------------------------------------------------------- */
+.luma-hero__promo-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  user-select: none;
+  animation: luma-float 4s ease-in-out infinite alternate;
+}
+
+@keyframes luma-float {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-6px);
+  }
+}
+
+.luma-hero__promo-badge-main {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 0.88;
+}
+
+.luma-hero__promo-prefix {
+  font-size: clamp(1.8rem, 2.6vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.luma-hero__promo-discount {
+  font-size: clamp(6.4rem, 11vw, 12.8rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.luma-hero__promo-suffix {
+  font-size: clamp(2.2rem, 3.6vw, 4.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.luma-hero__promo-tag {
+  background: #ffffff;
+  color: #121212;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.8rem;
+  border-radius: 4px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Promotional Ticker Strip
+   -------------------------------------------------------------------------- */
+.luma-hero__ticker {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  overflow: hidden;
+  background-color: #B66F75;
+  color: #ffffff;
+  padding: 1.1rem 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.luma-hero__ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: luma-ticker-scroll var(--ticker-duration, 22s) linear infinite;
+}
+
+.luma-hero__ticker:hover .luma-hero__ticker-track {
+  animation-play-state: paused;
+}
+
+.luma-hero__ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.2rem;
+  padding-right: 2.2rem;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.luma-hero__ticker-separator {
+  opacity: 0.65;
+  font-size: 1.4rem;
+}
+
+@keyframes luma-ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Press Marquee Strip
+   -------------------------------------------------------------------------- */
+.luma-hero__press {
+  position: relative;
+  z-index: 3;
+  background-color: rgba(var(--color-background), 0.65);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.14);
+  padding: 2rem 0 2.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .luma-hero__press {
+    background-color: rgb(var(--color-background));
+  }
+}
+
+.luma-hero__press-eyebrow {
+  margin: 0;
+  padding: 0 3rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--color-foreground));
+  opacity: 0.65;
+  text-align: center;
+}
+
+.luma-hero__marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.luma-hero__marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 5.6rem;
+  width: max-content;
+  padding: 0 2.8rem;
+  animation: luma-marquee 28s linear infinite;
+}
+
+.luma-hero__marquee:hover .luma-hero__marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes luma-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.luma-hero__logo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 3.2rem;
+}
+
+.luma-hero__logo img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.65;
+  filter: grayscale(1);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.luma-hero__logo:hover img {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+.luma-hero__logo-text {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: 2.4rem;
+  letter-spacing: 0.01em;
+  color: rgb(var(--color-foreground));
+  opacity: 0.55;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.luma-hero__logo:hover .luma-hero__logo-text {
+  opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-hero__marquee-track,
+  .luma-hero__ticker-track {
+    animation: none;
+  }
+
+  .luma-hero__marquee,
+  .luma-hero__ticker {
+    overflow-x: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Adjustments - Place Content & Buttons at the Bottom
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-hero__visual {
+    align-items: flex-end !important;
+    justify-content: center !important;
+  }
+
+  .luma-hero__container {
+    padding-top: 3rem !important;
+    padding-bottom: 3.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    gap: 1.6rem !important;
+  }
+
+  .luma-hero__content {
+    margin-top: auto !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    transform: none !important;
+    padding: 0 !important;
+  }
+
+  .luma-hero__buttons {
+    margin-top: 1.8rem !important;
+    width: 100% !important;
+  }
+
+  .luma-hero__content--mob-align-left {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+  .luma-hero__content--mob-align-left .luma-hero__buttons {
+    justify-content: flex-start !important;
+  }
+  .luma-hero__content--mob-align-left .luma-hero__subheading {
+    margin-inline: 0 !important;
+  }
+
+  .luma-hero__content--mob-align-center {
+    text-align: center !important;
+    align-items: center !important;
+  }
+  .luma-hero__content--mob-align-center .luma-hero__buttons {
+    justify-content: center !important;
+  }
+  .luma-hero__content--mob-align-center .luma-hero__subheading {
+    margin-inline: auto !important;
+  }
+
+  .luma-hero__content--mob-align-right {
+    text-align: right !important;
+    align-items: flex-end !important;
+  }
+  .luma-hero__content--mob-align-right .luma-hero__buttons {
+    justify-content: flex-end !important;
+  }
+  .luma-hero__content--mob-align-right .luma-hero__subheading {
+    margin-inline-start: auto !important;
+  }
+
+  .luma-hero__promo-badge {
+    margin-top: 0.5rem;
+    order: -1; /* Display badge above bottom text/CTA on mobile if enabled */
+  }
+
+  .luma-hero__ticker {
+    padding: 0.8rem 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+}

@@ -1,0 +1,345 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{{ 'section-luma-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="luma-reviews color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="luma-reviews__header page-width" data-animate="fade-up">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="luma-reviews__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="luma-reviews__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <luma-reviews-carousel class="luma-reviews__carousel">
+      <div class="luma-reviews__track">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign slot = 'hidden'
+            if forloop.first
+              assign slot = 'center'
+            elsif forloop.index0 == 1
+              assign slot = 'right'
+            elsif forloop.last and section.blocks.size > 1
+              assign slot = 'left'
+            endif
+          -%}
+          <div class="luma-reviews__card" data-slot="{{ slot }}" {{ block.shopify_attributes }}>
+            <div class="luma-reviews__card-top">
+              <div class="luma-reviews__stars" aria-hidden="true">
+                {%- assign rating = block.settings.rating | plus: 0 -%}
+                {%- for i in (1..5) -%}
+                  {%- if i <= rating -%}
+                    <span class="luma-reviews__star luma-reviews__star--full">★</span>
+                  {%- else -%}
+                    <span class="luma-reviews__star">★</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <span class="visually-hidden">{{ block.settings.rating }} out of 5 stars</span>
+              {%- if block.settings.product_tag != blank -%}
+                <span class="luma-reviews__tag">{{ block.settings.product_tag | escape }}</span>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.title != blank -%}
+              <h3 class="luma-reviews__title">&ldquo;{{ block.settings.title | escape }}&rdquo;</h3>
+            {%- endif -%}
+            <p class="luma-reviews__quote">{{ block.settings.quote | escape }}</p>
+            <p class="luma-reviews__name">{{ block.settings.name | escape }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if section.blocks.size > 1 -%}
+        <div class="luma-reviews__dots" aria-label="Review pagination">
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="luma-reviews__dot{% if forloop.first %} is-active{% endif %}"
+              data-index="{{ forloop.index0 }}"
+              aria-label="Go to slide {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </luma-reviews-carousel>
+  {%- endif -%}
+</div>
+
+{% javascript %}
+  class LumaReviewsCarousel extends HTMLElement {
+    connectedCallback() {
+      this.cards = Array.from(this.querySelectorAll('.luma-reviews__card'));
+      this.dots = Array.from(this.querySelectorAll('.luma-reviews__dot'));
+      this.activeIndex = 0;
+      this.autoplayDelay = 2800;
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      this.addEventListener('mouseenter', () => this.stopAutoplay());
+      this.addEventListener('mouseleave', () => this.maybeStartAutoplay());
+
+      // Touch swipe gestures for mobile right-to-left sliding
+      let touchStartX = 0;
+      let touchEndX = 0;
+      this.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        this.stopAutoplay();
+      }, { passive: true });
+
+      this.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 35) {
+          if (diff > 0) {
+            this.go(1);
+          } else {
+            this.go(-1);
+          }
+        }
+        this.maybeStartAutoplay();
+      }, { passive: true });
+
+      // Dot click handling
+      this.dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.dataset.index, 10);
+          if (!isNaN(idx)) {
+            this.activeIndex = idx;
+            this.setSlots();
+          }
+        });
+      });
+
+      this.sideSlotsQuery = window.matchMedia('(min-width: 750px)');
+      this.showSideSlots = this.sideSlotsQuery.matches;
+      const onSideSlotsChange = (e) => {
+        this.showSideSlots = e.matches;
+        this.setSlots();
+      };
+      if (this.sideSlotsQuery.addEventListener) {
+        this.sideSlotsQuery.addEventListener('change', onSideSlotsChange);
+      } else {
+        this.sideSlotsQuery.addListener(onSideSlotsChange);
+      }
+
+      this.isInView = false;
+      this._observer = new IntersectionObserver(
+        (entries) => {
+          this.isInView = entries[0].isIntersecting;
+          if (this.isInView) {
+            this.maybeStartAutoplay();
+          } else {
+            this.stopAutoplay();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      this._observer.observe(this);
+
+      this.setSlots();
+    }
+
+    go(delta) {
+      const n = this.cards.length;
+      this.activeIndex = (this.activeIndex + delta + n) % n;
+      this.setSlots();
+    }
+
+    setSlots() {
+      const n = this.cards.length;
+      this.cards.forEach((card, i) => {
+        let slot = 'hidden';
+        if (i === this.activeIndex) {
+          slot = 'center';
+        } else if (n > 1 && i === (this.activeIndex + 1) % n) {
+          slot = 'right';
+        } else if (n > 1 && i === (this.activeIndex - 1 + n) % n) {
+          slot = 'left';
+        }
+        card.dataset.slot = slot;
+      });
+
+      this.dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === this.activeIndex);
+      });
+    }
+
+    maybeStartAutoplay() {
+      if (this.isInView) this.startAutoplay();
+    }
+
+    startAutoplay() {
+      if (this.reducedMotion || this.cards.length < 2) return;
+      this.stopAutoplay();
+      this._autoplay = setInterval(() => this.go(1), this.autoplayDelay);
+    }
+
+    stopAutoplay() {
+      if (this._autoplay) clearInterval(this._autoplay);
+    }
+
+    disconnectedCallback() {
+      this.stopAutoplay();
+      if (this._observer) this._observer.disconnect();
+    }
+  }
+
+  customElements.define('luma-reviews-carousel', LumaReviewsCarousel);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Luma Pause reviews",
+  "tag": "section",
+  "class": "section luma-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "OUR PHILOSOPHY"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What you say <strong>matters the most.</strong>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Rating"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review title / Quote headline",
+          "default": "Top notch"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review text",
+          "default": "I was sceptical, but the afternoon bloating that followed me for years has really settled. I feel lighter and more like myself."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "Vineeta Bhatnagar"
+        },
+        {
+          "type": "text",
+          "id": "product_tag",
+          "label": "Product tag",
+          "default": "GUT BALANCE PROBIOTIC"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "Luma Pause reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Top notch",
+            "quote": "I was sceptical, but the afternoon bloating that followed me for years has really settled. I feel lighter and more like myself.",
+            "name": "Vineeta Bhatnagar",
+            "product_tag": "GUT BALANCE PROBIOTIC"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Most effective",
+            "quote": "Finally something made for this stage of life. My sleep is better and the night sweats are far less frequent.",
+            "name": "Kabir M.",
+            "product_tag": "MENOPAUSE SUPPORT PROBIOTIC"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Game changer",
+            "quote": "I used to dread recurring discomfort. Three months in and I feel so much more confident day to day.",
+            "name": "Devika R.",
+            "product_tag": "INTIMATE FLORA PROBIOTIC"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Wonderful",
+            "quote": "One capsule with breakfast, that is it. My mood feels steadier and I have more energy in the evenings.",
+            "name": "Ananya S.",
+            "product_tag": "MENOPAUSE SUPPORT PROBIOTIC"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1466 @@
+/* Luma Pause — product detail page: vertical gallery, pack-size cards, offer cards, accordions, FAQs */
+
+/* ==========================================================================
+   1. Media gallery — vertical thumbnail rail on the left of the main image
+   ========================================================================== */
+.product--thumbnail media-gallery {
+  position: relative;
+  display: block;
+}
+
+@media screen and (min-width: 750px) {
+  /* The info column is far taller than the gallery, which would otherwise leave
+     a dead gap under the image. Dawn already puts .product__column-sticky on
+     media-gallery for the thumbnail layout; this rule is more specific than
+     that class, so it has to restate `sticky` or it cancels it. */
+  .product--thumbnail media-gallery {
+    position: sticky;
+    top: 3rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 6rem);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .product--thumbnail media-gallery > slider-component:not(.thumbnail-slider) {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .product--thumbnail media-gallery > .thumbnail-slider {
+    order: 1;
+    flex: 0 0 8.4rem;
+    width: 8.4rem;
+    margin: 0;
+  }
+
+  .product--thumbnail .thumbnail-slider .thumbnail-list.slider--tablet-up,
+  .product--thumbnail .thumbnail-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+  }
+
+  .product--thumbnail .thumbnail-list__item.slider__slide,
+  .product--thumbnail .thumbnail-list__item {
+    width: 8.4rem !important;
+    max-width: 8.4rem;
+    flex: 0 0 auto;
+  }
+
+  /* The thumbnail rail scrolls itself rather than the page when there are many */
+  .product--thumbnail .thumbnail-slider .thumbnail-list {
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  /* Keep the main image inside the sticky box so it can never outgrow the
+     viewport and strand the bottom of the image off-screen. */
+  .product--thumbnail media-gallery > slider-component:not(.thumbnail-slider) .product__media-item,
+  .product--thumbnail media-gallery > slider-component:not(.thumbnail-slider) .product__media {
+    max-height: calc(100vh - 6rem);
+  }
+
+  .product--thumbnail media-gallery > slider-component:not(.thumbnail-slider) .product__media img {
+    max-height: calc(100vh - 6rem);
+    object-fit: contain;
+  }
+
+  .product--thumbnail .thumbnail-slider .thumbnail-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Dawn's horizontal prev/next thumb arrows make no sense vertically */
+  .product--thumbnail .thumbnail-slider > .slider-button {
+    display: none;
+  }
+}
+
+.product--thumbnail .thumbnail {
+  border-radius: 1.2rem;
+  border: 1px solid rgba(182, 111, 117, 0.16);
+  /* The product PNGs are background-removed, so a pure white tile makes a
+     white bottle disappear. A faint warm tile gives the silhouette an edge. */
+  background-color: #FBF9F4;
+  padding: 0.6rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Product shots are white-on-white, so cover crops them to a blank square */
+.product--thumbnail .thumbnail img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.product--thumbnail .thumbnail[aria-current='true'] {
+  border-color: #B66F75;
+  box-shadow: 0 0 0 1px #B66F75;
+}
+
+.product--thumbnail .thumbnail:hover {
+  border-color: rgba(182, 111, 117, 0.5);
+}
+
+.product--thumbnail .product__media {
+  border-radius: 1.8rem;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.product--thumbnail .product__media-item .product__modal-opener {
+  border-radius: 1.8rem;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   2. Info column
+   ========================================================================== */
+.luma-pdp-info .product__title,
+.luma-pdp-info .product__title h1 {
+  font-size: clamp(2.2rem, 2.6vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #2F3A24;
+}
+
+/* ==========================================================================
+   3. PACK SIZE — Dawn's pill variant picker restyled as reference cards.
+      Auto-hidden by Dawn when the product has a single variant.
+   ========================================================================== */
+.product-form__input--pill {
+  margin: 0 0 2rem;
+  padding: 0;
+  border: 0;
+}
+
+.product-form__input--pill > legend.form__label,
+.product-form__input--dropdown > .form__label,
+.product-form__input--swatch > legend.form__label {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+.product-form__input--pill input[type='radio'] + label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 11.5rem;
+  margin: 0 0.8rem 0.8rem 0;
+  padding: 1.2rem 1.6rem;
+  border-radius: 1.4rem;
+  border: 1.5px solid rgba(140, 148, 121, 0.15);
+  background-color: rgba(255, 255, 255, 0.6);
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2F3A24;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-form__input--pill input[type='radio'] + label:hover {
+  border-color: #B66F75;
+  background-color: rgba(182, 111, 117, 0.06);
+}
+
+.product-form__input--pill input[type='radio']:checked + label {
+  border-color: #B66F75;
+  background-color: rgba(182, 111, 117, 0.1);
+  color: #9A5963;
+  box-shadow: 0 4px 14px -4px rgba(182, 111, 117, 0.35);
+}
+
+.product-form__input--pill input[type='radio']:focus-visible + label {
+  outline: 2px solid #B66F75;
+  outline-offset: 2px;
+}
+
+.product-form__input--pill input[type='radio'].disabled + label,
+.product-form__input--pill input[type='radio'] + label.disabled {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+/* ==========================================================================
+   4. Quantity + Add to cart on one row
+   ========================================================================== */
+/* Quantity and Add to cart share a row. The buy-buttons wrapper Dawn emits has
+   no class of its own, so it is reached as the sibling right after quantity —
+   which the product template's block order guarantees. */
+@media screen and (min-width: 750px) {
+  .luma-pdp-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .luma-pdp-info > * {
+    width: 100%;
+  }
+
+  .luma-pdp-info > .product-form__quantity {
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0 1.2rem 2rem 0 !important;
+    padding: 0;
+  }
+
+  .luma-pdp-info > .product-form__quantity + div,
+  .luma-pdp-info > .product-form__buy-buttons {
+    width: auto;
+    flex: 1 1 18rem;
+    min-width: 0;
+    margin: 0 0 2rem 0 !important;
+    align-self: flex-end;
+  }
+
+  .luma-pdp-info > .product-form__quantity + div .product-form,
+  .luma-pdp-info > .product-form__buy-buttons .product-form {
+    margin: 0 !important;
+  }
+
+  .luma-pdp-info > .product-form__quantity + div .product-form__buttons,
+  .luma-pdp-info > .product-form__buy-buttons .product-form__buttons {
+    margin: 0 !important;
+    max-width: 100%;
+  }
+
+  .luma-pdp-info > .product-form__quantity + div .product-form__submit,
+  .luma-pdp-info > .product-form__buy-buttons .product-form__submit {
+    margin: 0 !important;
+  }
+}
+
+.luma-pdp-info .quantity {
+  border-radius: 100px;
+  border: 1.5px solid rgba(140, 148, 121, 0.15);
+  background-color: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  height: 5.4rem !important;
+  min-height: 5.4rem !important;
+  box-sizing: border-box;
+}
+
+.luma-pdp-info .quantity:after {
+  box-shadow: none;
+}
+
+.luma-pdp-info .quantity__input {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2F3A24;
+}
+
+.luma-pdp-info .quantity__button {
+  color: #B66F75;
+}
+
+.luma-pdp-info .quantity__rules:empty {
+  display: none !important;
+  margin: 0 !important;
+}
+
+.luma-pdp-info .product-form__submit {
+  height: 5.4rem !important;
+  min-height: 5.4rem !important;
+  border-radius: 100px;
+  background-color: #2F3A24;
+  color: #FAF8F3;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: none;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.luma-pdp-info .product-form__submit:not([disabled]):hover {
+  background-color: #B66F75;
+  transform: translateY(-1px);
+}
+
+.luma-pdp-info .product-form__submit:after,
+.luma-pdp-info .product-form__submit:before,
+.luma-pdp-info .product-form__submit:hover:after,
+.luma-pdp-info .product-form__submit:hover:before,
+.luma-pdp-info .product-form__submit:focus:after,
+.luma-pdp-info .product-form__submit:focus:before,
+.luma-pdp-info .product-form__submit:focus-visible:after,
+.luma-pdp-info .product-form__submit:focus-visible:before,
+.luma-pdp-info .shopify-payment-button__button--unbranded:after,
+.luma-pdp-info .shopify-payment-button__button--unbranded:before,
+.luma-pdp-info .shopify-payment-button__button--unbranded:hover:after,
+.luma-pdp-info .shopify-payment-button__button--unbranded:hover:before {
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.luma-pdp-info .product-form__submit,
+.luma-pdp-info .product-form__submit:hover,
+.luma-pdp-info .product-form__submit:focus,
+.luma-pdp-info .product-form__submit:active {
+  outline: none !important;
+}
+
+.luma-pdp-info .shopify-payment-button__button--unbranded {
+  min-height: 5rem;
+  border-radius: 100px;
+  background-color: transparent !important;
+  border: 1.5px solid rgba(140, 148, 121, 0.35) !important;
+  color: #2F3A24 !important;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.luma-pdp-info .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+  background-color: #2F3A24 !important;
+  color: #FAF8F3 !important;
+}
+
+/* ==========================================================================
+   5. EXTRA SAVINGS offer cards
+   ========================================================================== */
+.luma-pdp-offers {
+  margin: 0 0 2.4rem;
+}
+
+.luma-pdp-offers__label {
+  margin: 0 0 1rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+.luma-pdp-offers__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .luma-pdp-offers__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.luma-pdp-offers__card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(182, 111, 117, 0.16);
+  background-color: rgba(182, 111, 117, 0.05);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.luma-pdp-offers__card:hover {
+  border-color: rgba(182, 111, 117, 0.4);
+  box-shadow: 0 8px 24px -6px rgba(182, 111, 117, 0.18);
+}
+
+/* The info column is ~450px, so three cards get ~140px each. Icon above the
+   text rather than beside it keeps the titles on one line at that width. */
+.luma-pdp-offers__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.1rem 0.8rem 0.9rem;
+  flex: 1 1 auto;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-pdp-offers__body {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 0.9rem;
+    padding: 1.1rem 1.2rem 1rem;
+  }
+}
+
+.luma-pdp-offers__icon {
+  flex: none;
+  width: 2.1rem;
+  height: 2.1rem;
+  color: #B66F75;
+}
+
+.luma-pdp-offers__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.luma-pdp-offers__title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #2F3A24;
+  text-wrap: balance;
+}
+
+.luma-pdp-offers__sub {
+  margin: 0.2rem 0 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: #8C9479;
+  text-wrap: balance;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-pdp-offers__title { font-size: 1.45rem; }
+  .luma-pdp-offers__sub { font-size: 1.25rem; }
+}
+
+.luma-pdp-offers__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.8rem;
+  border-top: 1px solid rgba(182, 111, 117, 0.16);
+  background-color: rgba(182, 111, 117, 0.08);
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #9A5963;
+  text-align: center;
+}
+
+.luma-pdp-offers__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin: -0.4rem -0.4rem -0.4rem 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.6rem;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.luma-pdp-offers__copy:hover {
+  background-color: rgba(182, 111, 117, 0.16);
+  color: #2F3A24;
+}
+
+.luma-pdp-offers__copy:focus-visible {
+  outline: 2px solid #B66F75;
+  outline-offset: 1px;
+}
+
+.luma-pdp-offers__copy svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
+}
+
+.luma-pdp-offers__copy.is-copied {
+  color: #2F3A24;
+}
+
+/* ==========================================================================
+   6. Accordions — Dawn collapsible_tab restyled with a +/- affordance
+   ========================================================================== */
+.luma-pdp-info .product__accordion {
+  border: 0;
+  border-top: 1px solid rgba(140, 148, 121, 0.12);
+  margin: 0;
+  padding: 0;
+}
+
+.luma-pdp-info .product__accordion:last-of-type {
+  border-bottom: 1px solid rgba(140, 148, 121, 0.12);
+}
+
+.luma-pdp-info .product__accordion + .product__accordion {
+  margin-top: 0;
+}
+
+.luma-pdp-info .product__accordion summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.6rem 3.4rem 1.6rem 0;
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.2s ease;
+}
+
+.luma-pdp-info .product__accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.luma-pdp-info .product__accordion summary:hover {
+  color: #B66F75;
+}
+
+.luma-pdp-info .product__accordion summary:focus-visible {
+  outline: 2px solid #B66F75;
+  outline-offset: -2px;
+}
+
+.luma-pdp-info .product__accordion .summary__title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.luma-pdp-info .product__accordion .accordion__title {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: inherit;
+}
+
+/* Dawn's caret out, CSS plus/minus in */
+.luma-pdp-info .product__accordion summary .icon-caret,
+.luma-pdp-info .product__accordion summary > svg {
+  display: none;
+}
+
+.luma-pdp-info .product__accordion summary::after,
+.luma-pdp-info .product__accordion summary::before {
+  content: '';
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  width: 1.4rem;
+  height: 1.5px;
+  margin-top: -0.75px;
+  background-color: currentColor;
+  border-radius: 1px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.luma-pdp-info .product__accordion summary::before {
+  transform: rotate(90deg);
+}
+
+.luma-pdp-info .product__accordion details[open] > summary::before {
+  transform: rotate(0deg);
+  opacity: 0;
+}
+
+.luma-pdp-info .product__accordion .accordion__content {
+  padding: 0 0 1.8rem;
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #8C9479;
+}
+
+.luma-pdp-info .product__accordion .accordion__content > * + * {
+  margin-top: 1rem;
+}
+
+.luma-pdp-info .product__accordion .accordion__content a {
+  color: #B66F75;
+}
+
+.luma-pdp-info .product__accordion .accordion__content ul,
+.luma-pdp-info .product__accordion .accordion__content ol {
+  padding-left: 1.8rem;
+  margin: 0.6rem 0 0;
+}
+
+.luma-pdp-info .product__accordion .accordion__content li {
+  margin-bottom: 0.5rem;
+}
+
+/* Rich-text descriptions often wrap each bullet's text in its own <p>, which
+   drops the text onto the line below the marker. Keep the first one inline. */
+.luma-pdp-info .product__accordion .accordion__content li > p {
+  margin: 0;
+}
+
+.luma-pdp-info .product__accordion .accordion__content li > p:first-child {
+  display: inline;
+}
+
+/* An empty paragraph between bullets is a common paste artefact */
+.luma-pdp-info .product__accordion .accordion__content li > p:empty,
+.luma-pdp-info .product__accordion .accordion__content > p:empty {
+  display: none;
+}
+
+/* ==========================================================================
+   7. Per-product FAQs
+   ========================================================================== */
+.luma-pdp-faqs {
+  margin: 2.4rem 0 0;
+}
+
+.luma-pdp-faqs__heading {
+  margin: 0 0 1.2rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+.luma-pdp-faqs__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.luma-pdp-faqs__item {
+  background-color: #ffffff;
+  border: 1px solid rgba(182, 111, 117, 0.16);
+  border-radius: 1.4rem;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.luma-pdp-faqs__item:hover,
+.luma-pdp-faqs__item[open] {
+  border-color: rgba(182, 111, 117, 0.4);
+  box-shadow: 0 8px 24px -6px rgba(182, 111, 117, 0.16);
+}
+
+.luma-pdp-faqs__summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.3rem 3.8rem 1.3rem 1.4rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #2F3A24;
+  transition: color 0.2s ease;
+}
+
+.luma-pdp-faqs__summary::-webkit-details-marker {
+  display: none;
+}
+
+.luma-pdp-faqs__summary:hover {
+  color: #B66F75;
+}
+
+.luma-pdp-faqs__summary:focus-visible {
+  outline: 2px solid #B66F75;
+  outline-offset: -2px;
+}
+
+.luma-pdp-faqs__summary::after,
+.luma-pdp-faqs__summary::before {
+  content: '';
+  position: absolute;
+  right: 1.4rem;
+  top: 50%;
+  width: 1.2rem;
+  height: 1.5px;
+  margin-top: -0.75px;
+  background-color: currentColor;
+  border-radius: 1px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.luma-pdp-faqs__summary::before {
+  transform: rotate(90deg);
+}
+
+.luma-pdp-faqs__item[open] .luma-pdp-faqs__summary::before {
+  transform: rotate(0deg);
+  opacity: 0;
+}
+
+.luma-pdp-faqs__answer {
+  padding: 0 1.4rem 1.4rem;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #8C9479;
+}
+
+.luma-pdp-faqs__answer > * + * {
+  margin-top: 0.8rem;
+}
+
+.luma-pdp-faqs__answer a {
+  color: #B66F75;
+}
+
+/* ==========================================================================
+   8. Mobile
+   ========================================================================== */
+@media screen and (max-width: 749px) {
+  .luma-pdp-info .product-form__quantity {
+    margin-bottom: 1.2rem;
+  }
+
+  .luma-pdp-offers__body {
+    align-items: center;
+  }
+
+  /* Compact Mobile Accordion Headers */
+  .luma-pdp-info .product__accordion summary {
+    padding: 1rem 2.4rem 1rem 0 !important;
+    min-height: auto;
+  }
+
+  .luma-pdp-info .product__accordion .accordion__title {
+    font-size: 1.38rem !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Compact Product Description & Accordion Content on Mobile */
+  .luma-pdp-info .product__accordion .accordion__content {
+    padding: 0 0 1.2rem !important;
+    font-size: 1.25rem !important;
+    line-height: 1.45 !important;
+    color: #5A6350 !important;
+  }
+
+  .luma-pdp-info .product__accordion .accordion__content > * + * {
+    margin-top: 0.6rem !important;
+  }
+
+  .luma-pdp-info .product__accordion .accordion__content p,
+  .luma-pdp-info .product__description p {
+    font-size: 1.25rem !important;
+    line-height: 1.45 !important;
+    margin: 0 0 0.5rem 0 !important;
+  }
+
+  .luma-pdp-info .product__accordion .accordion__content ul,
+  .luma-pdp-info .product__accordion .accordion__content ol,
+  .luma-pdp-info .product__description ul,
+  .luma-pdp-info .product__description ol {
+    padding-left: 1.5rem !important;
+    margin: 0.4rem 0 0.5rem 0 !important;
+  }
+
+  .luma-pdp-info .product__accordion .accordion__content li,
+  .luma-pdp-info .product__description li {
+    margin-bottom: 0.25rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .luma-pdp-info .product__description {
+    margin: 1.2rem 0 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Mobile Description Clamp & Read More Toggle */
+  .luma-pdp-description-content .luma-pdp-description-clamp {
+    max-height: 130px;
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .luma-pdp-description-content .luma-pdp-description-clamp:not(.is-expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(251, 249, 244, 0.95) 100%);
+    pointer-events: none;
+  }
+
+  .luma-pdp-description-content .luma-pdp-description-clamp.is-expanded {
+    max-height: 1500px;
+  }
+
+  .luma-pdp-description-content .luma-pdp-description-clamp.is-expanded::after {
+    display: none;
+  }
+
+  .luma-pdp-description-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    padding: 0.3rem 0;
+    margin-top: 0.3rem;
+    font-family: 'Geist Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #B66F75;
+    cursor: pointer;
+  }
+
+  .luma-pdp-description-toggle svg {
+    transition: transform 0.25s ease;
+  }
+
+  .luma-pdp-description-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  .luma-pdp-description-toggle[aria-expanded="true"] .luma-pdp-toggle-more {
+    display: none;
+  }
+
+  .luma-pdp-description-toggle[aria-expanded="false"] .luma-pdp-toggle-less {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .luma-pdp-description-toggle {
+    display: none !important;
+  }
+  .luma-pdp-description-content .luma-pdp-description-clamp {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .luma-pdp-description-content .luma-pdp-description-clamp::after {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-form__input--pill input[type='radio'] + label,
+  .luma-pdp-offers__card,
+  .luma-pdp-info .product-form__submit,
+  .luma-pdp-info .product__accordion summary::after,
+  .luma-pdp-info .product__accordion summary::before,
+  .luma-pdp-faqs__summary::after,
+  .luma-pdp-faqs__summary::before {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   9. Above-The-Fold Optimized Hierarchy & Bundle Upsell
+   ========================================================================== */
+
+/* 1. Descriptor */
+.luma-pdp-descriptor {
+  margin: -0.2rem 0 1.2rem;
+}
+
+.luma-pdp-descriptor__text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #8C9479;
+  margin: 0;
+}
+
+/* 2. Reviews Row (Under Price) */
+.luma-pdp-rating-strip {
+  margin: 0 0 1.4rem;
+}
+
+.luma-pdp-rating-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.luma-pdp-rating-link:hover {
+  opacity: 0.85;
+}
+
+.luma-pdp-rating-strip .luma-pdp-stars {
+  color: #B66F75;
+  font-size: 1.6rem;
+  letter-spacing: 0.15rem;
+  line-height: 1;
+}
+
+.luma-pdp-rating-score {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2F3A24;
+}
+
+.luma-pdp-rating-divider {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  color: rgba(140, 148, 121, 0.5);
+}
+
+.luma-pdp-rating-dot {
+  color: rgba(140, 148, 121, 0.4);
+  font-size: 1.2rem;
+}
+
+.luma-pdp-rating-count {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #8C9479;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(182, 111, 117, 0.4);
+}
+
+/* 3. Benefit Line */
+.luma-pdp-benefit-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.4rem;
+  margin: 0 0 1.6rem;
+  border-radius: 100px;
+  background: rgba(182, 111, 117, 0.07);
+  border: 1px solid rgba(182, 111, 117, 0.18);
+  max-width: 100%;
+}
+
+.luma-pdp-benefit-line__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B66F75;
+  flex-shrink: 0;
+}
+
+.luma-pdp-benefit-line__text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #2F3A24;
+  line-height: 1.3;
+}
+
+/* 4. Dominating CTA Enhancement */
+.luma-pdp-info .product-form__submit {
+  height: 5.4rem !important;
+  min-height: 5.4rem !important;
+  border-radius: 100px !important;
+  background: linear-gradient(135deg, #2F3A24 0%, #2B2D30 100%) !important;
+  color: #FAF8F3 !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 4px 20px rgba(47, 58, 36, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}
+
+.luma-pdp-info .product-form__submit:not([disabled]):hover {
+  background: #B66F75 !important;
+  border-color: #B66F75 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(182, 111, 117, 0.35) !important;
+}
+
+/* 5. Bundle Upsell Card */
+.luma-bundle-upsell {
+  width: 100%;
+  margin: 0.8rem 0 1.2rem;
+  box-sizing: border-box;
+}
+
+.luma-bundle-card {
+  border-radius: 1.2rem;
+  border: 1.5px solid rgba(182, 111, 117, 0.22);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 249, 244, 0.92) 100%);
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 2px 10px rgba(182, 111, 117, 0.05);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.luma-bundle-card:hover {
+  border-color: rgba(182, 111, 117, 0.4);
+  box-shadow: 0 4px 16px rgba(182, 111, 117, 0.1);
+}
+
+.luma-bundle-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.luma-bundle-card__label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+.luma-bundle-card__badge {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #B66F75;
+  color: #ffffff;
+  padding: 0.2rem 0.7rem;
+  border-radius: 100px;
+  line-height: 1.2;
+}
+
+.luma-bundle-card__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.luma-bundle-card__product {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.luma-bundle-card__media {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.12);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.luma-bundle-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.2rem;
+}
+
+.luma-bundle-card__placeholder {
+  color: #B66F75;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.luma-bundle-card__details {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.luma-bundle-card__title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #2F3A24;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.luma-bundle-card__pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  white-space: nowrap !important;
+}
+
+.luma-bundle-card__price {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2F3A24;
+  white-space: nowrap !important;
+}
+
+.luma-bundle-card__compare {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.1rem;
+  color: rgba(140, 148, 121, 0.55);
+  text-decoration: line-through;
+  white-space: nowrap !important;
+}
+
+.luma-bundle-card__action {
+  flex-shrink: 0;
+}
+
+.luma-bundle-card__btn {
+  height: 3.2rem !important;
+  min-height: 3.2rem !important;
+  padding: 0 1.3rem !important;
+  border-radius: 100px !important;
+  background: #2F3A24 !important;
+  color: #FAF8F3 !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.luma-bundle-card__btn:before,
+.luma-bundle-card__btn:after {
+  display: none !important;
+  content: none !important;
+}
+
+.luma-bundle-card__btn:hover {
+  background: #B66F75 !important;
+  color: #ffffff !important;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-bundle-card__content {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .luma-bundle-card__product {
+    width: 100% !important;
+  }
+
+  .luma-bundle-card__title {
+    font-size: 1.2rem !important;
+    white-space: normal !important;
+    line-height: 1.25 !important;
+  }
+
+  .luma-bundle-card__action {
+    width: 100% !important;
+  }
+
+  .luma-bundle-product-form {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .luma-bundle-card__btn {
+    width: 100% !important;
+    height: 3.4rem !important;
+    min-height: 3.4rem !important;
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ==========================================================================
+   10. Mobile UX Refinements & Compact Hierarchy (<750px)
+   ========================================================================== */
+@media screen and (max-width: 749px) {
+  /* Tighten spacing between PDP header elements */
+  .luma-pdp-info > * + * {
+    margin: 0.8rem 0 0 !important;
+  }
+
+  /* Compact Product Title */
+  .luma-pdp-info .product__title,
+  .luma-pdp-info .product__title h1,
+  .product__title h1 {
+    font-size: clamp(2.1rem, 5.8vw, 2.5rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  /* Compact Subtitle / Descriptor */
+  .luma-pdp-descriptor {
+    margin: 0 0 0.6rem !important;
+  }
+
+  .luma-pdp-descriptor__text {
+    font-size: 1.25rem !important;
+    line-height: 1.35 !important;
+    color: #6E7563 !important;
+  }
+
+  /* Compact Price Card */
+  .luma-pdp-price-card {
+    gap: 0.25rem !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .luma-pdp-price-primary-row {
+    gap: 0.75rem !important;
+    align-items: baseline !important;
+  }
+
+  .luma-pdp-final-price {
+    font-size: 2.6rem !important;
+    line-height: 1 !important;
+  }
+
+  .luma-pdp-mrp {
+    font-size: 1.25rem !important;
+  }
+
+  .luma-pdp-save-badge {
+    font-size: 1.05rem !important;
+    padding: 0.2rem 0.75rem !important;
+  }
+
+  .luma-pdp-tax-line {
+    gap: 0.5rem !important;
+    margin-top: 0.1rem !important;
+  }
+
+  .luma-pdp-tax-label {
+    font-size: 1.15rem !important;
+  }
+
+  /* Compact Ratings Strip */
+  .luma-pdp-rating-strip {
+    margin: 0.2rem 0 0.8rem !important;
+  }
+
+  .luma-pdp-rating-strip .luma-pdp-stars {
+    font-size: 1.45rem !important;
+    letter-spacing: 0.08rem !important;
+  }
+
+  .luma-pdp-rating-score {
+    font-size: 1.2rem !important;
+  }
+
+  .luma-pdp-rating-count {
+    font-size: 1.15rem !important;
+  }
+
+  /* Compact Benefit Line Pill */
+  .luma-pdp-benefit-line {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.65rem !important;
+    padding: 0.65rem 1.1rem !important;
+    margin: 0 0 1rem !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .luma-pdp-benefit-line__icon {
+    margin-top: 0.15rem !important;
+  }
+
+  .luma-pdp-benefit-line__text {
+    font-size: 1.15rem !important;
+    line-height: 1.35 !important;
+    letter-spacing: 0.005em !important;
+  }
+}
+
+/* ==========================================================================
+   Risk Reduction Strip (Visible below CTA / Bundle Upsell)
+   ========================================================================== */
+.luma-risk-strip {
+  margin: 1.4rem 0 1.8rem;
+  background: #FBF9F4;
+  border: 1px solid rgba(182, 111, 117, 0.2);
+  border-radius: 1.4rem;
+  padding: 0.8rem 1rem;
+}
+
+.luma-risk-strip__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.luma-risk-strip__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.9rem;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.luma-risk-strip__item:hover {
+  background: rgba(182, 111, 117, 0.09);
+  transform: translateY(-1px);
+}
+
+.luma-risk-strip__icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: rgba(182, 111, 117, 0.12);
+  color: #B66F75;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.luma-risk-strip__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.luma-risk-strip__title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.luma-risk-strip__sub {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.05rem;
+  color: #8C9479;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-risk-strip__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .luma-risk-strip {
+    padding: 0.8rem;
+    margin: 1.2rem 0 1.4rem;
+  }
+}
+
+/* ==========================================================================
+   Compact Product Accordion Tweaks
+   ========================================================================== */
+.luma-pdp-info .product__accordion summary {
+  padding: 1.2rem 3rem 1.2rem 0 !important;
+}
+
+.luma-pdp-info .product__accordion .accordion__title {
+  font-size: 1.45rem !important;
+  font-weight: 600 !important;
+  color: #2F3A24 !important;
+}
+
+.luma-pdp-info .product__accordion .accordion__content {
+  padding: 0 0 1.2rem !important;
+  font-size: 1.3rem !important;
+  line-height: 1.5 !important;
+  color: #4A5540 !important;
+}
+
+/* Compact Step-by-Step Badge for Patch Test */
+.luma-faq-step {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #B66F75;
+  background: rgba(182, 111, 117, 0.1);
+  border: 1px solid rgba(182, 111, 117, 0.22);
+  padding: 0.15rem 0.55rem;
+  border-radius: 100px;
+  margin-right: 0.4rem;
+}
+
+.luma-faq-highlight {
+  background: rgba(182, 111, 117, 0.06);
+  border-left: 2px solid #B66F75;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 0.8rem 0.8rem 0;
+  margin: 0.8rem 0;
+  font-size: 1.2rem;
+  color: #2F3A24;
+}
+

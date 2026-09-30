@@ -1,0 +1,76 @@
+{{ 'section-luma-ingredients.css' | asset_url | stylesheet_tag }}
+
+<section class="luma-pdp-ingredients color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="luma-pdp-ingredients__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="luma-pdp-ingredients__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="luma-pdp-ingredients__title">{{ section.settings.heading }}</h2>
+      <p class="luma-pdp-ingredients__subtitle">Clinically studied strains, prebiotic fibre and botanicals chosen for women’s health.</p>
+    </div>
+
+    <div class="luma-pdp-ingredients__grid">
+      <div class="luma-pdp-ingredients__card">
+        <div class="luma-pdp-ingredients__badge">10B CFU</div>
+        <h3 class="luma-pdp-ingredients__name">Lactobacillus gasseri</h3>
+        <p class="luma-pdp-ingredients__role">Women’s Health Strain</p>
+        <p class="luma-pdp-ingredients__desc">Studied for its role in supporting digestive comfort and a healthy weight balance in women.</p>
+      </div>
+
+      <div class="luma-pdp-ingredients__card">
+        <div class="luma-pdp-ingredients__badge">10B CFU</div>
+        <h3 class="luma-pdp-ingredients__name">Bifidobacterium longum</h3>
+        <p class="luma-pdp-ingredients__role">Gut–Brain Axis Strain</p>
+        <p class="luma-pdp-ingredients__desc">Supports the gut–brain connection, with research linking it to a calmer mood and better stress resilience.</p>
+      </div>
+
+      <div class="luma-pdp-ingredients__card">
+        <div class="luma-pdp-ingredients__badge">BOTANICAL</div>
+        <h3 class="luma-pdp-ingredients__name">Saffron Extract</h3>
+        <p class="luma-pdp-ingredients__role">Mood & Comfort Botanical</p>
+        <p class="luma-pdp-ingredients__desc">A standardised saffron extract studied for supporting emotional balance during menopause.</p>
+      </div>
+
+      <div class="luma-pdp-ingredients__card">
+        <div class="luma-pdp-ingredients__badge">PREBIOTIC</div>
+        <h3 class="luma-pdp-ingredients__name">Inulin Fibre</h3>
+        <p class="luma-pdp-ingredients__role">Food for Good Bacteria</p>
+        <p class="luma-pdp-ingredients__desc">Chicory-root prebiotic fibre that feeds beneficial bacteria and helps them thrive in the gut.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma active ingredients",
+  "tag": "section",
+  "class": "section luma-product-ingredients-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "FORMULA SCIENCE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Clinically Studied Strains & Botanicals"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma active ingredients"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1022 @@
+/* ==========================================================================
+   Luma Pause Product Proof — Customer Evidence, Capsule Science & UGC Hub
+   ========================================================================== */
+
+.luma-pproof {
+  position: relative;
+  isolation: isolate;
+  background-color: #FBF9F4;
+  overflow: hidden;
+}
+
+/* Background Subtle Ambience Glow */
+.luma-pproof::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(182, 111, 117, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.luma-pproof .page-width {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Section Header
+   ========================================================================== */
+.luma-pproof__header {
+  text-align: center;
+  max-width: 68ch;
+  margin: 0 auto 3.6rem;
+}
+
+.luma-pproof__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+  background: rgba(182, 111, 117, 0.08);
+  border: 1px solid rgba(182, 111, 117, 0.22);
+  padding: 0.4rem 1.2rem;
+  border-radius: 100px;
+  margin-bottom: 1.4rem;
+}
+
+.luma-pproof__eyebrow-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #B66F75;
+  box-shadow: 0 0 8px #B66F75;
+  animation: lumaProofPulse 2s infinite ease-in-out;
+}
+
+@keyframes lumaProofPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.4;
+  }
+}
+
+.luma-pproof__heading {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: clamp(2.6rem, 3.5vw, 3.8rem);
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.2rem;
+}
+
+.luma-pproof__subheading {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #8C9479;
+  margin: 0 0 2.2rem;
+}
+
+/* ==========================================================================
+   Proof Lens Mode Switcher (Tabs)
+   ========================================================================== */
+.luma-pproof__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  padding: 0.5rem;
+  border-radius: 100px;
+  border: 1px solid rgba(140, 148, 121, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  max-width: 100%;
+  overflow-x: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.luma-pproof__nav::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.luma-pproof__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: transparent;
+  border: none;
+  border-radius: 100px;
+  padding: 0.8rem 1.6rem;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #8C9479;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.luma-pproof__tab svg {
+  color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.luma-pproof__tab:hover {
+  color: #2F3A24;
+}
+
+.luma-pproof__tab.is-active {
+  background: #2F3A24;
+  color: #FAF8F3;
+  box-shadow: 0 4px 12px rgba(47, 58, 36, 0.2);
+}
+
+.luma-pproof__tab.is-active svg {
+  color: #B66F75;
+}
+
+/* ==========================================================================
+   Panels Container & Transition
+   ========================================================================== */
+.luma-pproof__panels {
+  position: relative;
+}
+
+.luma-pproof__panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.luma-pproof__panel.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   PANEL 1: Before / After Comparison Slider Frame
+   ========================================================================== */
+.luma-pproof__compare-wrap {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2.4rem;
+  align-items: center;
+}
+
+.luma-pproof__compare-box {
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  padding: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.luma-pproof__compare-visual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.4rem;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  cursor: ew-resize;
+  background-color: #2F3A24;
+}
+
+.luma-pproof__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.luma-pproof__layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.luma-pproof__layer--before {
+  z-index: 2;
+  clip-path: polygon(0 0, var(--slider-pos, 50%) 0, var(--slider-pos, 50%) 100%, 0 100%);
+}
+
+.luma-pproof__tag {
+  position: absolute;
+  top: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 100px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: rgba(47, 58, 36, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.luma-pproof__tag--before {
+  left: 1.4rem;
+}
+
+.luma-pproof__tag--after {
+  right: 1.4rem;
+}
+
+.luma-pproof__tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.luma-pproof__tag-dot--rose {
+  background-color: #B66F75;
+  box-shadow: 0 0 6px #B66F75;
+}
+
+.luma-pproof__tag-dot--green {
+  background-color: #4CAF50;
+  box-shadow: 0 0 6px #4CAF50;
+}
+
+/* Draggable Divider & Grip Handle */
+.luma-pproof__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--slider-pos, 50%);
+  width: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.luma-pproof__handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: #2F3A24;
+  border: 2px solid #B66F75;
+  color: #FBF9F4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 0 4px rgba(182, 111, 117, 0.2);
+  cursor: ew-resize;
+  pointer-events: auto;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.luma-pproof__handle:hover,
+.luma-pproof__handle:focus-visible {
+  transform: translate(-50%, -50%) scale(1.1);
+  background-color: #B66F75;
+  color: #ffffff;
+  outline: none;
+}
+
+.luma-pproof__slider-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.15rem;
+  color: #8C9479;
+  margin: 1.1rem 0 0.3rem;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Customer Case Record Card
+   ========================================================================== */
+.luma-pproof__case-card {
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  padding: 2.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.luma-pproof__case-badge {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #B66F75;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.luma-pproof__case-title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1.25;
+  margin: 0 0 1rem;
+}
+
+.luma-pproof__case-desc {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: #8C9479;
+  margin: 0 0 2rem;
+}
+
+.luma-pproof__metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.luma-pproof__metric-item {
+  background: #FBF9F4;
+  border: 1px solid rgba(140, 148, 121, 0.14);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+}
+
+.luma-pproof__metric-val {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.luma-pproof__metric-lbl {
+  display: block;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #8C9479;
+  line-height: 1.3;
+}
+
+.luma-pproof__compliance-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: rgba(182, 111, 117, 0.06);
+  border: 1px solid rgba(182, 111, 117, 0.18);
+  border-radius: 1.2rem;
+  padding: 1.1rem 1.3rem;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  color: #8C9479;
+}
+
+.luma-pproof__compliance-shield {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.luma-pproof__compliance-note strong {
+  color: #2F3A24;
+}
+
+/* ==========================================================================
+   PANEL 2: Texture & Water vs Oil Demo
+   ========================================================================== */
+.luma-pproof__texture-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.4rem;
+  align-items: center;
+}
+
+.luma-pproof__texture-media {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  padding: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.luma-pproof__texture-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 1.4rem;
+  display: block;
+}
+
+.luma-pproof__texture-badge {
+  position: absolute;
+  bottom: 2.2rem;
+  left: 2.2rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: rgba(47, 58, 36, 0.8);
+  backdrop-filter: blur(8px);
+  color: #FBF9F4;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.luma-pproof__texture-info {
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  padding: 2.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.luma-pproof__compare-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.luma-pproof__table-col {
+  padding: 1.4rem;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(140, 148, 121, 0.14);
+}
+
+.luma-pproof__table-col--oil {
+  background: #FBF9F4;
+}
+
+.luma-pproof__table-col--water {
+  background: rgba(182, 111, 117, 0.08);
+  border-color: #B66F75;
+}
+
+.luma-pproof__table-heading {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2F3A24;
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.luma-pproof__pill-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #B66F75;
+  background: rgba(182, 111, 117, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+}
+
+.luma-pproof__table-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.luma-pproof__table-list li {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #8C9479;
+  margin-bottom: 0.8rem;
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.luma-pproof__table-list li:last-child {
+  margin-bottom: 0;
+}
+
+.luma-pproof__table-col--oil .luma-pproof__table-list li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  color: #e53935;
+  font-weight: bold;
+}
+
+.luma-pproof__table-col--water .luma-pproof__table-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #B66F75;
+  font-weight: bold;
+}
+
+.luma-pproof__speed-meter {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  background: #FBF9F4;
+  border: 1px solid rgba(140, 148, 121, 0.14);
+  border-radius: 1.4rem;
+  padding: 1.2rem 1.6rem;
+}
+
+.luma-pproof__speed-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.luma-pproof__speed-val {
+  font-family: 'Geist Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1;
+}
+
+.luma-pproof__speed-lbl {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.1rem;
+  color: #8C9479;
+}
+
+.luma-pproof__speed-bar {
+  flex: 1 1 auto;
+  height: 8px;
+  background: rgba(140, 148, 121, 0.16);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.luma-pproof__speed-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4AF37 0%, #B66F75 100%);
+  border-radius: 100px;
+}
+
+.luma-pproof__speed-right {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  color: #B66F75;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ==========================================================================
+   PANEL 3: Real People UGC & Honest Customer Logs
+   ========================================================================== */
+.luma-pproof__ugc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.2rem;
+}
+
+.luma-pproof__ugc-card {
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.luma-pproof__ugc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
+}
+
+.luma-pproof__ugc-media {
+  position: relative;
+  background: #2F3A24;
+}
+
+.luma-pproof__ugc-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.luma-pproof__ugc-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: rgba(47, 58, 36, 0.7);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.luma-pproof__ugc-play:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  background-color: #B66F75;
+}
+
+.luma-pproof__ugc-concern {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: rgba(47, 58, 36, 0.75);
+  backdrop-filter: blur(6px);
+  color: #FBF9F4;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.8rem;
+  text-align: center;
+}
+
+.luma-pproof__ugc-body {
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.luma-pproof__ugc-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+
+.luma-pproof__ugc-name {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #2F3A24;
+  margin: 0 0 0.2rem;
+}
+
+.luma-pproof__ugc-location {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.15rem;
+  color: #8C9479;
+  margin: 0;
+}
+
+.luma-pproof__ugc-stars {
+  color: #D4AF37;
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+}
+
+.luma-pproof__ugc-diary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.luma-pproof__diary-entry {
+  padding: 0.9rem 1.1rem;
+  background: #FBF9F4;
+  border: 1px solid rgba(140, 148, 121, 0.12);
+  border-radius: 1.1rem;
+}
+
+.luma-pproof__diary-entry--highlight {
+  background: rgba(182, 111, 117, 0.08);
+  border-color: rgba(182, 111, 117, 0.35);
+}
+
+.luma-pproof__diary-day {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #B66F75;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.luma-pproof__diary-text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #2F3A24;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Clinical Perception & Compliance Stat Strip
+   ========================================================================== */
+.luma-pproof__stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.4rem;
+  background: #ffffff;
+  border: 1px solid rgba(140, 148, 121, 0.16);
+  border-radius: 2rem;
+  padding: 2.4rem;
+  margin-top: 3.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.luma-pproof__stat-col {
+  text-align: center;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.luma-pproof__stat-col:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 1px;
+  background: rgba(140, 148, 121, 0.16);
+}
+
+.luma-pproof__stat-pct {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  font-weight: 700;
+  color: #B66F75;
+  line-height: 1;
+  margin-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+}
+
+.luma-pproof__stat-text {
+  display: block;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: #8C9479;
+}
+
+/* ==========================================================================
+   Compliant Regulatory Disclaimer Box
+   ========================================================================== */
+.luma-pproof__disclaimer-box {
+  margin-top: 2rem;
+  padding: 1.4rem 2rem;
+  background: rgba(140, 148, 121, 0.06);
+  border-radius: 1.4rem;
+  border: 1px solid rgba(140, 148, 121, 0.12);
+}
+
+.luma-pproof__disclaimer-text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: #8C9479;
+  margin: 0;
+  text-align: center;
+}
+
+.luma-pproof__disclaimer-text strong {
+  color: #2F3A24;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media screen and (max-width: 990px) {
+  .luma-pproof__compare-wrap,
+  .luma-pproof__texture-wrap {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .luma-pproof__ugc-grid {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .luma-pproof__stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+  }
+
+  .luma-pproof__stat-col:nth-child(2)::after {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .luma-pproof__header {
+    margin-bottom: 1.8rem;
+  }
+
+  .luma-pproof__heading {
+    font-size: 2.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .luma-pproof__subheading {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 1.4rem;
+  }
+
+  .luma-pproof__compare-box {
+    padding: 0.8rem;
+    border-radius: 1.3rem;
+  }
+
+  .luma-pproof__case-card {
+    padding: 1.4rem 1.2rem;
+    border-radius: 1.3rem;
+  }
+
+  .luma-pproof__case-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .luma-pproof__case-desc {
+    font-size: 1.22rem;
+    line-height: 1.4;
+    margin-bottom: 1.4rem;
+  }
+
+  .luma-pproof__metrics-grid {
+    gap: 0.8rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .luma-pproof__metric-item {
+    padding: 0.9rem;
+    border-radius: 1rem;
+  }
+
+  .luma-pproof__metric-val {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .luma-pproof__metric-lbl {
+    font-size: 1.05rem;
+  }
+
+  .luma-pproof__texture-media {
+    padding: 0.8rem;
+    border-radius: 1.3rem;
+  }
+
+  .luma-pproof__texture-info {
+    padding: 1.4rem 1.2rem;
+    border-radius: 1.3rem;
+  }
+
+  .luma-pproof__compare-table {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .luma-pproof__table-col {
+    padding: 1.1rem;
+  }
+
+  .luma-pproof__speed-meter {
+    padding: 1rem 1.2rem;
+    gap: 1rem;
+  }
+
+  .luma-pproof__speed-val {
+    font-size: 1.6rem;
+  }
+
+  .luma-pproof__ugc-card {
+    grid-template-columns: 1fr;
+    border-radius: 1.4rem;
+  }
+
+  .luma-pproof__ugc-media {
+    height: 220px;
+  }
+
+  .luma-pproof__ugc-body {
+    padding: 1.4rem 1.2rem;
+  }
+
+  .luma-pproof__ugc-name {
+    font-size: 1.5rem;
+  }
+
+  .luma-pproof__ugc-diary {
+    gap: 0.65rem;
+  }
+
+  .luma-pproof__diary-entry {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .luma-pproof__stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1.4rem 1rem;
+    gap: 1.2rem 0.8rem;
+    border-radius: 1.4rem;
+    margin-top: 2rem;
+  }
+
+  .luma-pproof__stat-col {
+    padding: 0 0.5rem;
+  }
+
+  .luma-pproof__stat-col:not(:last-child)::after {
+    display: none;
+  }
+
+  .luma-pproof__stat-pct {
+    font-size: 2.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .luma-pproof__stat-text {
+    font-size: 1.1rem;
+    line-height: 1.35;
+  }
+
+  .luma-pproof__disclaimer-box {
+    padding: 1rem 1.2rem;
+    margin-top: 1.2rem;
+  }
+
+  .luma-pproof__nav {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .luma-pproof__nav::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .luma-pproof__tab {
+    padding: 0.65rem 1.1rem;
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-pproof__tab,
+  .luma-pproof__handle,
+  .luma-pproof__panel,
+  .luma-pproof__eyebrow-pulse {
+    transition: none !important;
+    animation: none !important;
+  }
+}

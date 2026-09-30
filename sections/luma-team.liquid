@@ -1,0 +1,155 @@
+{{ 'section-luma-team.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="luma-team color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="luma-team__header page-width page-width--narrow" data-animate="fade-up">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="luma-team__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="luma-team__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="luma-team__text rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="luma-team__grid page-width" data-animate="stagger">
+      {%- for block in section.blocks -%}
+        <div class="luma-team__member" {{ block.shopify_attributes }}>
+          <div class="luma-team__photo">
+            {%- if block.settings.photo != blank -%}
+              {{
+                block.settings.photo
+                | image_url: width: 600
+                | image_tag: loading: 'lazy', widths: '300, 450, 600', class: 'luma-team__image', alt: block.settings.name | escape
+              }}
+            {%- else -%}
+              <div class="luma-team__avatar-placeholder">
+                <div class="luma-team__avatar-seal">
+                  <span class="luma-team__avatar-monogram">P</span>
+                </div>
+                <span class="luma-team__avatar-tag">FOUNDING TEAM · 0{{ forloop.index }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.name != blank -%}
+            <p class="luma-team__name">{{ block.settings.name | escape }}</p>
+          {%- endif -%}
+          {%- if block.settings.role != blank -%}
+            <p class="luma-team__role">{{ block.settings.role | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Luma Pause team",
+  "tag": "section",
+  "class": "section luma-team-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our Team"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The ones who <strong>stand behind Luma Pause.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>A small, multidisciplinary team spanning research, formulation, design and operations — all working toward the same standard.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Founder Name"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "default": "Co-Founder"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Luma Pause team",
+      "blocks": [
+        { "type": "member", "settings": { "name": "Founder Name", "role": "Co-Founder" } },
+        { "type": "member", "settings": { "name": "Co-Founder Name", "role": "Co-Founder" } },
+        { "type": "member", "settings": { "name": "Team Member", "role": "Head of Formulation" } },
+        { "type": "member", "settings": { "name": "Team Member", "role": "Creative Director" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

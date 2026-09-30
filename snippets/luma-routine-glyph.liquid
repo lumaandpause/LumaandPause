@@ -1,0 +1,53 @@
+{% doc %}
+  Line icon for one Routine Builder concern tile.
+
+  Geometry only, in the same line-art idiom as luma-ritual-viz. Strokes inherit
+  currentColor, so the tile's resting sage and its checked rose are both
+  set once in section-luma-routine-builder.css.
+
+  @param {string} glyph - one of "flush", "gut", "flora", "mood".
+    Anything else renders nothing.
+
+  @example
+  {% render 'luma-routine-glyph', glyph: 'flush' %}
+{% enddoc %}
+
+{%- case glyph -%}
+  {%- when 'flush' -%}
+    {%- comment -%} A thermometer with heat waves rising beside it - hot flushes. {%- endcomment -%}
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M13 24V8a3.5 3.5 0 0 1 7 0v16a6 6 0 1 1-7 0Z"/>
+        <path d="M16.5 14v12"/>
+        <path d="M26 10c2 2 2 4 0 6s-2 4 0 6" opacity="0.6"/>
+        <path d="M31.5 12c2 2 2 4 0 6s-2 4 0 6" opacity="0.6"/>
+      </g>
+    </svg>
+  {%- when 'gut' -%}
+    {%- comment -%} A soft looping gut outline with a calm centre - digestion and bloating. {%- endcomment -%}
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 5v5c-5 0-8 4-8 9s3 9 8 9h4c3 0 5 2 5 4v3"/>
+        <path d="M14 10h10c4 0 7 3 7 7s-3 7-7 7h-8c-2 0-3-1.5-3-3.5S14.5 17 16.5 17H23"/>
+      </g>
+    </svg>
+  {%- when 'flora' -%}
+    {%- comment -%} A leaf with small bacteria-like dots - intimate flora in balance. {%- endcomment -%}
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 31C9 17 17 9 32 8c0 15-8 23-23 23Z"/>
+        <path d="M9 31 22 18"/>
+        <circle cx="27" cy="27" r="2" opacity="0.6"/>
+        <circle cx="32" cy="21" r="1.4" opacity="0.6"/>
+        <circle cx="12" cy="13" r="1.4" opacity="0.6"/>
+      </g>
+    </svg>
+  {%- when 'mood' -%}
+    {%- comment -%} A crescent moon with a small star - sleep and mood. {%- endcomment -%}
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M27 27.5A12 12 0 0 1 16.5 7 12 12 0 1 0 33 23.5a12 12 0 0 1-6 4Z"/>
+        <path d="M29 6v5M26.5 8.5h5" opacity="0.6"/>
+      </g>
+    </svg>
+{%- endcase -%}

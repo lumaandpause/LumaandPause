@@ -1,0 +1,444 @@
+/* ==========================================================================
+   Luma Pause — Modern DTC Product Card (Luma Pause Signature Warm Luxury Palette)
+   ========================================================================== */
+
+.luma-product-card-component,
+product-component.luma-product-card-component {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.luma-product-card {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid rgba(182, 111, 117, 0.16);
+  border-radius: 1.8rem;
+  padding: 1.6rem 1.6rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.luma-product-card:hover {
+  border-color: rgba(182, 111, 117, 0.4);
+  box-shadow: 0 10px 32px -4px rgba(182, 111, 117, 0.14), 0 2px 10px rgba(47, 58, 36, 0.04);
+}
+
+/* --------------------------------------------------------------------------
+   Top-Right Badges Stack (BEST SELLER + PAYDAY)
+   -------------------------------------------------------------------------- */
+.luma-card-badges-stack {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.luma-badge-bestseller {
+  background-color: #B66F75; /* Luma Pause Signature Terracotta */
+  color: #FAF8F3;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.95rem;
+  border-radius: 9999px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(182, 111, 117, 0.35);
+}
+
+.luma-badge-payday {
+  background-color: rgba(255, 253, 249, 0.94);
+  color: #B66F75;
+  border: 1px solid rgba(182, 111, 117, 0.35);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.8rem;
+  border-radius: 9999px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Media / Bottle Cutout with Floor Shadow
+   -------------------------------------------------------------------------- */
+.luma-card-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+  overflow: hidden;
+}
+
+.luma-card-media-wrapper img,
+.luma-card-media-wrapper .luma-card-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.12));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.luma-product-card:hover .luma-card-media-wrapper img {
+  transform: scale(1.04);
+}
+
+/* --------------------------------------------------------------------------
+   Product Title & Tagline
+   -------------------------------------------------------------------------- */
+.luma-card-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.luma-card-title,
+.luma-card__title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #2F3A24;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.8rem;
+}
+
+.luma-card-title a,
+.luma-card__title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.luma-card-title a:hover,
+.luma-card__title a:hover {
+  color: #B66F75;
+}
+
+.luma-card-tagline-wrapper {
+  margin: 0.8rem 0 0.6rem;
+}
+
+.luma-card-tagline {
+  display: inline-block;
+  background-color: #FBF6F6;
+  border: 1px solid #F3E3E5;
+  color: #3A4630;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Review Rating Row (Stars | 226 REVIEWS)
+   -------------------------------------------------------------------------- */
+.luma-card-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.luma-card-rating-stars {
+  display: inline-flex;
+  gap: 0.15rem;
+  color: #f0ad3f; /* Luma Pause Warm Gold Star */
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.luma-card-rating-stars .star-dim {
+  color: rgba(140, 148, 121, 0.15);
+}
+
+.luma-card-rating-divider {
+  color: rgba(140, 148, 121, 0.2);
+  font-weight: 300;
+  font-size: 1.2rem;
+}
+
+.luma-card-review-count {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(140, 148, 121, 0.65);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Price Stack with MRP and SAVE % Pill
+   -------------------------------------------------------------------------- */
+.luma-card-price-stack {
+  margin: 0.6rem 0 1.4rem;
+  margin-top: auto;
+}
+
+.luma-card-price-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.luma-card-mrp {
+  font-size: 1.35rem;
+  color: rgba(140, 148, 121, 0.55);
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+.luma-card-save-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1.5px solid #B66F75;
+  color: #B66F75;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.2rem 0.85rem;
+  border-radius: 9999px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.luma-card-final-price {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #2F3A24;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   Luma Pause ADD TO CART Pill Button
+   -------------------------------------------------------------------------- */
+.button--luma-add-to-cart {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  min-height: 4.6rem;
+  background: #2F3A24 !important; /* Luma Pause Deep Onyx */
+  background-color: #2F3A24 !important;
+  color: #FAF8F3 !important;
+  font-family: inherit;
+  font-weight: 800 !important;
+  font-size: 1.35rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 1.2rem 2rem !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(47, 58, 36, 0.2);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* Remove Dawn default button pseudo-element box borders */
+.button--luma-add-to-cart::before,
+.button--luma-add-to-cart::after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.button--luma-add-to-cart:hover {
+  background: #B66F75 !important; /* Shift to Terracotta on Hover */
+  background-color: #B66F75 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(182, 111, 117, 0.4);
+  transform: translateY(-1.5px);
+}
+
+.button--luma-add-to-cart[disabled] {
+  background-color: #e5e5e5 !important;
+  color: #999999 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   FREE SHIPPING Bottom Strip
+   -------------------------------------------------------------------------- */
+.luma-card-free-shipping {
+  display: block;
+  background-color: #FAF8F3; /* Luma Pause Warm Sand/Ivory */
+  color: #2F3A24;
+  border: 1px solid rgba(182, 111, 117, 0.12);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.65rem 1rem;
+  border-radius: 0.6rem;
+  margin-top: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   Full-Width 3rd Product / Odd Last Item Layout (Mobile ONLY)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  #product-grid > .grid__item:last-child:nth-child(2n+1),
+  #product-grid > .grid__item:nth-child(3):last-child {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #product-grid > .grid__item:last-child:nth-child(2n+1) .luma-product-card {
+    padding: 1.8rem 1.6rem 2rem;
+  }
+
+  #product-grid > .grid__item:last-child:nth-child(2n+1) .luma-card-media-wrapper {
+    aspect-ratio: 16 / 10;
+    max-height: 26rem;
+    margin-bottom: 1.8rem;
+  }
+
+  #product-grid > .grid__item:last-child:nth-child(2n+1) .luma-card-media-wrapper img {
+    max-height: 23rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Mobile Adjustments for Standard 2-Col Cards
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-product-card {
+    padding: 1.2rem 1.2rem 1.4rem;
+    border-radius: 1.4rem;
+  }
+
+  .luma-card-title,
+  .luma-card__title {
+    font-size: 1.35rem;
+    min-height: 3.4rem;
+  }
+
+  .luma-card-tagline {
+    font-size: 1.05rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .luma-card-final-price {
+    font-size: 2.2rem;
+  }
+
+  .luma-card-mrp {
+    font-size: 1.2rem;
+  }
+
+  .luma-card-save-pill {
+    font-size: 0.95rem;
+    padding: 0.15rem 0.65rem;
+  }
+
+  .button--luma-add-to-cart {
+    min-height: 4.2rem;
+    font-size: 1.2rem !important;
+    padding: 1rem 1.4rem !important;
+  }
+
+  .luma-card-free-shipping {
+    font-size: 1.05rem;
+    padding: 0.5rem 0.8rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   System Role Pills (RESET, SUPPORT, REPAIR)
+   -------------------------------------------------------------------------- */
+.luma-card-role-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.luma-role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Geist Mono', monospace, inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+.luma-role-pill__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* BALANCE — sky blue */
+.luma-role-pill--balance {
+  background-color: rgba(63, 127, 163, 0.08);
+  border: 1px solid rgba(63, 127, 163, 0.28);
+  color: #3F7FA3;
+}
+.luma-role-pill--balance .luma-role-pill__dot {
+  background-color: #8CC8E8;
+}
+
+/* SUPPORT — dusty rose */
+.luma-role-pill--support {
+  background-color: rgba(182, 111, 117, 0.1);
+  border: 1px solid rgba(182, 111, 117, 0.35);
+  color: #8A4E57;
+}
+.luma-role-pill--support .luma-role-pill__dot {
+  background-color: #B66F75;
+}
+
+/* RESTORE — logo olive */
+.luma-role-pill--restore {
+  background-color: rgba(73, 85, 56, 0.08);
+  border: 1px solid rgba(73, 85, 56, 0.3);
+  color: #495538;
+}
+.luma-role-pill--restore .luma-role-pill__dot {
+  background-color: #6B7A4F;
+}
+

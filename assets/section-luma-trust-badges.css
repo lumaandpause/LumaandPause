@@ -1,0 +1,93 @@
+/* Luma Pause — trust badges strip */
+
+.luma-trust__row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.luma-trust__item {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.6rem;
+  padding: 4rem 2rem;
+}
+
+.luma-trust__item:not(:first-child) {
+  border-left: 0.1rem solid rgba(140, 148, 121, 0.12);
+}
+
+.luma-trust__icon {
+  height: 4.8rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.luma-trust__icon--svg {
+  color: rgb(var(--luma-sky-deep));
+}
+
+.luma-trust__label {
+  margin: 0;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: #3A4630;
+  max-width: 18ch;
+}
+
+/* Tablet / Middle devices */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .luma-trust__item {
+    padding: 3rem 1.2rem;
+    gap: 1.4rem;
+  }
+
+  .luma-trust__icon {
+    height: 4rem;
+  }
+
+  .luma-trust__label {
+    font-size: 1.2rem;
+  }
+}
+
+/* Mobile viewports: single horizontal row with scaled icons */
+@media screen and (max-width: 749px) {
+  .luma-trust__row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .luma-trust__item {
+    min-width: 0;
+    flex: 1 1 0%;
+    padding: 2rem 0.4rem;
+    gap: 1rem;
+  }
+
+  .luma-trust__item:not(:first-child) {
+    border-top: none;
+    border-left: 0.1rem solid rgba(140, 148, 121, 0.12);
+  }
+
+  .luma-trust__icon {
+    height: 3.4rem;
+  }
+
+  .luma-trust__label {
+    font-size: 1.05rem;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    max-width: 14ch;
+  }
+}

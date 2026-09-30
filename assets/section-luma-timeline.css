@@ -1,0 +1,389 @@
+/* Luma Pause — Horizontal Scrollable Timeline with Animated Connector Arrows */
+
+.luma-timeline {
+  position: relative;
+  overflow: hidden;
+}
+
+.luma-timeline__header {
+  text-align: center;
+  margin: 0 auto 2.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.luma-timeline__header-text {
+  max-width: 68rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.luma-timeline__eyebrow {
+  margin: 0;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+.luma-timeline__heading {
+  margin: 0;
+  font-size: clamp(2.8rem, 3.8vw, 4.4rem);
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #2F3A24;
+  text-wrap: balance;
+}
+
+.luma-timeline__heading strong {
+  font-weight: 700;
+}
+
+.luma-timeline__text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #8C9479;
+  margin: 0;
+}
+
+/* Horizontal Track & Container */
+.luma-timeline__container {
+  position: relative;
+  width: 100%;
+}
+
+.luma-timeline__track {
+  display: flex;
+  gap: 2.4rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.8rem max(5rem, calc((100vw - 120rem) / 2)) 2.4rem;
+  scroll-padding-left: max(5rem, calc((100vw - 120rem) / 2));
+  scroll-padding-inline-start: max(5rem, calc((100vw - 120rem) / 2));
+  cursor: grab;
+  user-select: none;
+  scrollbar-width: none; /* Firefox */
+}
+
+.luma-timeline__track::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.luma-timeline__track.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+/* Milestone Item */
+.luma-timeline__item {
+  flex: 0 0 28rem;
+  width: 28rem;
+  max-width: 32rem;
+  min-width: 25rem;
+  scroll-snap-align: start;
+  scroll-margin-left: max(5rem, calc((100vw - 120rem) / 2));
+  scroll-margin-inline-start: max(5rem, calc((100vw - 120rem) / 2));
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luma-timeline__item:hover {
+  transform: translateY(-3px);
+}
+
+/* Big Display Date */
+.luma-timeline__date-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.luma-timeline__year {
+  font-family: inherit;
+  font-size: clamp(3.2rem, 3.8vw, 4.2rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #2F3A24;
+}
+
+.luma-timeline__label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #B66F75;
+}
+
+/* Horizontal Connector Line & Animated Arrows */
+.luma-timeline__connector-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 2.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.luma-timeline__node {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+}
+
+.luma-timeline__node-dot {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background-color: #B66F75;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px #B66F75;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luma-timeline__node-pulse {
+  position: absolute;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: rgba(182, 111, 117, 0.2);
+  animation: nodePulse 2.4s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  pointer-events: none;
+}
+
+.luma-timeline__item:hover .luma-timeline__node-dot {
+  transform: scale(1.25);
+  background-color: #2F3A24;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #2F3A24;
+}
+
+.luma-timeline__rail {
+  position: absolute;
+  left: 1.2rem;
+  right: -2.4rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.luma-timeline__rail--end {
+  right: 0;
+}
+
+.luma-timeline__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(182, 111, 117, 0.35);
+  border-radius: 2px;
+}
+
+.luma-timeline__line--fade {
+  background: linear-gradient(90deg, rgba(182, 111, 117, 0.35) 0%, rgba(182, 111, 117, 0.08) 80%, transparent 100%);
+}
+
+/* Animating Flowing Arrows */
+.luma-timeline__arrow-stream {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  color: #B66F75;
+  pointer-events: none;
+}
+
+.luma-timeline__animated-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: arrowFlow 1.8s infinite ease-in-out;
+}
+
+.luma-timeline__animated-arrow.arrow-1 {
+  animation-delay: 0s;
+}
+
+.luma-timeline__animated-arrow.arrow-2 {
+  animation-delay: 0.3s;
+}
+
+@keyframes arrowFlow {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0.1;
+  }
+  35% {
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(14px);
+    opacity: 0.05;
+  }
+}
+
+@keyframes nodePulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Milestone Content */
+.luma-timeline__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.luma-timeline__item-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #2F3A24;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.luma-timeline__item-description {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: #8C9479;
+}
+
+/* Progress Bar Indicator */
+.luma-timeline__progress-wrapper {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  padding: 0 max(5rem, calc((100vw - 120rem) / 2));
+}
+
+.luma-timeline__progress-bar {
+  width: 12rem;
+  height: 0.3rem;
+  background-color: rgba(182, 111, 117, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.luma-timeline__progress-thumb {
+  height: 100%;
+  width: 25%;
+  background-color: #B66F75;
+  border-radius: 999px;
+  transition: transform 0.15s ease-out, width 0.15s ease-out;
+}
+
+/* Mobile Viewport Refinements */
+@media screen and (max-width: 749px) {
+  .luma-timeline__header {
+    margin-bottom: 1.6rem;
+    padding: 0 2rem;
+  }
+
+  .luma-timeline__track {
+    gap: 1.4rem;
+    padding: 0.4rem 2rem 1.6rem;
+    scroll-padding-left: 2rem;
+    scroll-padding-inline-start: 2rem;
+  }
+
+  .luma-timeline__progress-wrapper {
+    padding: 0 2rem;
+  }
+
+  .luma-timeline__item {
+    flex: 0 0 22rem;
+    width: 22rem;
+    max-width: 24rem;
+    min-width: 20rem;
+    scroll-margin-left: 2rem;
+    scroll-margin-inline-start: 2rem;
+  }
+
+  .luma-timeline__date-wrapper {
+    gap: 0.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .luma-timeline__year {
+    font-size: 2.6rem;
+  }
+
+  .luma-timeline__label {
+    font-size: 1.15rem;
+  }
+
+  .luma-timeline__connector-wrapper {
+    height: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .luma-timeline__node {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .luma-timeline__node-dot {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .luma-timeline__rail {
+    left: 1rem;
+    right: -1.4rem;
+  }
+
+  .luma-timeline__content {
+    gap: 0.4rem;
+  }
+
+  .luma-timeline__item-title {
+    font-size: 1.5rem;
+  }
+
+  .luma-timeline__item-description {
+    font-size: 1.25rem;
+    line-height: 1.45;
+  }
+}
+

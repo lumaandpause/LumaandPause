@@ -1,0 +1,213 @@
+/* Luma Pause — mobile menu drawer as a full-screen overlay.
+
+   Restyles Dawn's drawer (component-menu-drawer.css) rather than replacing
+   it, so MenuDrawer's focus trap, Escape handling and aria stay intact.
+   The reveal itself is a clip-path ellipse driven by
+   assets/luma-menu-drawer-animation.js; this file only owns the closed
+   clip-path and the layout/typography.
+
+   Panel styles are scoped to below 990px because that is the only range
+   where Dawn renders the drawer (menu_type_desktop is "dropdown", so
+   header-drawer carries data-breakpoint="tablet"). The toggle pill is left
+   unscoped - it only exists inside header-drawer, which is itself hidden
+   on desktop. */
+
+@media screen and (max-width: 989px) {
+  /* Layering. The header's .shopify-section is `position: sticky; z-index: 3`,
+     which makes it a stacking context - so any z-index on the panel only
+     orders it against its siblings *inside* that section, and page-level
+     fixed elements (the wellness quiz launcher at z-index 40) paint straight over
+     it. Lifting the section itself while the drawer is open is what actually
+     puts the overlay above the page; 100 clears the launcher while staying
+     under the cart drawer (1000), so the sticky header is not left floating
+     over the cart. */
+  html.luma-drawer-gsap .shopify-section:has(details.menu-drawer-container[open]) {
+    z-index: 100;
+  }
+
+  /* Inside the header section: the panel is a *sibling* of its own trigger,
+     so without this it paints over the close icon and the menu can't be
+     dismissed. A plain descendant selector, so closability never depends
+     on :has() support. */
+  html.luma-drawer-gsap details[open] > .header__icon--menu {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Re-assert Dawn's hamburger/close swap. luma-glass-nav.css forces
+     `.header__icon svg { display: block !important }` for icon sizing, which
+     outranks Dawn's plain `display: none` and leaves the hamburger and the X
+     stacked on top of each other while the drawer is open. Not scoped to
+     luma-drawer-gsap on purpose - the clash exists whenever the drawer opens,
+     GSAP or not. */
+  details[open] > .header__icon--menu .icon-hamburger,
+  details:not([open]) > .header__icon--menu .icon-close {
+    display: none !important;
+  }
+
+  /* Dawn dims the page with a translucent scrim on the toggle itself
+     (.header__icon--menu[aria-expanded='true']::before, absolutely positioned
+     at top:100%/left:0/width:100%). Positioning the toggle above re-anchors
+     that pseudo-element to the icon, which paints a translucent band from the
+     icon's left edge all the way down the page. Our full-screen overlay is
+     the scrim now, so it has to go. */
+  html.luma-drawer-gsap .header__icon--menu[aria-expanded='true']::before {
+    display: none;
+  }
+
+  /* Cosmetic: keep the logo and cart/search icons readable on top of the
+     overlay. Browsers without :has() simply tuck these behind the panel -
+     the pill above still closes the menu. */
+  html.luma-drawer-gsap .header:has(details.menu-drawer-container[open]) .header__heading,
+  html.luma-drawer-gsap .header:has(details.menu-drawer-container[open]) .header__heading-link,
+  html.luma-drawer-gsap .header:has(details.menu-drawer-container[open]) .header__icons {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ------------------------------------------------------------------------
+     Full-screen panel
+     ------------------------------------------------------------------------ */
+  html.luma-drawer-gsap .menu-drawer {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    /* Orders the panel against its siblings inside the header section; the
+       section lift above is what raises it over the page. 1 keeps it under
+       the trigger/logo/icons at 2. */
+    z-index: 1;
+    border: 0;
+    padding: 0;
+    background-color: rgb(var(--luma-ink));
+    color: rgb(var(--luma-cream));
+    /* Dawn slides the panel with translateX; the ellipse does the work here. */
+    transform: none;
+    clip-path: ellipse(75% 0% at 50% -5%);
+    filter: none;
+  }
+
+  html.luma-drawer-gsap .menu-drawer__inner-container,
+  html.luma-drawer-gsap .menu-drawer__navigation-container {
+    position: relative;
+    height: 100%;
+    background-color: transparent;
+    overflow: hidden;
+  }
+
+  /* Rose glow bleeding down from where the ellipse opens. */
+  html.luma-drawer-gsap .menu-drawer__inner-container::before {
+    content: '';
+    position: absolute;
+    top: -18vw;
+    left: 50%;
+    width: 62vw;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background-color: rgb(var(--luma-rose));
+    opacity: 0.22;
+    filter: blur(9vw);
+    pointer-events: none;
+  }
+
+  html.luma-drawer-gsap .menu-drawer__navigation-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 9rem 2.4rem 3.2rem;
+    box-sizing: border-box;
+  }
+
+  /* Nav fills the space between the header row and the utility block, with
+     the links centred in it. */
+  html.luma-drawer-gsap .menu-drawer__navigation {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  html.luma-drawer-gsap .menu-drawer__menu {
+    width: 100%;
+  }
+
+  html.luma-drawer-gsap .menu-drawer__menu > li {
+    border: 0;
+  }
+
+  /* ------------------------------------------------------------------------
+     Oversized centred links
+     ------------------------------------------------------------------------ */
+  html.luma-drawer-gsap .luma-drawer__link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* masks the reveal swing */
+    overflow: hidden;
+    padding: 0 1.2rem;
+    border: 0;
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: min(11vw, 12vh);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: rgb(var(--luma-cream));
+    text-decoration: none;
+  }
+
+  html.luma-drawer-gsap .luma-drawer__link-reveal {
+    display: block;
+  }
+
+  html.luma-drawer-gsap .luma-drawer__link-roll {
+    position: relative;
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.luma-drawer-gsap .luma-drawer__link-text {
+    display: block;
+    white-space: nowrap;
+  }
+
+  /* Sits one line below, ready to roll up into place. */
+  html.luma-drawer-gsap .luma-drawer__link-text--dup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    color: rgb(var(--luma-rose));
+  }
+
+  html.luma-drawer-gsap .luma-drawer__link:hover .luma-drawer__link-roll,
+  html.luma-drawer-gsap .luma-drawer__link:focus-visible .luma-drawer__link-roll,
+  html.luma-drawer-gsap .luma-drawer__link:active .luma-drawer__link-roll,
+  html.luma-drawer-gsap .menu-drawer__menu-item--active .luma-drawer__link-roll {
+    transform: translateY(-100%);
+  }
+
+  /* ------------------------------------------------------------------------
+     Utility block at the bottom
+     ------------------------------------------------------------------------ */
+  html.luma-drawer-gsap .menu-drawer__utility-links {
+    position: relative;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  html.luma-drawer-gsap .menu-drawer__utility-links .list-social__link {
+    color: rgb(var(--luma-cream));
+  }
+
+  /* Submenus keep Dawn's slide, just inheriting the dark panel. */
+  html.luma-drawer-gsap .menu-drawer__submenu {
+    background-color: rgb(var(--luma-ink));
+    color: rgb(var(--luma-cream));
+  }
+}

@@ -1,0 +1,368 @@
+{{ 'section-luma-cross-sell.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-cross-sell.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign balance_name = 'Luma Gut Balance Probiotic'
+  assign support_name = 'Luma Menopause Support Probiotic'
+  assign restore_name = 'Luma Intimate Flora Probiotic'
+  assign balance_handle = 'luma-gut-balance-probiotic'
+  assign support_handle = 'luma-menopause-support-probiotic'
+  assign restore_handle = 'luma-intimate-flora-probiotic'
+
+  assign current_handle = product.handle
+  assign target_handle = balance_handle
+  assign concern = ''
+  assign headline = ''
+  assign current_name = product.title
+  assign current_freq = ''
+  assign target_name = balance_name
+  assign target_freq = ''
+
+  if current_handle == support_handle or product.title contains 'Menopause'
+    assign target_handle = balance_handle
+    assign concern = 'Hot flushes, restless sleep and mood swings'
+    assign headline = 'Made for the pause.'
+    assign current_name = support_name
+    assign current_freq = 'Daily, evening'
+    assign target_name = balance_name
+    assign target_freq = 'Daily, morning'
+  elsif current_handle == balance_handle or product.title contains 'Gut'
+    assign target_handle = support_handle
+    assign concern = 'Bloating, sluggish or irregular digestion'
+    assign headline = 'A calmer gut, every day.'
+    assign current_name = balance_name
+    assign current_freq = 'Daily, morning'
+    assign target_name = support_name
+    assign target_freq = 'Daily, evening'
+  elsif current_handle == restore_handle or product.title contains 'Intimate'
+    assign target_handle = balance_handle
+    assign concern = 'Intimate dryness, irritation or recurring discomfort'
+    assign headline = 'Comfort starts with your flora.'
+    assign current_name = restore_name
+    assign current_freq = 'Daily'
+    assign target_name = balance_name
+    assign target_freq = 'Daily, morning'
+  endif
+
+  if section.settings.custom_target_product != blank
+    assign target_product = section.settings.custom_target_product
+    assign target_name = target_product.title
+  else
+    assign target_product = all_products[target_handle]
+  endif
+
+  assign eyebrow_text = section.settings.eyebrow | default: concern | default: 'Complete your regimen'
+  assign heading_text = section.settings.heading | default: headline | default: 'Pair it with its regimen partner'
+
+  assign bundle_balance = all_products[balance_handle]
+  assign bundle_support = all_products[support_handle]
+  assign bundle_restore = all_products[restore_handle]
+-%}
+
+<section
+  class="luma-cross-sell color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  data-luma-cross-sell
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <!-- Header -->
+    <div class="luma-cross-sell__header" data-cross-sell-header>
+      <div class="luma-cross-sell__eyebrow">
+        <span class="luma-cross-sell__eyebrow-dot" aria-hidden="true"></span>
+        <span>{{ eyebrow_text | escape }}</span>
+      </div>
+      <h2 class="luma-cross-sell__title">{{ heading_text }}</h2>
+      {%- if section.settings.subheading != blank -%}
+        <p class="luma-cross-sell__subtitle">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Primary + Cross-sell Pair -->
+    <div class="luma-cross-sell__experience" data-cross-sell-experience>
+      <!-- Left: Current Product (Primary) -->
+      <div class="luma-cross-sell__card luma-cross-sell__card--current">
+        <div class="luma-cross-sell__card-top">
+          <span class="luma-cross-sell__step-pill">PRIMARY • IN HAND</span>
+        </div>
+
+        <div class="luma-cross-sell__media">
+          {%- if product.featured_image != blank -%}
+            {{
+              product.featured_image
+              | image_url: width: 600
+              | image_tag: loading: 'lazy', alt: product.title, class: 'luma-cross-sell__img'
+            }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'luma-cross-sell__img' }}
+          {%- endif -%}
+        </div>
+
+        <div class="luma-cross-sell__info">
+          {%- if current_freq != blank -%}
+            <span class="luma-cross-sell__role">Use {{ current_freq }}</span>
+          {%- endif -%}
+          <h3 class="luma-cross-sell__product-title">{{ product.title }}</h3>
+          <p class="luma-cross-sell__price">{{ product.price | money }}</p>
+          <div class="luma-cross-sell__active-status">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Selected In Current View</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Connector -->
+      <div class="luma-cross-sell__connector" aria-hidden="true">
+        <div class="luma-cross-sell__connector-line"></div>
+        <div class="luma-cross-sell__connector-badge">
+          <span class="luma-cross-sell__connector-plus">+</span>
+          <span class="luma-cross-sell__connector-text">PAIR</span>
+        </div>
+        <div class="luma-cross-sell__connector-line"></div>
+      </div>
+
+      <!-- Right: Cross-sell Product -->
+      {%- if target_product != blank -%}
+        <div class="luma-cross-sell__card luma-cross-sell__card--target">
+          <div class="luma-cross-sell__card-top">
+            <span class="luma-cross-sell__step-pill luma-cross-sell__step-pill--target">RECOMMENDED PAIR</span>
+          </div>
+
+          <div class="luma-cross-sell__media">
+            {%- if target_product.featured_image != blank -%}
+              {{
+                target_product.featured_image
+                | image_url: width: 600
+                | image_tag: loading: 'lazy', alt: target_product.title, class: 'luma-cross-sell__img'
+              }}
+            {%- else -%}
+              {{ 'product-2' | placeholder_svg_tag: 'luma-cross-sell__img' }}
+            {%- endif -%}
+          </div>
+
+          <div class="luma-cross-sell__info">
+            {%- if target_freq != blank -%}
+              <span class="luma-cross-sell__role">Use {{ target_freq }}</span>
+            {%- endif -%}
+            <h3 class="luma-cross-sell__product-title">
+              <a href="{{ target_product.url }}">{{ target_product.title }}</a>
+            </h3>
+
+            <div class="luma-cross-sell__price-row">
+              <span class="luma-cross-sell__price luma-cross-sell__price--target">
+                {{ target_product.price | money }}
+              </span>
+              {%- if target_product.compare_at_price > target_product.price -%}
+                <span class="luma-cross-sell__mrp">
+                  MRP <s>{{ target_product.compare_at_price | money }}</s>
+                </span>
+              {%- endif -%}
+            </div>
+
+            {%- assign target_variant = target_product.selected_or_first_available_variant -%}
+            <button
+              type="button"
+              class="luma-cross-sell__add-btn"
+              data-cross-sell-add
+              data-variant-id="{{ target_variant.id }}"
+              {% unless target_variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {%- if target_variant.available -%}
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>+ Add to Bag</span>
+              {%- else -%}
+                <span>Sold Out</span>
+              {%- endif -%}
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Pair Regimen -->
+    {%- if current_freq != blank and target_freq != blank -%}
+      <div class="luma-cross-sell__regimen" data-cross-sell-regimen>
+        <div class="luma-cross-sell__regimen-head">
+          <span class="luma-cross-sell__regimen-label">YOUR REGIMEN</span>
+        </div>
+        <ul class="luma-cross-sell__regimen-list" role="list">
+          <li class="luma-cross-sell__regimen-row">
+            <span class="luma-cross-sell__regimen-name">{{ current_name }}</span>
+            <span class="luma-cross-sell__regimen-freq">{{ current_freq }}</span>
+          </li>
+          <li class="luma-cross-sell__regimen-row">
+            <span class="luma-cross-sell__regimen-name">{{ target_name }}</span>
+            <span class="luma-cross-sell__regimen-freq">{{ target_freq }}</span>
+          </li>
+        </ul>
+      </div>
+    {%- endif -%}
+
+    <!-- Complete Balance · Support · Restore ritual (3-product bundle) -->
+    {%- if bundle_balance != blank and bundle_support != blank and bundle_restore != blank -%}
+      {%- liquid
+        assign v_balance = bundle_balance.selected_or_first_available_variant
+        assign v_support = bundle_support.selected_or_first_available_variant
+        assign v_restore = bundle_restore.selected_or_first_available_variant
+        assign bundle_total = v_balance.price | plus: v_support.price | plus: v_restore.price
+        assign bundle_available = false
+        if v_balance.available and v_support.available and v_restore.available
+          assign bundle_available = true
+        endif
+      -%}
+      <div class="luma-cross-sell__bundle" data-cross-sell-bundle>
+        <div class="luma-cross-sell__bundle-head">
+          <span class="luma-cross-sell__regimen-label">THE COMPLETE LUMA PAUSE RITUAL</span>
+          <h3 class="luma-cross-sell__bundle-title">Reset. Support. Repair.</h3>
+        </div>
+
+        <ul class="luma-cross-sell__bundle-list" role="list">
+          <li class="luma-cross-sell__bundle-item">
+            <div class="luma-cross-sell__bundle-thumb">
+              {%- if bundle_balance.featured_image != blank -%}
+                {{ bundle_balance.featured_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: bundle_balance.title }}
+              {%- endif -%}
+            </div>
+            <div class="luma-cross-sell__bundle-text">
+              <span class="luma-cross-sell__bundle-step">Reset</span>
+              <span class="luma-cross-sell__regimen-name">{{ balance_name }}</span>
+              <span class="luma-cross-sell__regimen-freq">2–4x weekly</span>
+            </div>
+          </li>
+          <li class="luma-cross-sell__bundle-item">
+            <div class="luma-cross-sell__bundle-thumb">
+              {%- if bundle_support.featured_image != blank -%}
+                {{ bundle_support.featured_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: bundle_support.title }}
+              {%- endif -%}
+            </div>
+            <div class="luma-cross-sell__bundle-text">
+              <span class="luma-cross-sell__bundle-step">Support</span>
+              <span class="luma-cross-sell__regimen-name">{{ support_name }}</span>
+              <span class="luma-cross-sell__regimen-freq">Daily</span>
+            </div>
+          </li>
+          <li class="luma-cross-sell__bundle-item">
+            <div class="luma-cross-sell__bundle-thumb">
+              {%- if bundle_restore.featured_image != blank -%}
+                {{ bundle_restore.featured_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: bundle_restore.title }}
+              {%- endif -%}
+            </div>
+            <div class="luma-cross-sell__bundle-text">
+              <span class="luma-cross-sell__bundle-step">Repair</span>
+              <span class="luma-cross-sell__regimen-name">{{ restore_name }}</span>
+              <span class="luma-cross-sell__regimen-freq">1–2x weekly</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="luma-cross-sell__bundle-footer">
+          <span class="luma-cross-sell__price">{{ bundle_total | money }}</span>
+          <button
+            type="button"
+            class="luma-cross-sell__add-btn luma-cross-sell__add-btn--bundle"
+            data-cross-sell-add
+            data-variant-ids="{{ v_balance.id }},{{ v_support.id }},{{ v_restore.id }}"
+            {% unless bundle_available %}
+              disabled
+            {% endunless %}
+          >
+            {%- if bundle_available -%}
+              <span>+ Add Full Regimen to Bag</span>
+            {%- else -%}
+              <span>Sold Out</span>
+            {%- endif -%}
+          </button>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma Product Cross-Sell",
+  "tag": "section",
+  "class": "section luma-product-cross-sell-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow override",
+      "info": "Leave blank to show the wellness concern for the current product."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading override",
+      "info": "Leave blank to show the regimen headline for the current product."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "product",
+      "id": "custom_target_product",
+      "label": "Override Cross-sell Product",
+      "info": "Leave blank to automatically pair: Menopause Support -> Gut Balance, Gut Balance -> Menopause Support, Intimate Flora -> Gut Balance."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Product Cross-Sell"
+    }
+  ]
+}
+{% endschema %}

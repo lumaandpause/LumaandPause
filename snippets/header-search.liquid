@@ -1,0 +1,182 @@
+{% comment %}
+  Renders the header search: a Luma Pause command palette over a scrim, used by
+  'header.liquid'. Styling is assets/luma-search.css, motion and the keyboard
+  shortcut are assets/luma-search.js.
+
+  Dawn's own machinery is kept on purpose, so predictive search, focus trapping,
+  arrow-key selection and the no-JavaScript fallback all still work:
+
+  - <details-modal> binds to the first `button[type="button"]` it finds as the
+    close control, so that button comes first in the markup and is placed by CSS.
+    Anything else clickable in here is a link or a submit/reset button.
+  - trapFocus() takes the first `[tabindex="-1"]`, which must be the panel.
+  - <predictive-search> owns the input, [data-predictive-search] and the status
+    region, and closes its results on focusout - so the suggestion chips live
+    inside it, or tapping one would close what it just opened.
+
+  Accepts:
+  - input_id: {String} Id for the search input element (required)
+  - placeholder: {String} Field placeholder
+  - quick_label: {String} Label beside the suggestion chips
+  - quick_terms: {String} Comma-separated suggested terms
+
+  Usage:
+  {% render 'header-search', input_id: 'My-Id' %}
+{% endcomment %}
+
+{%- liquid
+  assign field_placeholder = placeholder | default: 'Search rituals, concerns, ingredients'
+  assign terms = quick_terms | default: '' | split: ','
+-%}
+
+<details-modal class="header__search luma-search">
+  <details>
+    <summary
+      class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle"
+      aria-haspopup="dialog"
+      aria-label="{{ 'general.search.search' | t }}"
+    >
+      <span>
+        <span class="svg-wrapper">
+          {{- 'icon-search.svg' | inline_asset_content -}}
+        </span>
+        <span class="svg-wrapper header__icon-close">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </span>
+    </summary>
+    <div
+      class="search-modal modal__content luma-search__modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'general.search.search' | t }}"
+      data-luma-search
+    >
+      <div class="modal-overlay luma-search__scrim" data-luma-search-scrim></div>
+      <div class="search-modal__content luma-search__panel" tabindex="-1" data-luma-search-panel>
+        <div class="luma-search__head" data-luma-search-head>
+          <p class="luma-search__eyebrow">
+            <span class="luma-search__dot" aria-hidden="true"></span>
+            {{ 'general.search.search' | t }}
+          </p>
+
+          {%- comment -%} First button[type="button"] in the component: the closer. {%- endcomment -%}
+          <button
+            type="button"
+            class="search-modal__close-button modal__close-button luma-search__close"
+            aria-label="{{ 'accessibility.close' | t }}"
+          >
+            <span class="luma-search__close-key" aria-hidden="true">ESC</span>
+            <span class="svg-wrapper">
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+
+        {%- if settings.predictive_search_enabled -%}
+          <predictive-search class="luma-search__form" data-loading-text="{{ 'accessibility.loading' | t }}">
+        {%- else -%}
+          <search-form class="luma-search__form">
+        {%- endif -%}
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search luma-search__form-inner">
+          <div class="luma-search__field" data-luma-search-field>
+            <span class="luma-search__field-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                <circle cx="10.5" cy="10.5" r="6.75" />
+                <path d="M15.5 15.5 21 21" />
+              </svg>
+            </span>
+
+            <input
+              class="search__input luma-search__input"
+              id="{{ input_id }}"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ field_placeholder | escape }}"
+              {%- if settings.predictive_search_enabled -%}
+                role="combobox"
+                aria-expanded="false"
+                aria-owns="predictive-search-results"
+                aria-controls="predictive-search-results"
+                aria-haspopup="listbox"
+                aria-autocomplete="list"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+              {%- endif -%}
+            >
+            <label class="visually-hidden" for="{{ input_id }}">{{ 'general.search.search' | t }}</label>
+            <input type="hidden" name="options[prefix]" value="last">
+
+            <button
+              type="reset"
+              class="reset__button luma-search__reset{% if search.terms == blank %} hidden{% endif %}"
+              aria-label="{{ 'general.search.reset' | t }}"
+            >
+              {%- comment -%}
+                Short label, full sentence in the accessible name: "Clear search
+                term" reads correctly to a screen reader but is far too long to
+                sit inside the field.
+              {%- endcomment -%}
+              Clear
+            </button>
+
+            <button class="search__button luma-search__submit" aria-label="{{ 'general.search.search' | t }}">
+              <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                <path d="M4 12h15" />
+                <path d="M13 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+
+          {%- if terms.size > 0 -%}
+            <div class="luma-search__quick" data-luma-search-quick>
+              {%- if quick_label != blank -%}
+                <p class="luma-search__quick-label">{{ quick_label | escape }}</p>
+              {%- endif -%}
+              <ul class="luma-search__chips">
+                {%- for term in terms -%}
+                  {%- assign trimmed = term | strip -%}
+                  {%- if trimmed != blank -%}
+                    <li>
+                      {%- comment -%}
+                        A real search link, so a chip works with JavaScript off;
+                        luma-search.js intercepts it to search in place instead.
+                      {%- endcomment -%}
+                      <a
+                        class="luma-search__chip"
+                        href="{{ routes.search_url }}?q={{ trimmed | url_encode }}&options%5Bprefix%5D=last"
+                        data-luma-search-term="{{ trimmed | escape }}"
+                      >
+                        {{- trimmed -}}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- if settings.predictive_search_enabled -%}
+            <div
+              class="predictive-search predictive-search--header luma-search__results"
+              tabindex="-1"
+              data-predictive-search
+            >
+              {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+            </div>
+
+            <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+          {%- endif -%}
+        </form>
+        {%- if settings.predictive_search_enabled -%}
+          </predictive-search>
+        {%- else -%}
+          </search-form>
+        {%- endif -%}
+      </div>
+    </div>
+  </details>
+</details-modal>

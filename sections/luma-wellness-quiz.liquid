@@ -1,0 +1,471 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;800&family=Geist+Mono:wght@600;700&display=swap"
+  rel="stylesheet"
+>
+{{ 'section-luma-wellness-quiz.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-wellness-quiz.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="luma-wellness-quiz color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <div class="luma-wellness-quiz__header" data-animate="fade-up">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="luma-wellness-quiz__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="luma-wellness-quiz__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="luma-wellness-quiz__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {% render 'luma-wellness-quiz-steps', section: section, context: 'page' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Luma Pause wellness quiz",
+  "tag": "section",
+  "class": "section luma-wellness-quiz-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "60-second wellness quiz"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find your probiotic. <strong>Made for the pause.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Four questions about your life stage, your gut and your routine. We'll match you to the probiotic made for what your body is going through — and show you exactly why.</p>"
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back button label",
+      "default": "Back"
+    },
+    {
+      "type": "header",
+      "content": "Results screen"
+    },
+    {
+      "type": "text",
+      "id": "result_eyebrow",
+      "label": "Result eyebrow",
+      "default": "Your result"
+    },
+    {
+      "type": "text",
+      "id": "result_heading",
+      "label": "Result heading",
+      "default": "Your best match"
+    },
+    {
+      "type": "textarea",
+      "id": "result_text",
+      "label": "Result intro text",
+      "default": "Based on what you told us, here's where to start — and the reasoning behind it."
+    },
+    {
+      "type": "text",
+      "id": "result_supporting_label",
+      "label": "Supporting products label",
+      "default": "Complete your ritual"
+    },
+    {
+      "type": "header",
+      "content": "Doctor recommendation"
+    },
+    {
+      "type": "checkbox",
+      "id": "doctor_enabled",
+      "label": "Show doctor block on results",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "doctor_image",
+      "label": "Doctor photo",
+      "info": "Square image works best. A placeholder shows until you upload one."
+    },
+    {
+      "type": "text",
+      "id": "doctor_badge",
+      "label": "Badge text",
+      "default": "Doctor recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "doctor_quote",
+      "label": "Quote",
+      "default": "So many of the menopause concerns I see — bloating, mood, intimate discomfort — are linked to changes in the microbiome. Supporting it daily is a simple, gentle place to start."
+    },
+    {
+      "type": "text",
+      "id": "doctor_name",
+      "label": "Doctor name",
+      "default": "Dr. [Name]"
+    },
+    {
+      "type": "text",
+      "id": "doctor_role",
+      "label": "Position / qualification",
+      "default": "[Position, qualification]"
+    },
+    {
+      "type": "textarea",
+      "id": "doctor_disclaimer",
+      "label": "Disclaimer",
+      "info": "Keep a factual disclaimer here. These are cosmetic products and the test is not a medical diagnosis.",
+      "default": "This quiz suggests food supplements based on your answers. It is not a medical diagnosis. For persistent or severe symptoms, please consult your doctor or gynaecologist."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product slot",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "The ORDER of these Product blocks defines the weight positions used in every question. Slot 1 is the first number, slot 2 the second, and so on."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Display name",
+          "info": "Leave blank to use the product's own title."
+        },
+        {
+          "type": "text",
+          "id": "axis",
+          "label": "Concern it owns",
+          "default": "Gut comfort & digestion"
+        },
+        {
+          "type": "textarea",
+          "id": "hero_line",
+          "label": "Why this is the match",
+          "info": "Shown only when this product is the top result.",
+          "default": "A calmer gut, every day."
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Step label",
+          "default": "About you"
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What bothers you most right now?"
+        },
+        {
+          "type": "text",
+          "id": "help",
+          "label": "Helper text"
+        },
+        {
+          "type": "range",
+          "id": "weight",
+          "min": 0,
+          "max": 5,
+          "step": 0.5,
+          "label": "Question weight",
+          "info": "How much this question counts. Use a high weight for the main concern and a low one (0.5) for questions that should only break ties.",
+          "default": 2
+        },
+        {
+          "type": "header",
+          "content": "Option 1"
+        },
+        {
+          "type": "text",
+          "id": "opt1_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "opt1_sub",
+          "label": "Sub-label"
+        },
+        {
+          "type": "text",
+          "id": "opt1_weights",
+          "label": "Points",
+          "info": "One number per Product slot, comma separated, in block order. Example: 0,3,1",
+          "default": "0,0,0"
+        },
+        {
+          "type": "text",
+          "id": "opt1_reason",
+          "label": "Reason clause",
+          "info": "Completes the sentence shown on the results screen. Leave blank to keep this answer out of the explanation."
+        },
+        {
+          "type": "header",
+          "content": "Option 2"
+        },
+        {
+          "type": "text",
+          "id": "opt2_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "opt2_sub",
+          "label": "Sub-label"
+        },
+        {
+          "type": "text",
+          "id": "opt2_weights",
+          "label": "Points",
+          "default": "0,0,0"
+        },
+        {
+          "type": "text",
+          "id": "opt2_reason",
+          "label": "Reason clause"
+        },
+        {
+          "type": "header",
+          "content": "Option 3"
+        },
+        {
+          "type": "text",
+          "id": "opt3_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "opt3_sub",
+          "label": "Sub-label"
+        },
+        {
+          "type": "text",
+          "id": "opt3_weights",
+          "label": "Points",
+          "default": "0,0,0"
+        },
+        {
+          "type": "text",
+          "id": "opt3_reason",
+          "label": "Reason clause"
+        },
+        {
+          "type": "header",
+          "content": "Option 4"
+        },
+        {
+          "type": "text",
+          "id": "opt4_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "opt4_sub",
+          "label": "Sub-label"
+        },
+        {
+          "type": "text",
+          "id": "opt4_weights",
+          "label": "Points",
+          "default": "0,0,0"
+        },
+        {
+          "type": "text",
+          "id": "opt4_reason",
+          "label": "Reason clause"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Luma Pause wellness quiz",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "axis": "BALANCE · Gut Comfort & Digestion",
+            "hero_line": "A calmer gut, every day. Multi-strain probiotics with prebiotic fibre to support regular digestion and ease occasional bloating."
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "axis": "SUPPORT · Menopause Comfort",
+            "hero_line": "Made for the pause. Targeted strains and botanicals to support comfort through hot flushes, restful sleep and a steadier mood."
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "axis": "RESTORE · Intimate Flora",
+            "hero_line": "Comfort starts with your flora. Women-specific lactobacilli and cranberry to support intimate and urinary health."
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "eyebrow": "About you",
+            "question": "Which stage of life are you in?",
+            "help": "This helps us tailor the recommendation to what your body is going through.",
+            "weight": 1,
+            "opt1_label": "Perimenopause",
+            "opt1_weights": "1,2,1",
+            "opt2_label": "Menopause / post-menopause",
+            "opt2_weights": "1,3,2",
+            "opt3_label": "Not sure yet",
+            "opt3_weights": "2,1,1"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "eyebrow": "Your main concern",
+            "question": "What bothers you most right now?",
+            "help": "Pick the one that affects your day most — this carries the most weight in your result.",
+            "weight": 4,
+            "opt1_label": "Hot flushes & night sweats",
+            "opt1_sub": "Sudden warmth, disturbed nights",
+            "opt1_weights": "0,3,1",
+            "opt1_reason": "hot flushes and night sweats respond best to targeted menopause support",
+            "opt2_label": "Bloating & digestion",
+            "opt2_sub": "Feeling heavy or uncomfortable after meals",
+            "opt2_weights": "3,1,0",
+            "opt2_reason": "digestive discomfort starts with rebalancing your gut flora",
+            "opt3_label": "Intimate dryness or discomfort",
+            "opt3_sub": "Irritation, dryness or recurring UTIs",
+            "opt3_weights": "0,1,3",
+            "opt3_reason": "intimate comfort depends on a healthy lactobacilli balance",
+            "opt4_label": "Mood, sleep & low energy",
+            "opt4_sub": "Restless nights, feeling flat",
+            "opt4_weights": "1,3,0",
+            "opt4_reason": "the gut–brain axis plays a big role in mood, sleep and energy"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "eyebrow": "Your gut",
+            "question": "How does your digestion usually feel?",
+            "help": "Your gut is at the centre of how you feel during this transition.",
+            "weight": 2,
+            "opt1_label": "Often bloated",
+            "opt1_sub": "Especially later in the day",
+            "opt1_weights": "3,0,1",
+            "opt1_reason": "regular bloating is a sign your gut flora could use support",
+            "opt2_label": "Irregular",
+            "opt2_sub": "Some days sluggish, some days not",
+            "opt2_weights": "3,1,0",
+            "opt2_reason": "prebiotic fibre and daily strains help support regularity",
+            "opt3_label": "Sensitive to certain foods",
+            "opt3_sub": "Dairy, spice or rich meals",
+            "opt3_weights": "2,1,1",
+            "opt3_reason": "a diverse microbiome helps your gut cope with everyday foods",
+            "opt4_label": "Mostly comfortable",
+            "opt4_sub": "No major complaints",
+            "opt4_weights": "0,2,1",
+            "opt4_reason": "with your gut settled, the gains come from targeted menopause support"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "eyebrow": "Your lifestyle",
+            "question": "What does a normal week look like for you?",
+            "help": "Be honest — this helps us match what your body needs most.",
+            "weight": 2,
+            "opt1_label": "High stress, little sleep",
+            "opt1_sub": "Busy days, restless nights",
+            "opt1_weights": "1,3,0",
+            "opt1_reason": "stress and poor sleep can amplify menopause symptoms",
+            "opt2_label": "Irregular meals & low fibre",
+            "opt2_sub": "Eating on the go",
+            "opt2_weights": "3,1,0",
+            "opt2_reason": "a low-fibre diet leaves your gut bacteria underfed",
+            "opt3_label": "Recent antibiotics",
+            "opt3_sub": "In the last few months",
+            "opt3_weights": "2,0,2",
+            "opt3_reason": "antibiotics can disrupt both gut and intimate flora",
+            "opt4_label": "Balanced & active",
+            "opt4_sub": "Good food, regular movement",
+            "opt4_weights": "1,2,1",
+            "opt4_reason": "a healthy routine gives targeted probiotics a great base to work from"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,178 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;800&family=Geist+Mono:wght@600;700&display=swap"
+  rel="stylesheet"
+>
+{{ 'section-luma-wellness-quiz.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-wellness-quiz.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'luma-wellness-quiz-popup.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign quiz_page = section.settings.quiz_page
+  assign quiz_url = ''
+  if quiz_page != blank
+    assign quiz_url = quiz_page.url
+  endif
+-%}
+
+{%- if quiz_url != blank and section.settings.enabled or quiz_url != blank and section.settings.show_launcher -%}
+  <div
+    class="luma-quiz-popup"
+    data-luma-quiz-popup
+    data-delay="{{ section.settings.delay | times: 1000 }}"
+    data-timer="{% if section.settings.enabled %}true{% else %}false{% endif %}"
+    data-source="{{ quiz_url }}"
+  >
+    {%- if section.settings.show_launcher -%}
+      <button
+        type="button"
+        class="luma-quiz-launcher"
+        data-quiz-launcher
+        aria-haspopup="dialog"
+      >
+        <span class="luma-quiz-launcher__pulse" aria-hidden="true"></span>
+        <span class="luma-quiz-launcher__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 3.5c-3.6 0-6.2 2.6-6.2 6 0 2 .9 3.3 1.9 4.4.9 1 1.4 1.7 1.5 2.8h5.6c.1-1.1.6-1.8 1.5-2.8 1-1.1 1.9-2.4 1.9-4.4 0-3.4-2.6-6-6.2-6Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+            <path d="M9.6 19.2h4.8M10.4 21.2h3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="luma-quiz-launcher__label">
+          {{- section.settings.launcher_label | default: 'Find your probiotic' | escape -}}
+        </span>
+      </button>
+    {%- endif -%}
+
+    <dialog
+      class="luma-quiz-dialog"
+      data-quiz-dialog
+      aria-label="{{ section.settings.heading | default: 'Wellness quiz' | strip_html | escape }}"
+    >
+      <div class="luma-quiz-dialog__panel">
+        <button
+          type="button"
+          class="luma-quiz-dialog__close"
+          data-quiz-dialog-close
+          aria-label="{{ 'accessibility.close' | t | default: 'Close' }}"
+        >
+          <svg viewBox="0 0 18 17" fill="none" aria-hidden="true">
+            <path
+              d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.5.5 0 0 0 .693-.72L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <div class="luma-quiz-dialog__intro">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="luma-wellness-quiz__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="luma-wellness-quiz__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <p class="luma-wellness-quiz__text">{{ section.settings.text | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {% comment %}
+          The quiz is fetched from the wellness quiz page on open, so its questions and
+          scoring live in exactly one place. The link below is the no-JS and
+          fetch-failure fallback.
+        {% endcomment %}
+        <div class="luma-quiz-dialog__mount" data-quiz-mount>
+          <p class="luma-quiz-dialog__fallback">
+            <a class="luma-quiz__card-cta" href="{{ quiz_url }}">
+              {{ section.settings.fallback_label | default: 'Take the quiz' | escape }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </dialog>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Luma Pause quiz popup",
+  "tag": "section",
+  "class": "section luma-wellness-quiz-popup-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Open automatically after a delay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_launcher",
+      "label": "Show floating button",
+      "info": "A pill button pinned to the bottom of the screen that opens the test at any time. It keeps working after the visitor dismisses the automatic popup.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "launcher_label",
+      "label": "Floating button label",
+      "default": "Find your probiotic"
+    },
+    {
+      "type": "page",
+      "id": "quiz_page",
+      "label": "Wellness quiz page",
+      "info": "The page holding the Luma Pause wellness quiz section. The popup loads the quiz from it, so you only configure the questions once. Required — the popup will not render without it."
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "s",
+      "label": "Delay before opening",
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "60-second wellness quiz"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Not sure where to <strong>start?</strong>"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Four quick questions. We'll match you to the right probiotic and show you why."
+    },
+    {
+      "type": "text",
+      "id": "fallback_label",
+      "label": "Fallback link label",
+      "info": "Shown if the quiz cannot be loaded, or with JavaScript disabled.",
+      "default": "Take the quiz"
+    },
+    {
+      "type": "paragraph",
+      "content": "The popup opens once per browser session. Dismissing it or completing the test keeps it closed until the visitor's next session. In the theme editor it opens when you select this section instead of on a timer."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Pause quiz popup"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,164 @@
+/* Luma Pause — process steps: 3x2 architectural card grid with rose badges and hover micro-interactions */
+
+.luma-process {
+  position: relative;
+  overflow: hidden;
+}
+
+.luma-process__header {
+  text-align: center;
+  margin: 0 auto 5.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  max-width: 72rem;
+}
+
+.luma-process__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B66F75;
+  padding: 0.4rem 1.4rem;
+  background: rgba(182, 111, 117, 0.08);
+  border: 1px solid rgba(182, 111, 117, 0.22);
+  border-radius: 999px;
+}
+
+.luma-process__heading {
+  margin: 0;
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  line-height: 1.12;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #2F3A24;
+  text-wrap: balance;
+}
+
+.luma-process__heading strong {
+  font-weight: 800;
+}
+
+.luma-process__text {
+  max-width: 52ch;
+  font-size: 1.6rem;
+  line-height: 1.65;
+  color: #6E7563;
+  margin: 0;
+}
+
+/* 3-Column Architectural Cards Grid */
+.luma-process__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.4rem;
+}
+
+@media screen and (min-width: 700px) {
+  .luma-process__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1020px) {
+  .luma-process__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.8rem;
+  }
+}
+
+.luma-process__step {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid rgba(47, 58, 36, 0.08);
+  border-radius: 2.2rem;
+  padding: 3.2rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  box-shadow: 0 10px 30px -12px rgba(47, 58, 36, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+
+.luma-process__step:hover {
+  transform: translateY(-5px);
+  border-color: rgba(182, 111, 117, 0.38);
+  box-shadow: 0 20px 44px -14px rgba(182, 111, 117, 0.12);
+}
+
+.luma-process__number {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #B66F75;
+  background: rgba(182, 111, 117, 0.09);
+  border: 1px solid rgba(182, 111, 117, 0.25);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.luma-process__step:hover .luma-process__number {
+  background-color: #B66F75;
+  color: #FFFFFF;
+  transform: scale(1.08);
+}
+
+.luma-process__step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.luma-process__step-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2F3A24;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.luma-process__step-description {
+  margin: 0;
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: #6E7563;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-process__header {
+    margin-bottom: 3.6rem;
+  }
+
+  .luma-process__list {
+    gap: 1.8rem;
+  }
+
+  .luma-process__step {
+    padding: 2.6rem 2.2rem;
+    border-radius: 1.8rem;
+    gap: 1.4rem;
+  }
+
+  .luma-process__step-title {
+    font-size: 1.85rem;
+  }
+
+  .luma-process__step-description {
+    font-size: 1.4rem;
+  }
+}

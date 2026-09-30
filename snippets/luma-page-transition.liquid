@@ -1,0 +1,78 @@
+{%- comment -%}
+  Luma Pause — page transition overlay.
+
+  Markup only; the sweep itself lives in assets/luma-page-transition.css and the
+  navigation handling in assets/luma-page-transition.js.
+
+  Rendered as a direct child of <body> on purpose. The panel is `position: fixed`
+  and has to escape every section wrapper - an ancestor with a transform, filter
+  or non-visible `overflow` would either clip it or turn it into a scroll-local
+  element, the same trap layout/theme.liquid already documents for the colour
+  scheme wrappers.
+
+  The inline script below has to stay inline and stay here, immediately after the
+  element: it runs while the body is still being parsed, which is what lets the
+  panel be covering before the page's own content gets a chance to paint. A
+  deferred file cannot do that - it runs after parsing, so you would see the new
+  page flash into view and only then get covered.
+{%- endcomment -%}
+{%- comment -%}
+  Two variants, picked by media query in the stylesheet rather than by script,
+  so the choice is made before first paint on the arriving half too:
+
+  - Narrow screens get the curved sweep - one panel clipped to an ellipse.
+  - Wide screens get staggered columns rising from the bottom, which has far
+    more to look at across a wide viewport than a single flat edge does.
+
+  Both are rendered; only one is ever displayed. Static markup, so the unused
+  one costs nothing but a few bytes.
+{%- endcomment -%}
+<div class="luma-pt" data-luma-page-transition data-state="idle" aria-hidden="true">
+  <div class="luma-pt__curve">
+    <div class="luma-pt__layer luma-pt__layer--edge"></div>
+    <div class="luma-pt__layer luma-pt__layer--panel"></div>
+  </div>
+  <div class="luma-pt__columns">
+    <div class="luma-pt__column"></div>
+    <div class="luma-pt__column"></div>
+    <div class="luma-pt__column"></div>
+    <div class="luma-pt__column"></div>
+    <div class="luma-pt__column"></div>
+  </div>
+</div>
+<script>
+  (function () {
+    /* Only cover if the page we came from handed over the baton. A direct load,
+       a reload, a bookmark or a visitor arriving from Google must never be left
+       staring at a olive screen, so the absence of the flag means the panel
+       stays idle. The flag is also stamped with a time and consumed on read, so
+       a detour through Shopify's own checkout (which does not render this
+       snippet, and so never consumes it) cannot leave a stale one behind. */
+    try {
+      var raw = sessionStorage.getItem('luma:pt');
+      sessionStorage.removeItem('luma:pt');
+      if (!raw || Date.now() - parseInt(raw, 10) > 5000) return;
+
+      var el = document.currentScript.previousElementSibling;
+      if (!el || !el.hasAttribute('data-luma-page-transition')) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      /* `is-instant` kills the transition for this first change: taking up the
+         covering pose moves the ellipse's centre to the opposite edge, and
+         that jump must not be animated. The deferred script lifts it. */
+      el.classList.add('is-instant');
+      el.dataset.state = 'arriving';
+
+      /* Failsafe. If the deferred script never gets to run - blocked asset, a
+         syntax error, an old browser - the panel clears itself instead of
+         trapping the page underneath it. */
+      window.setTimeout(function () {
+        if (el.dataset.state !== 'arriving') return;
+        el.dataset.state = 'idle';
+        el.classList.remove('is-instant');
+      }, 2500);
+    } catch (e) {
+      /* Private-mode sessionStorage throws on access. No flag, no transition. */
+    }
+  })();
+</script>

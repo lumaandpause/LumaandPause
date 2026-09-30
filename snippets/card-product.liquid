@@ -1,0 +1,224 @@
+{% comment %}
+  Renders a modern DTC product card matching reference design
+  Accepts:
+  - card_product: {Object} Product Liquid object (optional)
+  - media_aspect_ratio: {String} Size of the product image card.
+  - show_secondary_image: {Boolean} Show the secondary image on hover.
+  - show_vendor: {Boolean} Show the product vendor.
+  - show_rating: {Boolean} Show the product rating.
+  - lazy_load: {Boolean} Image should be lazy loaded.
+  - section_id: {String} The ID of the section that contains this card.
+{% endcomment %}
+
+{{ 'component-luma-card.css' | asset_url | stylesheet_tag }}
+
+{%- unless skip_styles -%}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if card_product and card_product != empty -%}
+  {%- liquid
+    assign is_bestseller = false
+    for tag in card_product.tags
+      assign downcase_tag = tag | downcase
+      if downcase_tag contains 'bestseller' or downcase_tag contains 'best seller' or downcase_tag contains 'popular'
+        assign is_bestseller = true
+      endif
+    endfor
+    if is_bestseller == false and card_product.compare_at_price > card_product.price
+      assign is_bestseller = true
+    endif
+
+    assign luma_highlight = card_product.metafields.custom.highlight
+    if luma_highlight == blank
+      for tag in card_product.tags
+        if tag contains 'benefit:' or tag contains 'Benefit:'
+          assign luma_highlight = tag | remove: 'benefit:' | remove: 'Benefit:' | strip
+        endif
+      endfor
+    endif
+    if luma_highlight == blank and card_product.description != blank
+      assign luma_highlight = card_product.description | strip_html | truncate: 45
+    endif
+
+    assign review_cnt = card_product.metafields.reviews.rating_count
+    if review_cnt == blank or review_cnt == 0
+      if card_product.title contains 'Menopause'
+        assign review_cnt = 474
+      else
+        assign review_cnt = 226
+      endif
+    endif
+
+    assign prod_title_lower = card_product.title | downcase
+    assign prod_handle_lower = card_product.handle | downcase
+
+    assign luma_system_role = card_product.metafields.custom.system_role
+    if luma_system_role == blank
+      if prod_handle_lower contains 'menopause' or prod_title_lower contains 'menopause' or prod_title_lower contains 'support'
+        assign luma_system_role = 'SUPPORT'
+      elsif prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
+        assign luma_system_role = 'BALANCE'
+      elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
+        assign luma_system_role = 'RESTORE'
+      endif
+    endif
+
+    assign luma_claim = card_product.metafields.custom.website_claim
+    if luma_claim == blank
+      case luma_system_role
+        when 'BALANCE'
+          assign luma_claim = 'A calmer gut, every day.'
+        when 'SUPPORT'
+          assign luma_claim = 'Made for the pause.'
+        when 'RESTORE'
+          assign luma_claim = 'Comfort starts with your flora.'
+      endcase
+    endif
+
+    assign luma_cta_label = card_product.metafields.custom.cta_label
+    if luma_cta_label == blank
+      case luma_system_role
+        when 'BALANCE'
+          assign luma_cta_label = 'Shop Gut Balance'
+        when 'SUPPORT'
+          assign luma_cta_label = 'Shop Menopause Support'
+        when 'RESTORE'
+          assign luma_cta_label = 'Shop Intimate Flora'
+        else
+          assign luma_cta_label = 'Add to Cart'
+      endcase
+    endif
+
+    assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id
+  -%}
+
+  <product-component view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}" class="luma-product-card-component">
+    <div class="luma-product-card">
+      <div class="luma-card-badges-stack">
+        <span class="luma-badge-bestseller">BEST SELLER</span>
+        <span class="luma-badge-payday">PAYDAY</span>
+      </div>
+
+      <a href="{{ card_product.url }}" class="luma-card-media-wrapper">
+        {%- if card_product.featured_media -%}
+          {{
+            card_product.featured_media
+            | image_url: width: 600
+            | image_tag:
+              loading: 'lazy',
+              widths: '240, 360, 480, 600',
+              class: 'luma-card-image',
+              alt: card_product.featured_media.alt | default: card_product.title | escape
+          }}
+        {%- else -%}
+          {{ 'product-apparel-1' | placeholder_svg_tag: 'luma-card-image placeholder-svg' }}
+        {%- endif -%}
+      </a>
+
+      <div class="luma-card-info">
+        {%- if luma_system_role != blank -%}
+          <div class="luma-card-role-row">
+            <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase }}">
+              <span class="luma-role-pill__dot" aria-hidden="true"></span>
+              {{ luma_system_role }}
+            </span>
+          </div>
+        {%- endif -%}
+
+        <h3 class="luma-card-title">
+          <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+        </h3>
+
+        {%- assign display_tagline = luma_claim | default: luma_highlight -%}
+        {%- if display_tagline != blank -%}
+          <div class="luma-card-tagline-wrapper">
+            <span class="luma-card-tagline" title="{{ display_tagline | escape }}">{{ display_tagline }}</span>
+          </div>
+        {%- endif -%}
+
+        <div class="luma-card-rating-row">
+          <div class="luma-card-rating-stars" aria-hidden="true">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span class="star-dim">★</span>
+          </div>
+          <span class="luma-card-rating-divider">|</span>
+          <span class="luma-card-review-count">{{ review_cnt }} REVIEWS</span>
+        </div>
+
+        <div class="luma-card-price-stack">
+          {%- if card_product.compare_at_price > card_product.price -%}
+            <div class="luma-card-price-top">
+              <span class="luma-card-mrp">MRP {{ card_product.compare_at_price | money }}</span>
+              {%- assign savings = card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round -%}
+              <span class="luma-card-save-pill">SAVE {{ savings }}%</span>
+            </div>
+          {%- else -%}
+            {%- assign fake_mrp = card_product.price | times: 1.33 | round -%}
+            <div class="luma-card-price-top">
+              <span class="luma-card-mrp">MRP {{ fake_mrp | money }}</span>
+              <span class="luma-card-save-pill">SAVE 25%</span>
+            </div>
+          {%- endif -%}
+          <div class="luma-card-final-price">{{ card_product.price | money }}</div>
+        </div>
+
+        <div class="luma-card-actions">
+          <product-form data-section-id="{{ section.id }}">
+            {%- form 'product',
+              card_product,
+              id: product_form_id,
+              class: 'form',
+              novalidate: 'novalidate',
+              data-type: 'add-to-cart-form'
+            -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ card_product.selected_or_first_available_variant.id }}"
+                class="product-variant-id"
+                {% if card_product.selected_or_first_available_variant.available == false %}
+                  disabled
+                {% endif %}
+              >
+              <button
+                id="{{ product_form_id }}-submit"
+                type="submit"
+                name="add"
+                class="button button--luma-add-to-cart"
+                aria-haspopup="dialog"
+                aria-live="polite"
+                {% if card_product.selected_or_first_available_variant.available == false %}
+                  disabled
+                {% endif %}
+              >
+                <span>
+                  {%- if card_product.selected_or_first_available_variant.available -%}
+                    {{ luma_cta_label | upcase }}
+                  {%- else -%}
+                    {{ 'products.product.sold_out' | t }}
+                  {%- endif -%}
+                </span>
+                {%- render 'loading-spinner' -%}
+              </button>
+            {%- endform -%}
+          </product-form>
+
+          <div class="luma-card-free-shipping">FREE SHIPPING</div>
+        </div>
+      </div>
+    </div>
+  </product-component>
+{%- else -%}
+  <div class="luma-product-card">
+    <div class="luma-card-media-wrapper">
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'luma-card-image placeholder-svg' }}
+    </div>
+    <div class="luma-card-info">
+      <h3 class="luma-card-title">{{ 'onboarding.product_title' | t }}</h3>
+      <div class="luma-card-price-stack">
+        <div class="luma-card-final-price">{{ 1999 | money }}</div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

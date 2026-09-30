@@ -1,0 +1,364 @@
+{{ 'section-luma-outcome.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-outcome.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="luma-outcome color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <!-- Header -->
+    <div class="luma-outcome__header" data-outcome-header>
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="luma-outcome__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="luma-outcome__title">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="luma-outcome__subtitle">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Dual Pillar Grid: Who It Is For & What It Helps With -->
+    <div class="luma-outcome__grid">
+      <!-- Pillar 1: Who It Is For -->
+      <div class="luma-outcome__col luma-outcome__col--for" data-outcome-card>
+        <div class="luma-outcome__col-head">
+          <div class="luma-outcome__col-badge">TARGET CONCERNS</div>
+          <h3 class="luma-outcome__col-title">{{ section.settings.who_title | default: 'Who This Is Built For' }}</h3>
+          <p class="luma-outcome__col-desc">Designed for women in perimenopause, menopause and beyond who want to feel more like themselves.</p>
+        </div>
+
+        <div class="luma-outcome__items-list">
+          <div class="luma-outcome__concern-item">
+            <div class="luma-outcome__concern-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="luma-outcome__concern-body">
+              <h4 class="luma-outcome__concern-name">Bloating & Digestive Discomfort</h4>
+              <p class="luma-outcome__concern-text">Feeling heavy, gassy or uncomfortable after meals, or digestion that has become less predictable.</p>
+            </div>
+          </div>
+
+          <div class="luma-outcome__concern-item">
+            <div class="luma-outcome__concern-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="luma-outcome__concern-body">
+              <h4 class="luma-outcome__concern-name">Hot Flushes & Night Sweats</h4>
+              <p class="luma-outcome__concern-text">Sudden waves of warmth during the day and disturbed, sweaty nights.</p>
+            </div>
+          </div>
+
+          <div class="luma-outcome__concern-item">
+            <div class="luma-outcome__concern-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="luma-outcome__concern-body">
+              <h4 class="luma-outcome__concern-name">Mood Swings & Low Energy</h4>
+              <p class="luma-outcome__concern-text">Feeling flat, irritable or tired in a way that does not match how you usually feel.</p>
+            </div>
+          </div>
+
+          <div class="luma-outcome__concern-item">
+            <div class="luma-outcome__concern-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <div class="luma-outcome__concern-body">
+              <h4 class="luma-outcome__concern-name">Intimate Dryness & Discomfort</h4>
+              <p class="luma-outcome__concern-text">Dryness, irritation or recurring urinary discomfort as oestrogen levels change.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 2: What It Helps With (Consumer First, Science Second) -->
+      <div class="luma-outcome__col luma-outcome__col--helps" data-outcome-card>
+        <div class="luma-outcome__col-head">
+          <div class="luma-outcome__col-badge luma-outcome__col-badge--rose">PROVEN IMPACT</div>
+          <h3 class="luma-outcome__col-title">{{ section.settings.helps_title | default: 'What It Transforms' }}</h3>
+          <p class="luma-outcome__col-desc">Everyday benefits first, backed by clinically studied strains and ingredients.</p>
+        </div>
+
+        <div class="luma-outcome__items-list">
+          <div class="luma-outcome__benefit-item">
+            <div class="luma-outcome__benefit-check">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="luma-outcome__benefit-body">
+              <h4 class="luma-outcome__benefit-name">Supports a Calmer, Comfortable Gut</h4>
+              <p class="luma-outcome__benefit-text">Helps ease occasional bloating and supports regular, comfortable digestion.</p>
+              <span class="luma-outcome__science-tag">Science: L. rhamnosus GG + B. lactis BB-12</span>
+            </div>
+          </div>
+
+          <div class="luma-outcome__benefit-item">
+            <div class="luma-outcome__benefit-check">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="luma-outcome__benefit-body">
+              <h4 class="luma-outcome__benefit-name">Supports Comfort Through the Pause</h4>
+              <p class="luma-outcome__benefit-text">Supports comfort through hot flushes, restful sleep and a steadier mood.</p>
+              <span class="luma-outcome__science-tag">Science: L. gasseri + Saffron Extract + Magnesium</span>
+            </div>
+          </div>
+
+          <div class="luma-outcome__benefit-item">
+            <div class="luma-outcome__benefit-check">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="luma-outcome__benefit-body">
+              <h4 class="luma-outcome__benefit-name">Nurtures Intimate Flora</h4>
+              <p class="luma-outcome__benefit-text">Women-specific lactobacilli help maintain a healthy intimate and urinary environment.</p>
+              <span class="luma-outcome__science-tag">Science: L. crispatus + L. reuteri RC-14</span>
+            </div>
+          </div>
+
+          <div class="luma-outcome__benefit-item">
+            <div class="luma-outcome__benefit-check">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="luma-outcome__benefit-body">
+              <h4 class="luma-outcome__benefit-name">One Easy Capsule a Day</h4>
+              <p class="luma-outcome__benefit-text">Vegan, delayed-release capsules that fit into any routine — no powders, no fridge.</p>
+              <span class="luma-outcome__science-tag">Science: Acid-Resistant Delayed-Release Capsule</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar 3: Expected Result Timeline -->
+    <div class="luma-outcome__timeline-wrap" data-outcome-timeline>
+      <div class="luma-outcome__timeline-intro">
+        <span class="luma-outcome__col-badge">THE 90-DAY JOURNEY</span>
+        <h3 class="luma-outcome__timeline-heading">{{ section.settings.timeline_title | default: 'Expected Result Timeline' }}</h3>
+        <p class="luma-outcome__timeline-sub">Your microbiome adapts gradually with daily use. Here is what you can realistically expect:</p>
+      </div>
+
+      <!-- Stepper Nav (Mobile/Desktop Interactive) -->
+      <div class="luma-outcome__stepper-nav" role="tablist">
+        <button type="button" class="luma-outcome__step-btn is-active" data-phase-target="0" role="tab" aria-selected="true">
+          <span class="luma-outcome__step-num">01</span>
+          <span class="luma-outcome__step-text">Days 1–30</span>
+        </button>
+        <button type="button" class="luma-outcome__step-btn" data-phase-target="1" role="tab" aria-selected="false">
+          <span class="luma-outcome__step-num">02</span>
+          <span class="luma-outcome__step-text">Days 31–60</span>
+        </button>
+        <button type="button" class="luma-outcome__step-btn" data-phase-target="2" role="tab" aria-selected="false">
+          <span class="luma-outcome__step-num">03</span>
+          <span class="luma-outcome__step-text">Days 61–90+</span>
+        </button>
+      </div>
+
+      <!-- Animated Progress Rail -->
+      <div class="luma-outcome__rail-container" aria-hidden="true">
+        <div class="luma-outcome__rail-bg">
+          <div class="luma-outcome__rail-fill" data-timeline-fill style="width: 33%;"></div>
+        </div>
+      </div>
+
+      <!-- 3 Phase Cards Grid -->
+      <div class="luma-outcome__timeline-cards">
+        <!-- Phase 1 -->
+        <div class="luma-outcome__phase-card is-active" data-phase-card="0" data-water-fill="33">
+          <div class="luma-outcome__water-wrap" aria-hidden="true">
+            <div class="luma-outcome__water-level">
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--back"></div>
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--front"></div>
+              <div class="luma-outcome__water-body">
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--1"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--2"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--3"></span>
+              </div>
+            </div>
+          </div>
+          <div class="luma-outcome__phase-top">
+            <span class="luma-outcome__phase-badge">PHASE 01 • WEEKS 1–4</span>
+            <span class="luma-outcome__phase-tag">DAYS 1–30</span>
+          </div>
+          <h4 class="luma-outcome__phase-title">Settling In</h4>
+          <div class="luma-outcome__phase-section">
+            <span class="luma-outcome__phase-label">WHAT YOU SEE & FEEL:</span>
+            <p class="luma-outcome__phase-consumer">Digestion starts to feel calmer and more regular. Less bloating after meals. The daily capsule becomes an easy habit.</p>
+          </div>
+          <div class="luma-outcome__phase-section luma-outcome__phase-section--science">
+            <span class="luma-outcome__phase-label">BEHIND THE SCENES:</span>
+            <p class="luma-outcome__phase-sci">Probiotic strains begin to colonise the gut, while prebiotic fibre feeds the beneficial bacteria already there.</p>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="luma-outcome__phase-card" data-phase-card="1" data-water-fill="66">
+          <div class="luma-outcome__water-wrap" aria-hidden="true">
+            <div class="luma-outcome__water-level">
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--back"></div>
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--front"></div>
+              <div class="luma-outcome__water-body">
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--1"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--2"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--3"></span>
+              </div>
+            </div>
+          </div>
+          <div class="luma-outcome__phase-top">
+            <span class="luma-outcome__phase-badge">PHASE 02 • WEEKS 5–8</span>
+            <span class="luma-outcome__phase-tag">DAYS 31–60</span>
+          </div>
+          <h4 class="luma-outcome__phase-title">Finding Balance</h4>
+          <div class="luma-outcome__phase-section">
+            <span class="luma-outcome__phase-label">WHAT YOU SEE & FEEL:</span>
+            <p class="luma-outcome__phase-consumer">Many women notice more restful nights, steadier energy and a more even mood through the day.</p>
+          </div>
+          <div class="luma-outcome__phase-section luma-outcome__phase-section--science">
+            <span class="luma-outcome__phase-label">BEHIND THE SCENES:</span>
+            <p class="luma-outcome__phase-sci">A more diverse microbiome supports the gut–brain axis and the way your body processes hormones.</p>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="luma-outcome__phase-card" data-phase-card="2" data-water-fill="100">
+          <div class="luma-outcome__water-wrap" aria-hidden="true">
+            <div class="luma-outcome__water-level">
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--back"></div>
+              <div class="luma-outcome__water-wave luma-outcome__water-wave--front"></div>
+              <div class="luma-outcome__water-body">
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--1"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--2"></span>
+                <span class="luma-outcome__water-bubble luma-outcome__water-bubble--3"></span>
+              </div>
+            </div>
+          </div>
+          <div class="luma-outcome__phase-top">
+            <span class="luma-outcome__phase-badge">PHASE 03 • WEEKS 9–12</span>
+            <span class="luma-outcome__phase-tag">DAYS 61–90+</span>
+          </div>
+          <h4 class="luma-outcome__phase-title">Feeling Like You Again</h4>
+          <div class="luma-outcome__phase-section">
+            <span class="luma-outcome__phase-label">WHAT YOU SEE & FEEL:</span>
+            <p class="luma-outcome__phase-consumer">Everyday comfort feels more consistent — in your gut, your sleep and your intimate health.</p>
+          </div>
+          <div class="luma-outcome__phase-section luma-outcome__phase-section--science">
+            <span class="luma-outcome__phase-label">BEHIND THE SCENES:</span>
+            <p class="luma-outcome__phase-sci">Established beneficial flora in the gut and intimate tract help maintain long-term balance with continued daily use.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assurance Badges Footer Strip -->
+    <div class="luma-outcome__assurance-strip" data-outcome-assurance>
+      <div class="luma-outcome__assurance-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Vegan & Drug-Free</span>
+      </div>
+      <div class="luma-outcome__assurance-divider" aria-hidden="true">•</div>
+      <div class="luma-outcome__assurance-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Safe For Daily Ongoing Use</span>
+      </div>
+      <div class="luma-outcome__assurance-divider" aria-hidden="true">•</div>
+      <div class="luma-outcome__assurance-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>GMP Certified Manufacturing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma Outcome & Timeline",
+  "tag": "section",
+  "class": "section luma-outcome-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE LUMA PAUSE PROMISE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Real Results You Can Measure"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Clear answers on who this helps, what it transforms, and when you can expect real changes."
+    },
+    {
+      "type": "header",
+      "content": "Pillars"
+    },
+    {
+      "type": "text",
+      "id": "who_title",
+      "label": "Pillar 1 Title",
+      "default": "Who This Is Built For"
+    },
+    {
+      "type": "text",
+      "id": "helps_title",
+      "label": "Pillar 2 Title",
+      "default": "What It Transforms"
+    },
+    {
+      "type": "text",
+      "id": "timeline_title",
+      "label": "Timeline Title",
+      "default": "Expected Result Timeline"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Outcome & Timeline"
+    }
+  ]
+}
+{% endschema %}

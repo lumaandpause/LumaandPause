@@ -1,0 +1,373 @@
+/* ==========================================================================
+   Luma Pause — Compact Bestsellers 2-Product Carousel
+   ========================================================================== */
+
+.luma-bestsellers {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.luma-bestsellers__layout {
+  display: block;
+}
+
+/* Optional now - the section renders without it. When present it is a header
+   above the panel rather than a column beside it, so an empty one can never
+   leave the products sharing the row with dead space. */
+.luma-bestsellers__intro {
+  max-width: 60ch;
+  margin: 0 auto 3.2rem;
+  text-align: center;
+}
+
+.luma-bestsellers__eyebrow {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin: 0 0 1rem;
+}
+
+.luma-bestsellers__heading {
+  font-family: inherit;
+  font-size: clamp(2.4rem, 3vw, 3.4rem);
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.2rem;
+  text-wrap: balance;
+  color: #2F3A24;
+}
+
+.luma-bestsellers__heading strong {
+  font-weight: 800;
+  display: block;
+}
+
+.luma-bestsellers__description {
+  font-size: 1.45rem;
+  line-height: 1.55;
+  color: rgba(140, 148, 121, 0.7);
+  max-width: 34ch;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Panel Container (Solid Warm Background)
+   -------------------------------------------------------------------------- */
+.luma-bestsellers__panel {
+  position: relative;
+  border-radius: 2.4rem;
+  padding: 1.8rem 1.4rem 2rem;
+  background-color: #F6EAEC; /* Solid warm sand background */
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(182, 111, 117, 0.08);
+}
+
+@media screen and (min-width: 750px) {
+  .luma-bestsellers__panel {
+    padding: 2.2rem 2rem 2.2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Carousel Container & 2-Product Slider Track
+   -------------------------------------------------------------------------- */
+.luma-bestsellers__carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y pinch-zoom;
+}
+
+.luma-bestsellers__track {
+  display: flex;
+  align-items: stretch;
+  gap: 2rem;
+  width: 100%;
+  /* Native scroll-snap carousel: touch drag, momentum and keyboard scrolling
+     all come free, and it still works with JavaScript off. */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.luma-bestsellers__track::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-bestsellers__track {
+    gap: 1.2rem;
+  }
+}
+
+/* Exactly 2 Spacious Cards per Viewport */
+.luma-bestsellers__slide {
+  flex: 0 0 calc(50% - 1rem);
+  width: calc(50% - 1rem);
+  min-width: calc(50% - 1rem);
+  box-sizing: border-box;
+  display: flex;
+  scroll-snap-align: start;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-bestsellers__slide {
+    /* Short of full width so the next card peeks in and the strip reads as
+       scrollable without the dots having to say so. A 375px screen split two
+       ways left each card ~165px, too narrow for the price and the CTA. */
+    flex: 0 0 82%;
+    width: 82%;
+    min-width: 82%;
+  }
+}
+
+/* Seamless Card on Solid Panel */
+.luma-bestsellers__slide .luma-product-card {
+  width: 100%;
+  height: 100%;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Compact Criss-Cross Grid Background on Product Media
+   -------------------------------------------------------------------------- */
+.luma-bestsellers__slide .luma-card-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.05; /* Compact squircle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.8rem;
+  margin-bottom: 1.2rem;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.45);
+  background-image: 
+    linear-gradient(rgba(182, 111, 117, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(182, 111, 117, 0.22) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1px solid rgba(182, 111, 117, 0.2);
+  box-shadow: inset 0 2px 8px rgba(182, 111, 117, 0.04);
+}
+
+.luma-bestsellers__slide .luma-card-media-wrapper img,
+.luma-bestsellers__slide .luma-card-media-wrapper .luma-card-image {
+  max-width: 78%;
+  max-height: 78%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.16));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.luma-bestsellers__slide .luma-product-card:hover .luma-card-media-wrapper img {
+  transform: scale(1.05);
+}
+
+/* --------------------------------------------------------------------------
+   Compact Product Details Area
+   -------------------------------------------------------------------------- */
+.luma-bestsellers__slide .luma-card-info {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.luma-bestsellers__slide .luma-card-title,
+.luma-bestsellers__slide .luma-card__title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2F3A24;
+  min-height: 3.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.luma-bestsellers__slide .luma-card-tagline-wrapper {
+  margin: 0.4rem 0 0.5rem;
+}
+
+.luma-bestsellers__slide .luma-card-tagline {
+  background-color: #FBF6F6;
+  border: 1px solid #F3E3E5;
+  color: #3A4630;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.2rem 0.8rem;
+}
+
+.luma-bestsellers__slide .luma-card-rating-row {
+  margin-bottom: 0.6rem;
+  gap: 0.6rem;
+}
+
+.luma-bestsellers__slide .luma-card-rating-stars {
+  font-size: 1.15rem;
+}
+
+.luma-bestsellers__slide .luma-card-review-count {
+  font-size: 1rem;
+}
+
+.luma-bestsellers__slide .luma-card-price-top {
+  margin-bottom: 0.2rem;
+}
+
+.luma-bestsellers__slide .luma-card-mrp {
+  font-size: 1.2rem;
+}
+
+.luma-bestsellers__slide .luma-card-save-pill {
+  font-size: 1rem;
+  padding: 0.15rem 0.65rem;
+}
+
+.luma-bestsellers__slide .luma-card-final-price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #2F3A24;
+  margin-bottom: 0.8rem;
+}
+
+.luma-bestsellers__slide .button--luma-add-to-cart {
+  min-height: 3.8rem !important;
+  padding: 0.85rem 1.6rem !important;
+  font-size: 1.15rem !important;
+}
+
+.luma-bestsellers__slide .luma-card-free-shipping {
+  background-color: rgba(255, 253, 249, 0.7);
+  border: 1px solid rgba(182, 111, 117, 0.15);
+  color: #2F3A24;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.95rem;
+  margin-top: 0.6rem;
+}
+
+/* --------------------------------------------------------------------------
+   Compact Carousel Navigation Dots
+   -------------------------------------------------------------------------- */
+.luma-bestsellers__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.luma-bestsellers__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 9999px;
+  background-color: rgba(47, 58, 36, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.luma-bestsellers__dot:hover {
+  background-color: rgba(182, 111, 117, 0.6);
+}
+
+.luma-bestsellers__dot--active {
+  width: 2.2rem;
+  background-color: #2F3A24;
+  border-radius: 100px;
+}
+
+/* ==========================================================================
+   Desktop grid
+   ==========================================================================
+
+   From 990px there is room for the whole range at once, so the carousel gives
+   way to a grid: no scrolling, no dots, every product visible. auto-fit keeps
+   it sensible whatever "products to show" is set to. */
+
+@media screen and (min-width: 990px) {
+  .luma-bestsellers__track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2.4rem;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .luma-bestsellers__slide {
+    flex: initial;
+    width: auto;
+    min-width: 0;
+  }
+
+  .luma-bestsellers__dots {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Product loading
+   ==========================================================================
+
+   The hidden starting state is set by GSAP, not here, so without JavaScript
+   every card is simply visible. This is only the shimmer that sits under an
+   image while it downloads. */
+
+.luma-bestsellers__slide .luma-card-media-wrapper.is-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  background-size: 220% 100%;
+  animation: lumaBestsellerShimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes lumaBestsellerShimmer {
+  from {
+    background-position: 160% 0;
+  }
+
+  to {
+    background-position: -60% 0;
+  }
+}
+
+/* ==========================================================================
+   Add to cart - hover fill
+   ==========================================================================
+
+   The button's own rules swap the background to rose the instant you hover,
+   which would hide the growing disc behind an already-rose button. Once
+   luma-button-fill.js has run, the background stays olive and the disc does
+   the colouring; the label still lifts to white on the same timing. Without
+   JavaScript the class is never added and the plain CSS hover stands.
+
+   `html.luma-fill-ready` is needed to out-specify the !important hover in
+   component-luma-card.css. */
+
+html.luma-fill-ready .luma-bestsellers__slide .button--luma-add-to-cart:hover,
+html.luma-fill-ready .luma-bestsellers__slide .button--luma-add-to-cart:focus-visible {
+  background: rgb(var(--luma-ink)) !important;
+  background-color: rgb(var(--luma-ink)) !important;
+}
+
+.luma-bestsellers__slide .button--luma-add-to-cart .luma-fill {
+  background-color: rgb(var(--luma-rose));
+}

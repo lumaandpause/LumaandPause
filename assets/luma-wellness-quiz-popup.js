@@ -1,0 +1,164 @@
+/* Luma Pause — wellness quiz popup. Opens N seconds after load, once per browser session.
+   Uses a native <dialog> so focus trapping, ESC and background inert come free. */
+(function () {
+  'use strict';
+
+  var KEY = 'luma:wellnessquiz:popup:seen';
+
+  function seen() {
+    try {
+      return window.sessionStorage.getItem(KEY) === '1';
+    } catch (e) {
+      // Private mode / blocked storage: fail closed so we never nag on every page.
+      return true;
+    }
+  }
+
+  function markSeen() {
+    try {
+      window.sessionStorage.setItem(KEY, '1');
+    } catch (e) {
+      /* nothing we can do; the in-memory guard below still holds for this page */
+    }
+  }
+
+  function initPopup(root) {
+    if (root.dataset.popupInit === 'true') return;
+    root.dataset.popupInit = 'true';
+
+    var dialog = root.querySelector('[data-quiz-dialog]');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+
+    var delay = parseInt(root.getAttribute('data-delay'), 10);
+    if (isNaN(delay)) delay = 7000;
+
+    var closers = root.querySelectorAll('[data-quiz-dialog-close]');
+    var timer = null;
+
+    function close() {
+      markSeen();
+      if (dialog.open) dialog.close();
+      document.documentElement.style.overflow = '';
+    }
+
+    var mount = root.querySelector('[data-quiz-mount]');
+    var source = root.getAttribute('data-source');
+    var loading = false;
+
+    // The quiz markup lives on the wellness quiz page. Fetch it on open so the
+    // questions and scoring have exactly one source of truth.
+    function loadQuiz() {
+      if (loading || !mount || !source) return;
+      if (mount.querySelector('[data-luma-quiz]')) return;
+      loading = true;
+      fetch(source, { credentials: 'same-origin' })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.text();
+        })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var quiz = doc.querySelector('[data-luma-quiz]');
+          if (!quiz) throw new Error('no quiz on page');
+          mount.innerHTML = '';
+          mount.appendChild(document.importNode(quiz, true));
+          if (window.LumaQuizInit) window.LumaQuizInit(mount);
+        })
+        .catch(function () {
+          // Leave the fallback link in place — it goes to the same quiz.
+          loading = false;
+        });
+    }
+
+    function open() {
+      if (dialog.open) return;
+      // Don't interrupt someone already taking the test on this page.
+      if (document.querySelector('.luma-wellness-quiz [data-luma-quiz]')) return;
+      markSeen();
+      loadQuiz();
+      dialog.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      if (window.LumaQuizInit) window.LumaQuizInit(dialog);
+    }
+
+    closers.forEach(function (btn) {
+      btn.addEventListener('click', close);
+    });
+
+    // Backdrop click closes. The dialog element itself fills the viewport, so a
+    // click landing on it rather than on the inner panel is a backdrop click.
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog) close();
+    });
+
+    dialog.addEventListener('close', function () {
+      markSeen();
+      document.documentElement.style.overflow = '';
+    });
+
+    // Completing the test counts as engagement; keep it closed for the session.
+    root.addEventListener('luma:quiz:complete', markSeen);
+
+    // The floating button is an explicit request, so it ignores the
+    // once-per-session guard entirely and always opens the test.
+    var launcher = root.querySelector('[data-quiz-launcher]');
+    if (launcher) {
+      launcher.addEventListener('click', function () {
+        loadQuiz();
+        if (!dialog.open) {
+          dialog.showModal();
+          document.documentElement.style.overflow = 'hidden';
+          if (window.LumaQuizInit) window.LumaQuizInit(dialog);
+        }
+      });
+      // Reveal it once the page has settled rather than on first paint.
+      window.setTimeout(function () {
+        launcher.classList.add('is-in');
+      }, 1200);
+    }
+
+    if (window.Shopify && window.Shopify.designMode) {
+      // In the editor, open on section select instead of on a timer so it never
+      // blocks the merchant while they are editing other sections.
+      document.addEventListener('shopify:section:select', function (e) {
+        if (root.contains(e.target) || e.target.contains(root)) open();
+      });
+      document.addEventListener('shopify:section:deselect', function (e) {
+        if (root.contains(e.target) || e.target.contains(root)) close();
+      });
+      return;
+    }
+
+    if (root.getAttribute('data-timer') !== 'true') return;
+    if (seen()) return;
+
+    // Re-check when the timer fires, not just when it's scheduled: something
+    // else on the page may have counted as engagement in the meantime - the
+    // routine builder marks the session seen once a concern is picked, so
+    // nobody halfway through building a routine gets a quiz dropped on them.
+    timer = window.setTimeout(function () {
+      if (!seen()) open();
+    }, delay);
+    window.addEventListener('pagehide', function () {
+      window.clearTimeout(timer);
+    });
+  }
+
+  function boot(scope) {
+    (scope || document).querySelectorAll('[data-luma-quiz-popup]').forEach(initPopup);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      boot();
+    });
+  } else {
+    boot();
+  }
+
+  if (window.Shopify && window.Shopify.designMode) {
+    document.addEventListener('shopify:section:load', function (e) {
+      boot(e.target);
+    });
+  }
+})();

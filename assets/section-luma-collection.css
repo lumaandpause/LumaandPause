@@ -1,0 +1,289 @@
+/* Luma Pause — shop-all: quick-filter pills, facets/toolbar restyle, product card additions */
+
+/* Quick-filter pill bar */
+.luma-pills-container {
+  margin-bottom: 2rem;
+}
+
+.luma-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.6rem;
+}
+
+.luma-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.luma-pills__group-label {
+  flex: none;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin-right: 0.4rem;
+}
+
+.luma-pills__group-label:not(:first-child) {
+  margin-left: 1.4rem;
+}
+
+.luma-pills__pill {
+  flex: none;
+  white-space: nowrap;
+  padding: 0.8rem 1.8rem;
+  border-radius: 100px;
+  border: 1px solid rgba(140, 148, 121, 0.15);
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: #2F3A24;
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luma-pills__pill:hover {
+  border-color: #B66F75;
+  background-color: rgba(182, 111, 117, 0.08);
+  color: #B66F75;
+  transform: translateY(-1px);
+}
+
+.luma-pills__pill--active {
+  background-color: #2F3A24;
+  color: #FAF8F3;
+  border-color: #2F3A24;
+  box-shadow: 0 4px 12px rgba(47, 58, 36, 0.15);
+}
+
+/* Toolbar: product count + filter/sort trigger */
+.product-count {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+}
+
+.mobile-facets__open-wrapper {
+  border-radius: 100px;
+  border: 1px solid rgba(140, 148, 121, 0.2);
+  padding: 0.8rem 1.8rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.mobile-facets__open-wrapper:hover {
+  border-color: #2F3A24;
+  background-color: rgba(47, 58, 36, 0.04);
+}
+
+.facets-container-drawer .mobile-facets__open-wrapper {
+  gap: 0.6rem;
+}
+
+/* Filter drawer contents */
+.mobile-facets__inner {
+  --luma-accent: #B66F75;
+}
+
+.facets__summary {
+  font-weight: 500;
+}
+
+.facet-checkbox.active .facet-checkbox__text-label {
+  font-weight: 600;
+}
+
+price-range input[type='range'] {
+  accent-color: var(--luma-accent, #B66F75);
+}
+
+.mobile-facets__footer .button--primary {
+  border-radius: 100px;
+}
+
+/* Product card additions (tagline, savings badge, free-shipping tag) */
+.card-information {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.luma-card-tagline {
+  display: inline-block;
+  background-color: rgba(47, 58, 36, 0.05);
+  color: #8C9479;
+  border-radius: 0.6rem;
+  padding: 0.3rem 0.8rem;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 0.4rem 0 0.2rem;
+  width: fit-content;
+}
+
+.luma-card-save {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 100px;
+  background-color: rgba(182, 111, 117, 0.1);
+  border: 0.1rem solid rgba(182, 111, 117, 0.3);
+  color: #B66F75;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.luma-card-shipping {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(140, 148, 121, 0.55);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0.4rem;
+  padding: 0.5rem 0;
+  margin: 0.6rem 0 0;
+}
+
+/* Quick Add button override for collection grid */
+.quick-add__submit,
+.quick-add .button {
+  border-radius: 100px !important;
+  font-family: 'Geist Mono', monospace !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 1.1rem 2rem !important;
+  background-color: #2F3A24 !important;
+  color: #FAF8F3 !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(47, 58, 36, 0.12) !important;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.quick-add__submit:hover,
+.quick-add .button:hover {
+  background-color: #B66F75 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(182, 111, 117, 0.28) !important;
+}
+
+/* ==========================================================================
+   Luma Pause — "Our Collection" Header
+   ========================================================================== */
+.luma-collection-header {
+  margin-bottom: 3.6rem;
+  padding-top: 1.2rem;
+  box-sizing: border-box;
+}
+
+.luma-collection-header--center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.luma-collection-header--left {
+  text-align: left;
+}
+
+.luma-collection-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: 'Geist Mono', monospace, inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin-bottom: 1.2rem;
+}
+
+.luma-collection-header__eyebrow-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: #B66F75;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(182, 111, 117, 0.45);
+}
+
+.luma-collection-header__title {
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-size: clamp(2.8rem, 3.8vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: #2F3A24;
+  margin: 0 0 1.2rem;
+}
+
+.luma-collection-header__title em,
+.luma-collection-header__title strong {
+  color: #B66F75;
+  font-style: normal;
+}
+
+.luma-collection-header__subheading {
+  max-width: 58ch;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-size: clamp(1.4rem, 1.4vw, 1.6rem);
+  line-height: 1.6;
+  color: rgba(47, 58, 36, 0.68);
+  margin: 0 auto;
+}
+
+.luma-collection-header--left .luma-collection-header__subheading {
+  margin-left: 0;
+}
+
+.luma-collection-header__subheading p {
+  margin: 0;
+}
+
+.luma-collection-header__divider {
+  width: 5.6rem;
+  height: 0.2rem;
+  background: linear-gradient(90deg, rgba(182, 111, 117, 0.2), #B66F75, rgba(182, 111, 117, 0.2));
+  border-radius: 9999px;
+  margin: 2.2rem auto 0;
+}
+
+.luma-collection-header--left .luma-collection-header__divider {
+  margin-left: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-collection-header {
+    margin-bottom: 2.4rem;
+    padding-top: 0.6rem;
+  }
+
+  .luma-collection-header__title {
+    font-size: 2.6rem;
+  }
+
+  .luma-collection-header__subheading {
+    font-size: 1.35rem;
+  }
+}
+

@@ -1,0 +1,63 @@
+/* Luma Pause — custom cursor: rose dot + trailing halo ring.
+
+   These two elements are empty divs, and Dawn's base.css carries
+   `a:empty, ul:empty, div:empty, section:empty, ... { display: none }` - a
+   0-1-1 selector that beats a lone `.luma-cursor-dot` at 0-1-0 and collapses
+   them to nothing. That is why the cursor was invisible. Visibility is
+   therefore switched by the `.is-active` class pair below, whose selectors are
+   0-2-0 and win. Keep both classes in those selectors, and keep the explicit
+   `display` on each. */
+
+.luma-cursor-dot,
+.luma-cursor-ring {
+  /* Same value Dawn's `div:empty` rule would impose anyway, stated here so the
+     hidden state is a decision of this file rather than a side effect. */
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+  border-radius: 50%;
+  will-change: transform;
+  transition: width 0.18s ease, height 0.18s ease, background-color 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.luma-cursor-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #B66F75;
+  box-shadow: 0 0 0 1.5px #ffffff, 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.luma-cursor-ring {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #B66F75;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 16px rgba(182, 111, 117, 0.45);
+}
+
+/* Both classes are load-bearing: 0-2-0 outranks base.css's `div:empty`, which
+   is what luma-custom-cursor.js toggles to show the cursor once it sees real
+   mouse input. A plain inline `display` would win too, but a class keeps the
+   styling in the stylesheet. */
+.luma-cursor-dot.is-active,
+.luma-cursor-ring.is-active {
+  display: block;
+}
+
+.luma-cursor-ring.is-hovering {
+  width: 54px;
+  height: 54px;
+  background-color: rgba(182, 111, 117, 0.18);
+  border-width: 2.5px;
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.8), 0 0 22px rgba(182, 111, 117, 0.6);
+}
+
+/* The native pointer is only surrendered once JS has the custom one running,
+   so a failure here leaves the normal cursor rather than no cursor at all. */
+html.luma-cursor-active,
+html.luma-cursor-active * {
+  cursor: none !important;
+}

@@ -1,0 +1,512 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;800&family=Geist+Mono:wght@600;700&display=swap"
+  rel="stylesheet"
+>
+{{ 'section-luma-faqs.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign cat_idx_csv = ''
+  for block in section.blocks
+    if block.type == 'category'
+      assign cat_idx_csv = cat_idx_csv | append: forloop.index0 | append: ','
+    endif
+  endfor
+  assign cat_idx_csv = cat_idx_csv | remove_last: ','
+  assign cat_indexes = cat_idx_csv | split: ','
+  assign cat_count = cat_indexes.size
+-%}
+
+<div class="luma-faqs color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="luma-faqs__inner page-width">
+    {%- if section.settings.heading != blank or section.settings.text != blank -%}
+      <div class="luma-faqs__header" data-animate="fade-up">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="luma-faqs__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="luma-faqs__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if cat_count > 1 -%}
+      <div class="luma-faqs__tablist" role="tablist" aria-label="FAQ categories" data-animate="fade-up">
+        {%- assign tab_i = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category' -%}
+            <button
+              type="button"
+              class="luma-faqs__pill{% if tab_i == 0 %} is-active{% endif %}"
+              role="tab"
+              id="tab-{{ section.id }}-{{ block.id }}"
+              aria-controls="panel-{{ section.id }}-{{ block.id }}"
+              aria-selected="{% if tab_i == 0 %}true{% else %}false{% endif %}"
+              tabindex="{% if tab_i == 0 %}0{% else %}-1{% endif %}"
+              data-faq-tab
+              data-block-id="{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              {{- block.settings.label | escape -}}
+            </button>
+            {%- assign tab_i = tab_i | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="luma-faqs__panels" data-animate="fade-up">
+      {%- if cat_count > 0 -%}
+        {%- for cat_pos in cat_indexes -%}
+          {%- if cat_pos != blank -%}
+            {%- liquid
+              assign cat_pos_num = cat_pos | plus: 0
+              assign start = cat_pos_num
+              if forloop.index0 == 0
+                assign start = -1
+              endif
+              assign stop = section.blocks.size
+              unless forloop.last
+                assign next_pos = cat_indexes[forloop.index]
+                assign stop = next_pos | plus: 0
+              endunless
+              assign cat_block = section.blocks[cat_pos_num]
+              assign q_num = 0
+            -%}
+            <div
+              class="luma-faqs__panel"
+              id="panel-{{ section.id }}-{{ cat_block.id }}"
+              role="tabpanel"
+              aria-labelledby="tab-{{ section.id }}-{{ cat_block.id }}"
+              data-faq-panel
+              data-block-id="{{ cat_block.id }}"
+              {% unless forloop.first %}
+                hidden
+              {% endunless %}
+            >
+              <h3 class="luma-faqs__panel-title">{{ cat_block.settings.label | escape }}</h3>
+              <ul class="luma-faqs__list" role="list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'question'
+                      and forloop.index0 > start
+                      and forloop.index0 < stop
+                      and block.settings.question != blank
+                  -%}
+                    {%- liquid
+                      assign q_num = q_num | plus: 1
+                      assign is_open = false
+                      if section.settings.open_first and q_num == 1
+                        assign is_open = true
+                      endif
+                    -%}
+                    {%- render 'luma-faq-item',
+                      block: block,
+                      section_id: section.id,
+                      q_num: q_num,
+                      is_open: is_open
+                    -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- liquid
+          assign q_num = 0
+        -%}
+        <div class="luma-faqs__panel" data-faq-panel>
+          <ul class="luma-faqs__list" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'question' and block.settings.question != blank -%}
+                {%- liquid
+                  assign q_num = q_num | plus: 1
+                  assign is_open = false
+                  if section.settings.open_first and q_num == 1
+                    assign is_open = true
+                  endif
+                -%}
+                {%- render 'luma-faq-item',
+                  block: block,
+                  section_id: section.id,
+                  q_num: q_num,
+                  is_open: is_open
+                -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <style>
+    .luma-faqs__tablist {
+      display: none;
+    }
+
+    .luma-faqs__panel[hidden] {
+      display: block !important;
+    }
+
+    .luma-faqs__panel + .luma-faqs__panel {
+      margin-top: 3.2rem;
+    }
+
+    .luma-faqs__panel-title {
+      position: static !important;
+      width: auto !important;
+      height: auto !important;
+      clip: auto !important;
+      overflow: visible !important;
+      margin: 0 0 1.2rem !important;
+      font-family: 'Geist Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #B66F75;
+    }
+
+    .luma-faqs__answer {
+      grid-template-rows: 1fr !important;
+    }
+
+    .luma-faqs__answer-inner {
+      visibility: visible !important;
+    }
+
+    .luma-faqs__icon {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<script>
+  (function () {
+    function initLumaFaqs(section) {
+      if (section.dataset.faqsInit === 'true') return;
+      section.dataset.faqsInit = 'true';
+
+      var tabs = Array.prototype.slice.call(section.querySelectorAll('[data-faq-tab]'));
+      var panels = Array.prototype.slice.call(section.querySelectorAll('[data-faq-panel]'));
+
+      function activate(index, setFocus) {
+        tabs.forEach(function (tab, i) {
+          var selected = i === index;
+          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+          tab.setAttribute('tabindex', selected ? '0' : '-1');
+          tab.classList.toggle('is-active', selected);
+        });
+        panels.forEach(function (panel, i) {
+          panel.hidden = i !== index;
+        });
+        if (setFocus && tabs[index]) tabs[index].focus();
+      }
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () {
+          activate(i, false);
+        });
+
+        tab.addEventListener('keydown', function (event) {
+          var next = null;
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            next = (i + 1) % tabs.length;
+          } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            next = (i - 1 + tabs.length) % tabs.length;
+          } else if (event.key === 'Home') {
+            next = 0;
+          } else if (event.key === 'End') {
+            next = tabs.length - 1;
+          }
+          if (next === null) return;
+          event.preventDefault();
+          activate(next, true);
+        });
+      });
+
+      function setOpen(item, open) {
+        var button = item.querySelector('[data-faq-toggle]');
+        item.classList.toggle('is-open', open);
+        if (button) button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      section.querySelectorAll('[data-faq-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          var item = button.closest('[data-faq-item]');
+          if (!item) return;
+          var willOpen = button.getAttribute('aria-expanded') !== 'true';
+          var scope = item.closest('[data-faq-panel]') || section;
+
+          if (willOpen) {
+            scope.querySelectorAll('[data-faq-item].is-open').forEach(function (other) {
+              if (other !== item) setOpen(other, false);
+            });
+          }
+          setOpen(item, willOpen);
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.luma-faqs').forEach(initLumaFaqs);
+    });
+
+    if (window.Shopify && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (e) {
+        var el = e.target.classList.contains('luma-faqs') ? e.target : e.target.querySelector('.luma-faqs');
+        if (el) initLumaFaqs(el);
+      });
+
+      // The block list is flat, so a selected question can live in a hidden
+      // panel. Reveal its tab and expand it so the merchant sees what they clicked.
+      document.addEventListener('shopify:block:select', function (e) {
+        var section = e.target.closest('.luma-faqs');
+        if (!section) return;
+        var blockId = e.target.getAttribute('data-block-id') || (e.detail && e.detail.blockId);
+        if (!blockId) return;
+
+        var tab = section.querySelector('[data-faq-tab][data-block-id="' + blockId + '"]');
+        if (tab) {
+          tab.click();
+          return;
+        }
+
+        var item = section.querySelector('[data-faq-item][data-block-id="' + blockId + '"]');
+        if (!item) return;
+        var panel = item.closest('[data-faq-panel]');
+        if (panel && panel.id) {
+          var owner = section.querySelector('[data-faq-tab][aria-controls="' + panel.id + '"]');
+          if (owner) owner.click();
+        }
+        var toggle = item.querySelector('[data-faq-toggle]');
+        if (toggle && toggle.getAttribute('aria-expanded') !== 'true') toggle.click();
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Luma Pause FAQs",
+  "tag": "section",
+  "class": "section luma-faqs-section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FAQs"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open the first question in each category",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 88
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Creates a tab. Every Question block below it — until the next Category block — belongs to this tab.",
+          "default": "Orders & Shipping"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How can I track my order?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>The moment your order ships you will get an email and an SMS with a live tracking link.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "Luma Pause FAQs",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "label": "Orders & Shipping"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>The moment your order ships you will get an email and an SMS with a live tracking link. You can also check status any time under <strong>Account → Orders</strong>. Metros usually receive their parcel in 2–4 working days; the rest of India in 4–7.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship across India?",
+            "answer": "<p>Yes — every serviceable PIN code in India, through our courier partners. Orders above ₹699 ship free; below that a flat ₹49 applies at checkout.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Can I change or cancel my order after placing it?",
+            "answer": "<p>If it has not been packed yet, email <a href=\"mailto:support@lumapause.com\">support@lumapause.com</a> with your order number and we will amend or cancel it. Once it is handed to the courier we cannot recall it — but you can refuse delivery and we will refund you in full.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Not yet. We are working on it. Join the newsletter and you will be the first to know when we open up shipping outside India.</p>"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Products & Ingredients"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Who are Luma Pause probiotics for?",
+            "answer": "<p>Our formulas are designed for women in perimenopause, menopause and post-menopause. They are also suitable for any adult woman looking to support gut, intimate or everyday wellbeing.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Are your capsules vegan and allergen friendly?",
+            "answer": "<p>Yes. Our capsules are vegan, gluten-free and contain no added sugar, artificial colours or preservatives. Always check the full ingredient list on the pack if you have specific allergies.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Can I take Luma Pause with HRT or other medication?",
+            "answer": "<p>Probiotics are generally well tolerated alongside HRT and most supplements, but please check with your doctor or pharmacist before starting anything new.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How long before I see results?",
+            "answer": "<p>Some women notice changes in digestion within 1–2 weeks. Deeper benefits — sleep, mood, intimate comfort — build as your microbiome adjusts, so give it 8–12 weeks of daily use before you judge.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you test on animals?",
+            "answer": "<p>Never. Luma Pause is 100% cruelty-free.</p>"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Returns & Support"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Unopened products can be returned within 14 days of delivery for a full refund. Email <a href=\"mailto:support@lumapause.com\">support@lumapause.com</a> with your order number and we will arrange a pickup.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "My product arrived damaged. What now?",
+            "answer": "<p>Send a photo of the parcel and the product to <a href=\"mailto:support@lumapause.com\">support@lumapause.com</a> within 48 hours of delivery. We will ship a replacement straight away — no return needed.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose the right probiotic for me?",
+            "answer": "<p>Take our 60-second quiz, or tell us your life stage and main concern at <a href=\"mailto:support@lumapause.com\">support@lumapause.com</a> and we will suggest a routine. It is free, and there is no obligation to buy anything.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Where can I buy Luma Pause offline?",
+            "answer": "<p>Luma Pause is direct-to-consumer for now — here and on select marketplaces. Retail partnerships are in progress; reach out at <a href=\"mailto:support@lumapause.com\">support@lumapause.com</a>.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

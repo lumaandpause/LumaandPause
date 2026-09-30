@@ -1,0 +1,73 @@
+{{ 'section-luma-product-benefits.css' | asset_url | stylesheet_tag }}
+
+<section class="luma-pdp-benefits color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="luma-pdp-benefits__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="luma-pdp-benefits__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="luma-pdp-benefits__title">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="luma-pdp-benefits__grid">
+      <div class="luma-pdp-benefits__card">
+        <div class="luma-pdp-benefits__stat">30B CFU</div>
+        <h3 class="luma-pdp-benefits__card-title">Calmer Gut, Less Bloating</h3>
+        <p class="luma-pdp-benefits__card-text">Multi-strain probiotics and prebiotic fibre support regular digestion and help ease occasional bloating.</p>
+      </div>
+
+      <div class="luma-pdp-benefits__card">
+        <div class="luma-pdp-benefits__stat">94%</div>
+        <h3 class="luma-pdp-benefits__card-title">Comfort Through the Pause</h3>
+        <p class="luma-pdp-benefits__card-text">Supports comfort through hot flushes, restful sleep and a steadier mood.</p>
+      </div>
+
+      <div class="luma-pdp-benefits__card">
+        <div class="luma-pdp-benefits__stat">1 A DAY</div>
+        <h3 class="luma-pdp-benefits__card-title">Easy Daily Capsule</h3>
+        <p class="luma-pdp-benefits__card-text">One small, vegan capsule a day — no powders, no taste, no refrigeration.</p>
+      </div>
+
+      <div class="luma-pdp-benefits__card">
+        <div class="luma-pdp-benefits__stat">100% CLEAN</div>
+        <h3 class="luma-pdp-benefits__card-title">Clean & Gentle</h3>
+        <p class="luma-pdp-benefits__card-text">No added sugar, gluten, artificial colours or preservatives. Made in a GMP-certified facility.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma product benefits",
+  "tag": "section",
+  "class": "section luma-product-benefits-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "CLINICALLY STUDIED STRAINS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Designed for Real Comfort Through Menopause"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma product benefits"
+    }
+  ]
+}
+{% endschema %}

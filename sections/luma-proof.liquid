@@ -1,0 +1,641 @@
+{{ 'section-luma-proof.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-proof.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  Proof: real results, shown responsibly.
+
+  Four kinds of evidence, each an optional block type, in the order a sceptical
+  visitor reads them: the before/after cases, then the day-by-day diary, then
+  close-up texture shots and customer words.
+
+  The before/after cases are the centrepiece - both photos in one card with a
+  divider dragged in real time (snippets/luma-proof-compare.liquid). Three
+  smaller cards side by side rather than one large one: three people are
+  evidence, one is the photo that happened to work. Motion lives
+  in assets/luma-proof.js, which sets its own starting states, so with JavaScript
+  off the cases render at their configured split and every other block is simply
+  visible.
+
+  The disclaimer is a plain setting rather than anything clever: it should be
+  read, edited, and stand behind the claims on the page.
+{%- endcomment -%}
+
+{%- liquid
+  assign cases = section.blocks | where: 'type', 'compare'
+  assign diary = section.blocks | where: 'type', 'diary'
+  assign textures = section.blocks | where: 'type', 'texture'
+  assign reviews = section.blocks | where: 'type', 'review'
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  <section
+    class="luma-proof color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+    data-luma-proof
+  >
+    <span class="luma-proof__glow" aria-hidden="true"></span>
+
+    <div class="luma-proof__container page-width">
+      {%- if section.settings.eyebrow != blank
+        or section.settings.heading != blank
+        or section.settings.text != blank
+      -%}
+        <div class="luma-proof__header" data-luma-proof-header>
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="luma-proof__eyebrow">
+              <span class="luma-proof__eyebrow-dot" aria-hidden="true"></span>
+              {{ section.settings.eyebrow | escape }}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="luma-proof__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <div class="luma-proof__text">{{ section.settings.text }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if cases.size > 0 -%}
+        <div
+          class="luma-proof__cases{% if cases.size > 1 %} luma-proof__cases--grid{% endif %}"
+          data-luma-proof-cases
+          data-count="{{ cases.size }}"
+        >
+          {%- for block in cases -%}
+            {%- render 'luma-proof-compare', block: block, section: section -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.drag_hint != blank -%}
+          <p class="luma-proof__hint" data-luma-proof-hint>
+            <span class="luma-proof__hint-icon" aria-hidden="true"></span>
+            {{ section.settings.drag_hint | escape }}
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if diary.size > 0 -%}
+        <div class="luma-proof__block">
+          {%- if section.settings.diary_heading != blank -%}
+            <h3 class="luma-proof__subheading" data-luma-proof-reveal>
+              {{- section.settings.diary_heading | escape -}}
+            </h3>
+          {%- endif -%}
+
+          <ol class="luma-proof__diary" data-luma-proof-diary>
+            {%- for block in diary -%}
+              <li
+                class="luma-proof__day{% if block.settings.milestone %} luma-proof__day--milestone{% endif %}"
+                data-luma-proof-day
+                {{ block.shopify_attributes }}
+              >
+                <span class="luma-proof__day-media">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 640
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '240, 400, 640',
+                        sizes: '(min-width: 990px) 20vw, 60vw',
+                        alt: block.settings.day_label
+                    }}
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'luma-proof__placeholder' }}
+                  {%- endif -%}
+                  <span class="luma-proof__day-label">{{ block.settings.day_label | escape }}</span>
+                </span>
+                {%- if block.settings.note != blank -%}
+                  <span class="luma-proof__day-note">{{ block.settings.note | escape }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ol>
+        </div>
+      {%- endif -%}
+
+      {%- if textures.size > 0 or reviews.size > 0 -%}
+        <div class="luma-proof__block">
+          {%- if section.settings.wall_heading != blank -%}
+            <h3 class="luma-proof__subheading" data-luma-proof-reveal>
+              {{- section.settings.wall_heading | escape -}}
+            </h3>
+          {%- endif -%}
+
+          <div class="luma-proof__wall" data-luma-proof-wall>
+            {%- for block in textures -%}
+              <figure class="luma-proof__texture" data-luma-proof-tile {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '320, 520, 800',
+                      sizes: '(min-width: 990px) 30vw, 88vw',
+                      alt: block.settings.caption
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-2' | placeholder_svg_tag: 'luma-proof__placeholder' }}
+                {%- endif -%}
+                {%- if block.settings.caption != blank -%}
+                  <figcaption>
+                    {%- if block.settings.zoom_label != blank -%}
+                      <span class="luma-proof__texture-zoom">{{ block.settings.zoom_label | escape }}</span>
+                    {%- endif -%}
+                    {{ block.settings.caption | escape }}
+                  </figcaption>
+                {%- endif -%}
+              </figure>
+            {%- endfor -%}
+
+            {%- for block in reviews -%}
+              <blockquote class="luma-proof__review" data-luma-proof-tile {{ block.shopify_attributes }}>
+                {%- if block.settings.rating > 0 -%}
+                  <span class="luma-proof__stars" aria-label="{{ block.settings.rating }} out of 5">
+                    {%- for i in (1..5) -%}
+                      <span aria-hidden="true"{% if i > block.settings.rating %} class="is-dim"{% endif %}>&#9733;</span>
+                    {%- endfor -%}
+                  </span>
+                {%- endif -%}
+
+                {%- if block.settings.quote != blank -%}
+                  <p class="luma-proof__quote">{{ block.settings.quote | escape }}</p>
+                {%- endif -%}
+
+                <footer class="luma-proof__review-foot">
+                  {%- if block.settings.image != blank -%}
+                    <span class="luma-proof__review-avatar">
+                      {{
+                        block.settings.image
+                        | image_url: width: 96
+                        | image_tag: loading: 'lazy', widths: '48, 96', sizes: '48px', alt: ''
+                      }}
+                    </span>
+                  {%- endif -%}
+                  <span class="luma-proof__review-who">
+                    {%- if block.settings.name != blank -%}
+                      <span class="luma-proof__review-name">{{ block.settings.name | escape }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.detail != blank -%}
+                      <span class="luma-proof__review-detail">{{ block.settings.detail | escape }}</span>
+                    {%- endif -%}
+                  </span>
+                  {%- if block.settings.verified -%}
+                    <span class="luma-proof__verified">{{ section.settings.verified_label | escape }}</span>
+                  {%- endif -%}
+                </footer>
+              </blockquote>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.disclaimer != blank -%}
+        <p class="luma-proof__disclaimer">{{ section.settings.disclaimer }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <div class="page-width luma-proof__editor-empty">
+    <p>
+      Add a <strong>Before / after</strong>, <strong>Diary day</strong>, <strong>Texture</strong> or
+      <strong>Customer words</strong> block to build this section.
+    </p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Luma proof and results",
+  "tag": "div",
+  "class": "section luma-proof-section",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Real results, shown responsibly. Before and after photos must be the same person, same framing and same lighting, and cropping is the only edit allowed. Every case carries its timeframe and a permission line, and the theme editor flags a case that is missing them."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Real results"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Drag the line. <strong>Judge for yourself.</strong>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Same person, same light, same frame — only the weeks in between are different.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Before and after"
+    },
+    {
+      "type": "text",
+      "id": "drag_hint",
+      "label": "Drag hint",
+      "info": "Shown under the cases. Hidden once someone has dragged one.",
+      "default": "Drag to compare"
+    },
+    {
+      "type": "text",
+      "id": "slider_label",
+      "label": "Slider name",
+      "info": "Not shown. Read out by screen readers on the drag handle.",
+      "default": "Reveal the before photo"
+    },
+    {
+      "type": "header",
+      "content": "Other proof"
+    },
+    {
+      "type": "text",
+      "id": "diary_heading",
+      "label": "Diary heading",
+      "default": "The 90-day diary"
+    },
+    {
+      "type": "text",
+      "id": "wall_heading",
+      "label": "Texture and reviews heading",
+      "default": "Up close, and in their words"
+    },
+    {
+      "type": "text",
+      "id": "verified_label",
+      "label": "Verified badge",
+      "default": "Verified buyer"
+    },
+    {
+      "type": "header",
+      "content": "Disclaimer"
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "info": "Keep this accurate. It is the line that makes the rest of the section a fair claim rather than an advertisement.",
+      "default": "<p>Real customers, shared with permission. Individual experiences vary. Luma Pause products are food supplements and are not intended to diagnose, treat, cure or prevent any disease. Speak to your doctor if you are pregnant, nursing or taking medication.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-4"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "compare",
+      "name": "Before / after",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Both photos are drawn into the same fixed-ratio frame and cropped to fill it, so neither can be stretched and the pair cannot be re-framed to flatter the result. Shoot both at the same distance, angle and light."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_before",
+          "label": "Before photo"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_after",
+          "label": "After photo"
+        },
+        {
+          "type": "select",
+          "id": "ratio",
+          "label": "Frame shape",
+          "options": [
+            {
+              "value": "4 / 5",
+              "label": "Portrait"
+            },
+            {
+              "value": "1 / 1",
+              "label": "Square"
+            },
+            {
+              "value": "3 / 2",
+              "label": "Landscape"
+            }
+          ],
+          "default": "4 / 5"
+        },
+        {
+          "type": "range",
+          "id": "start_position",
+          "min": 10,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "label": "Starting split",
+          "info": "Where the divider rests before anyone touches it. Keep it near the middle - starting it at an extreme shows off one photo and reads as a sales trick.",
+          "default": 50
+        },
+        {
+          "type": "text",
+          "id": "label_before",
+          "label": "Before label",
+          "default": "Before"
+        },
+        {
+          "type": "text",
+          "id": "label_after",
+          "label": "After label",
+          "default": "After"
+        },
+        {
+          "type": "text",
+          "id": "timeframe",
+          "label": "Timeframe",
+          "info": "Required for a fair claim. How long between the two photos.",
+          "default": "Week 0 to week 12"
+        },
+        {
+          "type": "text",
+          "id": "concern",
+          "label": "Concern",
+          "default": "Daily bloating"
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "What changed",
+          "info": "In the customer's own words where possible. Describe what they saw, not what the product does.",
+          "default": "By week three my stomach felt calmer after meals, and I stopped planning outfits around bloating."
+        },
+        {
+          "type": "text",
+          "id": "conditions",
+          "label": "Conditions",
+          "info": "Required for a fair claim.",
+          "default": "Same light and framing. Unretouched."
+        },
+        {
+          "type": "text",
+          "id": "credit",
+          "label": "Permission line",
+          "info": "Required for a fair claim. Never publish a customer photo without written permission.",
+          "default": "Shared with permission"
+        }
+      ]
+    },
+    {
+      "type": "diary",
+      "name": "Diary day",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "day_label",
+          "label": "Day",
+          "default": "Day 1"
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note",
+          "default": "One capsule with breakfast. Easy to remember."
+        },
+        {
+          "type": "checkbox",
+          "id": "milestone",
+          "label": "Mark as a milestone",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "texture",
+      "name": "Texture",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Close-up photo"
+        },
+        {
+          "type": "text",
+          "id": "zoom_label",
+          "label": "Magnification",
+          "info": "State it if the photo is magnified. An unlabelled macro shot overstates what the eye can see.",
+          "default": "20x macro"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "default": "Delayed-release capsules help the strains get where they are needed."
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Customer words",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Rating",
+          "info": "Set to 0 to hide the stars.",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "info": "Quote it as written. Trim for length if you must, never to change the meaning.",
+          "default": "I was sceptical, but the bloating that followed me every afternoon has really settled down."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Ananya S."
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Detail",
+          "default": "Bengaluru · 8 weeks in"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified buyer",
+          "info": "Only tick this when the order is real and on record.",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma proof and results",
+      "blocks": [
+        {
+          "type": "compare",
+          "settings": {
+            "ratio": "4 / 5",
+            "start_position": 50,
+            "label_before": "Before",
+            "label_after": "After",
+            "timeframe": "Week 0 to week 8",
+            "concern": "Daily bloating",
+            "note": "By week three my stomach felt calmer after meals, and I stopped planning outfits around bloating.",
+            "conditions": "Same light and framing. Unretouched.",
+            "credit": "Shared with permission"
+          }
+        },
+        {
+          "type": "compare",
+          "settings": {
+            "ratio": "4 / 5",
+            "start_position": 45,
+            "label_before": "Before",
+            "label_after": "After",
+            "timeframe": "Week 0 to week 12",
+            "concern": "Night sweats & sleep",
+            "note": "I still have the odd warm night, but I am sleeping through far more often than before.",
+            "conditions": "Same light and framing. Unretouched.",
+            "credit": "Shared with permission"
+          }
+        },
+        {
+          "type": "compare",
+          "settings": {
+            "ratio": "4 / 5",
+            "start_position": 55,
+            "label_before": "Before",
+            "label_after": "After",
+            "timeframe": "Week 0 to week 10",
+            "concern": "Intimate comfort",
+            "note": "Fewer uncomfortable days, and I feel more like myself again.",
+            "conditions": "Same light and framing. Unretouched.",
+            "credit": "Shared with permission"
+          }
+        },
+        {
+          "type": "diary",
+          "settings": {
+            "day_label": "Day 1",
+            "note": "One capsule with breakfast. Easy to remember.",
+            "milestone": false
+          }
+        },
+        {
+          "type": "diary",
+          "settings": {
+            "day_label": "Day 30",
+            "note": "Less bloating after meals.",
+            "milestone": false
+          }
+        },
+        {
+          "type": "diary",
+          "settings": {
+            "day_label": "Day 60",
+            "note": "Sleeping through more nights.",
+            "milestone": true
+          }
+        },
+        {
+          "type": "diary",
+          "settings": {
+            "day_label": "Day 90",
+            "note": "Steadier energy and mood. It is part of my routine now.",
+            "milestone": true
+          }
+        },
+        {
+          "type": "texture",
+          "settings": {
+            "zoom_label": "Vegan capsule",
+            "caption": "Delayed-release capsules help the strains get where they are needed."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "I was sceptical, but the bloating that followed me every afternoon has really settled down.",
+            "name": "Ananya S.",
+            "detail": "Bengaluru · 8 weeks in",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "Finally something made for this stage of life. My sleep and mood feel far more even.",
+            "name": "Meera K.",
+            "detail": "Delhi · 12 weeks in",
+            "verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

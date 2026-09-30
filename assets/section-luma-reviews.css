@@ -1,0 +1,281 @@
+/* ==========================================================================
+   Luma Pause — Customer Reviews Section (Signature Warm Terracotta / Sand Palette)
+   ========================================================================== */
+
+.luma-reviews {
+  position: relative;
+  overflow: hidden;
+}
+
+.luma-reviews__header {
+  margin-bottom: 1.6rem;
+  text-align: left;
+}
+
+.luma-reviews__eyebrow {
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #B66F75; /* Luma Pause Signature Terracotta */
+  margin: 0 0 0.8rem;
+}
+
+.luma-reviews__heading {
+  font-family: inherit;
+  font-size: clamp(2.8rem, 3.8vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #2F3A24;
+  margin: 0;
+}
+
+.luma-reviews__heading strong {
+  display: block;
+  font-weight: 300;
+  color: rgba(140, 148, 121, 0.85);
+}
+
+/* --------------------------------------------------------------------------
+   Carousel & Stage
+   -------------------------------------------------------------------------- */
+.luma-reviews__carousel {
+  display: block;
+  isolation: isolate;
+  overflow: hidden;
+  --card-w: 36rem;
+  --scale-center: 1.08;
+  --scale-side: 0.92;
+  --scale-hidden: 0.7;
+  --slot-shift: 116%;
+  padding-bottom: 0.6rem;
+}
+
+.luma-reviews__track {
+  position: relative;
+  min-height: 33rem;
+  padding-block: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Review Card (Luma Pause Signature Warm Luxury Card)
+   -------------------------------------------------------------------------- */
+.luma-reviews__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  --slot-x: 0%;
+  --slot-scale: var(--scale-hidden);
+  --slot-opacity: 0;
+  transform: translate(-50%, -50%) translateX(var(--slot-x)) scale(var(--slot-scale));
+  opacity: var(--slot-opacity);
+  transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.55s ease, box-shadow 0.4s ease, visibility 0.55s;
+  border-radius: 3.2rem;
+  padding: 3.2rem 3.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  background-color: #ffffff;
+  border: 1.5px solid rgba(182, 111, 117, 0.2);
+  box-shadow:
+    0 14px 40px -4px rgba(182, 111, 117, 0.12),
+    0 4px 16px rgba(47, 58, 36, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
+}
+
+.luma-reviews__card[data-slot='center'] {
+  --slot-x: 0%;
+  --slot-scale: var(--scale-center);
+  --slot-opacity: 1;
+  z-index: 3;
+  background: #ffffff;
+  border: 2px solid rgba(182, 111, 117, 0.45);
+  box-shadow:
+    0 22px 55px -4px rgba(182, 111, 117, 0.2),
+    0 6px 20px rgba(47, 58, 36, 0.08),
+    0 0 0 2px rgba(243, 227, 229, 0.6);
+}
+
+.luma-reviews__card[data-slot='left'] {
+  --slot-x: calc(-1 * var(--slot-shift));
+  --slot-scale: var(--scale-side);
+  --slot-opacity: 0.55;
+  z-index: 2;
+  border-color: rgba(182, 111, 117, 0.14);
+}
+
+.luma-reviews__card[data-slot='right'] {
+  --slot-x: var(--slot-shift);
+  --slot-scale: var(--scale-side);
+  --slot-opacity: 0.55;
+  z-index: 2;
+  border-color: rgba(182, 111, 117, 0.14);
+}
+
+.luma-reviews__card[data-slot='hidden'] {
+  --slot-x: 0%;
+  --slot-scale: var(--scale-hidden);
+  --slot-opacity: 0;
+  z-index: 1;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-reviews__card {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Card Internal Elements
+   -------------------------------------------------------------------------- */
+.luma-reviews__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+.luma-reviews__stars {
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  color: rgba(140, 148, 121, 0.15);
+  line-height: 1;
+  display: inline-flex;
+}
+
+.luma-reviews__star--full {
+  color: #f0ad3f; /* Luma Pause Warm Gold Star */
+}
+
+.luma-reviews__tag {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #B66F75; /* Luma Pause Signature Terracotta */
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.luma-reviews__title {
+  margin: 0.4rem 0 0;
+  font-family: inherit;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #2F3A24;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.luma-reviews__quote {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1.45rem;
+  line-height: 1.65;
+  color: rgba(140, 148, 121, 0.72);
+  flex-grow: 1;
+  max-height: 12rem;
+  overflow: hidden;
+}
+
+.luma-reviews__name {
+  margin: 1rem 0 0;
+  font-family: inherit;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #2F3A24;
+}
+
+/* --------------------------------------------------------------------------
+   Pagination Dots
+   -------------------------------------------------------------------------- */
+.luma-reviews__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  position: relative;
+  z-index: 4;
+}
+
+.luma-reviews__dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(182, 111, 117, 0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease, width 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.3s ease;
+}
+
+.luma-reviews__dot.is-active {
+  background-color: #B66F75;
+  width: 2.6rem;
+  border-radius: 100px;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-reviews__carousel {
+    --card-w: min(88vw, 35rem);
+    --scale-center: 1;
+    padding-bottom: 0.2rem;
+  }
+
+  .luma-reviews__track {
+    min-height: 29rem;
+    padding-block: 0.4rem;
+  }
+
+  .luma-reviews__card {
+    padding: 2.8rem 2.4rem;
+    border-radius: 2.6rem;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, visibility 0.5s;
+  }
+
+  .luma-reviews__card[data-slot='center'] {
+    transform: translate(-50%, -50%) translateX(0) scale(1);
+    opacity: 1;
+    z-index: 3;
+  }
+
+  .luma-reviews__card[data-slot='right'] {
+    transform: translate(-50%, -50%) translateX(115vw) scale(1);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .luma-reviews__card[data-slot='left'] {
+    transform: translate(-50%, -50%) translateX(-115vw) scale(1);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .luma-reviews__card[data-slot='hidden'] {
+    transform: translate(-50%, -50%) translateX(115vw) scale(0.9);
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+  }
+
+  .luma-reviews__title {
+    font-size: 2.0rem;
+  }
+
+  .luma-reviews__quote {
+    font-size: 1.35rem;
+    line-height: 1.6;
+    max-height: 13rem;
+  }
+}

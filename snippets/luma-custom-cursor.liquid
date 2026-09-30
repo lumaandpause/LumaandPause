@@ -1,0 +1,11 @@
+{%- comment -%}
+  Luma Pause custom cursor: rose dot + trailing ring.
+
+  Markup is server-rendered rather than JS-injected so it exists at first
+  paint. Styles live in assets/luma-custom-cursor.css and behavior in
+  assets/luma-custom-cursor.js - keep them there rather than inlining copies
+  here, so there is a single source of truth for this component.
+{%- endcomment -%}
+
+<div class="luma-cursor-dot" id="LumaCursorDot" aria-hidden="true"></div>
+<div class="luma-cursor-ring" id="LumaCursorRing" aria-hidden="true"></div>

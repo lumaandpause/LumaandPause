@@ -1,0 +1,295 @@
+/* Luma Pause — page transition: a curved panel sweep between page loads.
+
+   The shape is lifted from palmo.co.in's basket drawer: a full-bleed panel
+   clipped to an ellipse whose centre sits just *outside* the viewport edge, so
+   the only part of the ellipse you ever see is one flank of it - a convex arc.
+   Growing the radii sweeps that arc across the screen, and because an ellipse
+   flattens as it grows the leading edge starts sharply bowed and straightens
+   out as it lands. That curvature is the whole effect.
+
+   Leaving a page grows the ellipse from the right edge until the panel covers.
+   Arriving shrinks an identical ellipse anchored off the *left* edge, so the
+   panel appears to carry on in the same direction and exit stage left rather
+   than retreating back the way it came - one continuous sweep across two
+   documents.
+
+   Two stacked layers: a rose one that is always a few percent larger than
+   the olive one, so a thin burnished crescent runs ahead of the panel along
+   the arc. It is never a rose block - at full cover the olive layer hides
+   it completely.
+
+   Deliberately CSS transitions rather than GSAP. The arriving half has to be
+   painted before any deferred script has even parsed, and a transition that
+   only exists once a CDN responds would mean a olive screen on a slow
+   connection. cubic-bezier(0.65, 0, 0.35, 1) is easeInOutCubic, which is the
+   same curve GSAP calls power3.inOut - the ease palmo uses on the original. */
+
+:root {
+  --luma-pt-leave: 0.85s;
+  --luma-pt-enter: 0.95s;
+  --luma-pt-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Column variant. easeOutQuad is GSAP's power1.out, which is the default the
+     reference implementation leans on. */
+  --luma-pt-col: 0.55s;
+  --luma-pt-col-stagger: 0.11s;
+  --luma-pt-col-ease: cubic-bezier(0.5, 1, 0.89, 1);
+
+  /* How long the whole gesture takes, stagger included. The script reads these
+     to time the navigation, so the two never drift apart - do not inline the
+     numbers into the JS. */
+  --luma-pt-leave-total: 0.85s;
+  --luma-pt-enter-total: 0.95s;
+}
+
+.luma-pt {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Variant switch. The curve is the narrow-screen default; columns take over at
+   the same 750px the rest of the theme calls desktop. */
+.luma-pt__columns {
+  display: none;
+}
+
+@media screen and (min-width: 750px) {
+  :root {
+    /* 0.55s + 4 staggers. */
+    --luma-pt-leave-total: 0.99s;
+    --luma-pt-enter-total: 0.99s;
+  }
+
+  .luma-pt__curve {
+    display: none;
+  }
+
+  .luma-pt__columns {
+    display: block;
+  }
+}
+
+/* Both classes in the selector are load-bearing. These layers are empty divs,
+   and Dawn's base.css carries `a:empty, ul:empty, div:empty, section:empty, ...
+   { display: none }` - a 0-1-1 selector that beats a lone `.luma-pt__layer` and
+   collapses them to nothing. The class pair here is 0-2-0, which wins. Do not
+   simplify it, and do not drop the explicit `display`. */
+.luma-pt .luma-pt__layer {
+  display: block;
+  position: absolute;
+  inset: 0;
+  /* Idle: a zero-width ellipse tucked against the right edge. */
+  clip-path: ellipse(0% 65% at 105% 50%);
+  /* Declared here, on every state, rather than switched on by the state that
+     needs it. A transition that only appears in the after-change style relies
+     on one specific reading of the spec; always having it and suppressing it
+     explicitly (below) does not. */
+  transition: clip-path var(--luma-pt-leave) var(--luma-pt-ease);
+}
+
+/* Applied around the two changes that must land instantly - taking up the
+   covering pose on arrival, and resetting the anchor back to the right edge
+   afterwards. Both move the ellipse's centre, which must never be seen to
+   animate. JS forces a reflow before taking the class off again. */
+.luma-pt.is-instant .luma-pt__layer {
+  transition: none !important;
+}
+
+.luma-pt__layer--edge {
+  background-color: rgba(var(--luma-rose), 0.92);
+}
+
+.luma-pt__layer--panel {
+  background-color: rgb(var(--luma-ink));
+}
+
+/* Idle --------------------------------------------------------------------- */
+.luma-pt[data-state='idle'] {
+  visibility: hidden;
+}
+
+.luma-pt[data-state='idle'] .luma-pt__layer {
+  clip-path: ellipse(0% 65% at 105% 50%);
+}
+
+/* Leaving ------------------------------------------------------------------
+   pointer-events go live so a second click during the sweep is swallowed
+   rather than queueing up another navigation. */
+.luma-pt[data-state='leaving'] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.luma-pt[data-state='leaving'] .luma-pt__layer--edge {
+  clip-path: ellipse(153% 123% at 105% 50%);
+}
+
+.luma-pt[data-state='leaving'] .luma-pt__layer--panel {
+  clip-path: ellipse(150% 120% at 105% 50%);
+}
+
+/* Arriving -----------------------------------------------------------------
+   Set inline by the snippet's own script while the document is still parsing,
+   so this is the very first thing painted. Already covering, and anchored off
+   the opposite edge ready to continue leftwards. */
+.luma-pt[data-state='arriving'] {
+  visibility: visible;
+}
+
+.luma-pt[data-state='arriving'] .luma-pt__layer--edge {
+  clip-path: ellipse(153% 123% at -5% 50%);
+}
+
+.luma-pt[data-state='arriving'] .luma-pt__layer--panel {
+  clip-path: ellipse(150% 120% at -5% 50%);
+}
+
+/* Revealing ----------------------------------------------------------------
+   The panel carries on off the left edge. The rose layer is the one that
+   leads, so here it has to shrink *behind* the olive - it keeps its size
+   advantage, which now trails, putting the crescent on the arc as it leaves. */
+.luma-pt[data-state='revealing'] {
+  visibility: visible;
+}
+
+.luma-pt[data-state='revealing'] .luma-pt__layer {
+  transition-duration: var(--luma-pt-enter);
+}
+
+.luma-pt[data-state='revealing'] .luma-pt__layer--edge {
+  clip-path: ellipse(0% 68% at -5% 50%);
+}
+
+.luma-pt[data-state='revealing'] .luma-pt__layer--panel {
+  clip-path: ellipse(0% 65% at -5% 50%);
+}
+
+/* Cancelled ----------------------------------------------------------------
+   A navigation that never happened (a 204, a link the server turned into a
+   download, the user cancelling). Retreat the way we came rather than leave
+   the panel parked over a live page. */
+.luma-pt[data-state='cancelled'] {
+  visibility: visible;
+}
+
+.luma-pt[data-state='cancelled'] .luma-pt__layer {
+  clip-path: ellipse(0% 65% at 105% 50%);
+  transition-duration: 0.5s;
+}
+
+/* ==========================================================================
+   Columns - the wide-screen variant
+   ==========================================================================
+
+   Five full-height columns that rise from below the fold to cover, then keep
+   rising and exit through the top of the viewport on the next page. Same idea
+   as the curve - motion that carries on in one direction across two documents
+   rather than a curtain that opens back up - but staggered left to right, so a
+   wide viewport gets a travelling staircase instead of one flat edge.
+
+   Each column carries a rose hairline on its leading edge, which is what
+   makes the stagger legible: you read five rose lines climbing in sequence.
+   At full cover they all line up along the top of the screen. */
+
+/* `display` and the class pair are both load-bearing here for the same reason
+   as the curve layers above - these are empty divs, and Dawn's base.css hides
+   those at 0-1-1. */
+.luma-pt .luma-pt__column {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* A shade over a fifth: sub-pixel column widths otherwise leave hairline
+     gaps of live page showing between them at full cover. */
+  width: 20.2%;
+  background-color: rgb(var(--luma-ink));
+  /* Hairline plus a short bloom under it, so the rising edge reads as lit
+     rather than as a drawn border. Stays an accent - a few pixels of rose on
+     a olive column, never a rose block.
+
+     The bloom is a gradient rather than a second inset shadow: an inset shadow
+     bleeds from the left and right edges as well as the top, and with the
+     columns overlapping slightly that doubled up into uneven vertical lines
+     across the covered screen. A gradient only paints where it is told to. */
+  background-image: linear-gradient(
+    to bottom,
+    rgba(var(--luma-rose), 0.3),
+    rgba(var(--luma-rose), 0) 90px
+  );
+  box-shadow: inset 0 3px 0 0 rgba(var(--luma-rose), 0.9);
+  /* Later siblings paint over earlier ones, so a left edge shows and a right
+     edge would be buried under the overlap. Keeps a whisper of the column
+     structure once the screen is fully covered. */
+  border-left: 1px solid rgba(var(--luma-rose), 0.14);
+  transform: translateY(100%);
+  transition: transform var(--luma-pt-col) var(--luma-pt-col-ease);
+}
+
+.luma-pt.is-instant .luma-pt__column {
+  transition: none !important;
+}
+
+/* Position and stagger. The delay only has an effect while a transition is
+   actually running, so it lives on the base rule rather than being repeated
+   in every state. */
+.luma-pt .luma-pt__column:nth-child(1) {
+  left: 0;
+  transition-delay: 0s;
+}
+
+.luma-pt .luma-pt__column:nth-child(2) {
+  left: 20%;
+  transition-delay: var(--luma-pt-col-stagger);
+}
+
+.luma-pt .luma-pt__column:nth-child(3) {
+  left: 40%;
+  transition-delay: calc(var(--luma-pt-col-stagger) * 2);
+}
+
+.luma-pt .luma-pt__column:nth-child(4) {
+  left: 60%;
+  transition-delay: calc(var(--luma-pt-col-stagger) * 3);
+}
+
+.luma-pt .luma-pt__column:nth-child(5) {
+  left: 80%;
+  transition-delay: calc(var(--luma-pt-col-stagger) * 4);
+}
+
+/* Waiting below the fold. */
+.luma-pt[data-state='idle'] .luma-pt__column,
+.luma-pt[data-state='cancelled'] .luma-pt__column {
+  transform: translateY(100%);
+}
+
+/* Covering. */
+.luma-pt[data-state='leaving'] .luma-pt__column,
+.luma-pt[data-state='arriving'] .luma-pt__column {
+  transform: translateY(0%);
+}
+
+/* Carrying on out through the top. */
+.luma-pt[data-state='revealing'] .luma-pt__column {
+  transform: translateY(-100%);
+}
+
+/* No clip-path support, or the visitor asked for less motion: the panel has to
+   stay out of the way even though the snippet's inline script may already have
+   marked it as arriving. */
+.luma-pt[data-state='off'],
+.luma-pt[data-state='off'] .luma-pt__layer,
+.luma-pt[data-state='off'] .luma-pt__column {
+  visibility: hidden;
+  clip-path: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-pt {
+    display: none;
+  }
+}

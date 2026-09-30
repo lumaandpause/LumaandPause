@@ -1,0 +1,387 @@
+/* Luma Pause — Mechanism Section Styles (How Hero Ingredients Support The Outcome) */
+/* Compact 4-Card Luxury Apothecary Aesthetic — Horizontal Carousel on Mobile */
+
+.luma-mechanism {
+  position: relative;
+  overflow: hidden;
+  background-color: #FBF9F4;
+  color: #2F3A24;
+}
+
+/* Header */
+.luma-mechanism__header {
+  text-align: center;
+  max-width: 68rem;
+  margin: 0 auto 2.6rem;
+}
+
+.luma-mechanism__eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #B66F75;
+  margin: 0 0 0.6rem;
+}
+
+.luma-mechanism__title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: clamp(2.2rem, 2.8vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #2F3A24;
+  margin: 0 0 0.7rem;
+}
+
+.luma-mechanism__subtitle {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: clamp(1.3rem, 1.4vw, 1.5rem);
+  line-height: 1.5;
+  color: #8C9479;
+  margin: 0 auto;
+  max-width: 54rem;
+}
+
+/* 4-Card Responsive Grid (Desktop: 4 columns, Tablet: 2 columns) */
+.luma-mechanism__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+}
+
+@media screen and (min-width: 750px) and (max-width: 1080px) {
+  .luma-mechanism__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.6rem;
+  }
+}
+
+/* Individual Mechanism Card (Punchy, Structured micro-fields, NO paragraphs) */
+.luma-mechanism__card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 1.6rem;
+  border: 1.5px solid rgba(140, 148, 121, 0.15);
+  padding: 1.8rem 1.6rem;
+  box-shadow: 0 4px 16px -2px rgba(47, 58, 36, 0.04);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s ease;
+  position: relative;
+}
+
+.luma-mechanism__card:hover {
+  border-color: rgba(182, 111, 117, 0.45);
+  box-shadow: 0 10px 24px -4px rgba(182, 111, 117, 0.12);
+  transform: translateY(-3px);
+}
+
+/* Card Top: Micro Badge & Science Icon */
+.luma-mechanism__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.luma-mechanism__badge {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #B66F75;
+  background: rgba(182, 111, 117, 0.09);
+  border: 1px solid rgba(182, 111, 117, 0.22);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+}
+
+.luma-mechanism__icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: rgba(251, 249, 244, 0.9);
+  border: 1px solid rgba(140, 148, 121, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2F3A24;
+  transition: all 0.2s ease;
+}
+
+.luma-mechanism__card:hover .luma-mechanism__icon {
+  background: #2F3A24;
+  color: #FBF9F4;
+  border-color: #2F3A24;
+}
+
+/* Card Names & Role */
+.luma-mechanism__name {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2F3A24;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.01em;
+}
+
+.luma-mechanism__role {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.22rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #B66F75;
+  margin: 0 0 1.2rem;
+}
+
+/* Action Block (How It Works) */
+.luma-mechanism__block {
+  background: rgba(251, 249, 244, 0.65);
+  border: 1px solid rgba(140, 148, 121, 0.12);
+  border-radius: 1.1rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.luma-mechanism__label {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8C9479;
+  margin-bottom: 0.35rem;
+}
+
+.luma-mechanism__action {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.45;
+  color: #2F3A24;
+  margin: 0;
+}
+
+/* Outcome Connection Tag */
+.luma-mechanism__outcome-tag {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.8rem 0.95rem;
+  background: rgba(182, 111, 117, 0.06);
+  border: 1px solid rgba(182, 111, 117, 0.18);
+  border-radius: 0.95rem;
+}
+
+.luma-mechanism__outcome-icon {
+  font-size: 1.2rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.luma-mechanism__outcome-text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.14rem;
+  line-height: 1.35;
+  color: #2F3A24;
+}
+
+.luma-mechanism__outcome-text strong {
+  color: #B66F75;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-right: 0.2rem;
+}
+
+/* Mobile Nav Indicators (Hidden by default on Desktop) */
+.luma-mechanism__mobile-nav {
+  display: none;
+}
+
+/* Synergistic Summary Strip */
+.luma-mechanism__summary-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  background: #ffffff;
+  border-radius: 100px;
+  border: 1.5px solid rgba(140, 148, 121, 0.15);
+  padding: 1rem 1.8rem;
+  max-width: 82rem;
+  margin: 0 auto;
+  box-shadow: 0 4px 14px rgba(47, 58, 36, 0.03);
+}
+
+.luma-mechanism__summary-badge {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #2F3A24;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+
+.luma-mechanism__summary-text {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.26rem;
+  line-height: 1.4;
+  color: #5A6350;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness: Horizontal Swipeable Cards
+   ========================================================================== */
+@media screen and (max-width: 749px) {
+  .luma-mechanism__header {
+    margin-bottom: 1.8rem;
+  }
+
+  /* Horizontal Scrolling Track */
+  .luma-mechanism__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 1.2rem;
+    padding: 0.4rem 1.5rem 1.2rem;
+    margin: 0 -1.5rem 0.4rem;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .luma-mechanism__grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+
+  /* Each card spans ~82% width so next card peeks into view */
+  .luma-mechanism__card {
+    flex: 0 0 82%;
+    max-width: 320px;
+    min-width: 260px;
+    scroll-snap-align: start;
+    padding: 1.5rem 1.4rem;
+    border-radius: 1.4rem;
+  }
+
+  .luma-mechanism__card-top {
+    margin-bottom: 0.9rem;
+  }
+
+  .luma-mechanism__name {
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .luma-mechanism__role {
+    font-size: 1.18rem;
+    margin-bottom: 1rem;
+  }
+
+  .luma-mechanism__block {
+    padding: 0.85rem 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .luma-mechanism__label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .luma-mechanism__action {
+    font-size: 1.15rem;
+    line-height: 1.38;
+  }
+
+  .luma-mechanism__outcome-tag {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .luma-mechanism__outcome-text {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  /* Mobile Swipe Navigation Controls */
+  .luma-mechanism__mobile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto 1.8rem;
+    padding: 0 0.5rem;
+    max-width: 340px;
+  }
+
+  .luma-mechanism__dots {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .luma-mechanism__dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 100px;
+    background: rgba(140, 148, 121, 0.25);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .luma-mechanism__dot.is-active {
+    width: 2.2rem;
+    background: #B66F75;
+  }
+
+  .luma-mechanism__swipe-hint {
+    font-family: 'Geist Mono', monospace;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8C9479;
+  }
+
+  .luma-mechanism__summary-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+    border-radius: 1.3rem;
+    padding: 1.2rem 1.3rem;
+  }
+
+  .luma-mechanism__summary-badge {
+    font-size: 0.95rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .luma-mechanism__summary-text {
+    font-size: 1.18rem;
+    line-height: 1.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-mechanism__card,
+  .luma-mechanism__icon,
+  .luma-mechanism__dot {
+    transition: none !important;
+  }
+}

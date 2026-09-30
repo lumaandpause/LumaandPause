@@ -1,0 +1,348 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+  rel="stylesheet"
+>
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-luma-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-luma-bestsellers.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'luma-bestsellers.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="luma-bestsellers color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  data-luma-bestsellers
+>
+  <div class="luma-bestsellers__layout page-width">
+    {%- if section.settings.eyebrow != blank
+      or section.settings.heading != blank
+      or section.settings.description != blank
+    -%}
+      <div class="luma-bestsellers__intro" data-animate="fade-up">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="luma-bestsellers__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="luma-bestsellers__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="luma-bestsellers__description rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="luma-bestsellers__panel">
+      <!-- 2-Product Manual Carousel -->
+      <div class="luma-bestsellers__carousel" data-luma-bs-carousel>
+        <div class="luma-bestsellers__track" data-luma-bs-track id="BestsellersTrack-{{ section.id }}">
+          {%- assign shown_products = section.settings.collection.products -%}
+          {%- if shown_products.size > 0 -%}
+            {%- for product in shown_products limit: section.settings.products_to_show -%}
+              <div class="luma-bestsellers__slide" data-luma-bs-slide data-slide-index="{{ forloop.index0 }}">
+                <div class="luma-product-card">
+                  <div class="luma-card-badges-stack">
+                    <span class="luma-badge-bestseller">BEST SELLER</span>
+                    <span class="luma-badge-payday">PAYDAY</span>
+                  </div>
+                  <a href="{{ product.url }}" class="luma-card-media-wrapper" data-luma-bs-media>
+                    {%- if product.featured_image != blank -%}
+                      {{
+                        product.featured_image
+                        | image_url: width: 600
+                        | image_tag: loading: 'lazy', widths: '240, 360, 480, 600', class: 'luma-card-image', alt: product.featured_image.alt | default: product.title | escape
+                      }}
+                    {%- else -%}
+                      {{ 'product-apparel-1' | placeholder_svg_tag: 'luma-card-image placeholder-svg' }}
+                    {%- endif -%}
+                  </a>
+                  <div class="luma-card-info">
+                    {%- liquid
+                      assign prod_title_lower = product.title | downcase
+                      assign prod_handle_lower = product.handle | downcase
+
+                      assign luma_system_role = product.metafields.custom.system_role
+                      if luma_system_role == blank
+                        if prod_handle_lower contains 'menopause' or prod_title_lower contains 'menopause' or prod_title_lower contains 'support'
+                          assign luma_system_role = 'SUPPORT'
+                        elsif prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
+                          assign luma_system_role = 'BALANCE'
+                        elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
+                          assign luma_system_role = 'RESTORE'
+                        endif
+                      endif
+
+                      assign luma_claim = product.metafields.custom.website_claim
+                      if luma_claim == blank
+                        case luma_system_role
+                          when 'BALANCE'
+                            assign luma_claim = 'A calmer gut, every day.'
+                          when 'SUPPORT'
+                            assign luma_claim = 'Made for the pause.'
+                          when 'RESTORE'
+                            assign luma_claim = 'Comfort starts with your flora.'
+                        endcase
+                      endif
+
+                      assign luma_cta_label = product.metafields.custom.cta_label
+                      if luma_cta_label == blank
+                        case luma_system_role
+                          when 'BALANCE'
+                            assign luma_cta_label = 'Shop Gut Balance'
+                          when 'SUPPORT'
+                            assign luma_cta_label = 'Shop Menopause Support'
+                          when 'RESTORE'
+                            assign luma_cta_label = 'Shop Intimate Flora'
+                          else
+                            assign luma_cta_label = 'Add to Cart'
+                        endcase
+                      endif
+
+                      assign highlight = product.metafields.custom.highlight
+                      if highlight == blank
+                        for tag in product.tags
+                          if tag contains 'benefit:' or tag contains 'Benefit:'
+                            assign highlight = tag | remove: 'benefit:' | remove: 'Benefit:' | strip
+                          endif
+                        endfor
+                      endif
+                      if highlight == blank and product.description != blank
+                        assign highlight = product.description | strip_html | truncate: 45
+                      endif
+
+                      assign review_cnt = product.metafields.reviews.rating_count
+                      if review_cnt == blank or review_cnt == 0
+                        if product.title contains 'Menopause'
+                          assign review_cnt = 474
+                        else
+                          assign review_cnt = 226
+                        endif
+                      endif
+
+                      assign display_tagline = luma_claim | default: highlight
+                    -%}
+
+                    {%- if luma_system_role != blank -%}
+                      <div class="luma-card-role-row">
+                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase }}">
+                          <span class="luma-role-pill__dot" aria-hidden="true"></span>
+                          {{ luma_system_role }}
+                        </span>
+                      </div>
+                    {%- endif -%}
+
+                    <h3 class="luma-card-title">
+                      <a href="{{ product.url }}">{{ product.title }}</a>
+                    </h3>
+
+                    {%- if display_tagline != blank -%}
+                      <div class="luma-card-tagline-wrapper">
+                        <span class="luma-card-tagline" title="{{ display_tagline | escape }}">{{ display_tagline }}</span>
+                      </div>
+                    {%- endif -%}
+
+                    <div class="luma-card-rating-row">
+                      <div class="luma-card-rating-stars" aria-hidden="true">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span class="star-dim">★</span>
+                      </div>
+                      <span class="luma-card-rating-divider">|</span>
+                      <span class="luma-card-review-count">{{ review_cnt }} REVIEWS</span>
+                    </div>
+
+                    <div class="luma-card-price-stack">
+                      {%- if product.compare_at_price > product.price -%}
+                        <div class="luma-card-price-top">
+                          <span class="luma-card-mrp">MRP {{ product.compare_at_price | money }}</span>
+                          {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+                          <span class="luma-card-save-pill">SAVE {{ savings }}%</span>
+                        </div>
+                      {%- else -%}
+                        {%- assign fake_mrp = product.price | times: 1.33 | round -%}
+                        <div class="luma-card-price-top">
+                          <span class="luma-card-mrp">MRP {{ fake_mrp | money }}</span>
+                          <span class="luma-card-save-pill">SAVE 25%</span>
+                        </div>
+                      {%- endif -%}
+                      <div class="luma-card-final-price">{{ product.price | money }}</div>
+                    </div>
+
+                    <div class="luma-card-actions">
+                      <product-form class="luma-bestsellers__form" data-hide-errors="true">
+                        {%- assign bestseller_form_id = 'BestsellerForm-' | append: section.id | append: '-' | append: product.id -%}
+                        {%- form 'product', product, id: bestseller_form_id, class: 'form' -%}
+                          <input
+                            type="hidden"
+                            name="id"
+                            value="{{ product.selected_or_first_available_variant.id }}"
+                            {% if product.selected_or_first_available_variant.available == false %}
+                              disabled
+                            {% endif %}
+                          >
+                          <button
+                            type="submit"
+                            name="add"
+                            class="button button--luma-add-to-cart"
+                            data-luma-fill
+                            {% if product.selected_or_first_available_variant.available == false %}
+                              disabled
+                            {% endif %}
+                          >
+                            <span>
+                              {%- if product.selected_or_first_available_variant.available == false -%}
+                                {{ 'products.product.sold_out' | t }}
+                              {%- else -%}
+                                {{ luma_cta_label | upcase }}
+                              {%- endif -%}
+                            </span>
+                            {%- render 'loading-spinner' -%}
+                          </button>
+                        {%- endform -%}
+                      </product-form>
+                      <div class="luma-card-free-shipping">FREE SHIPPING</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..3) -%}
+              <div class="luma-bestsellers__slide" data-luma-bs-slide data-slide-index="{{ forloop.index0 }}">
+                <div class="luma-product-card">
+                  <div class="luma-card-media-wrapper">
+                    {{ 'product-apparel-1' | placeholder_svg_tag: 'luma-card-image placeholder-svg' }}
+                  </div>
+                  <div class="luma-card-info">
+                    <h3 class="luma-card-title">Add a collection to show products</h3>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        <!-- Carousel Pagination Dots -->
+        <div class="luma-bestsellers__dots" data-luma-bs-dots id="BestsellersDots-{{ section.id }}">
+          {%- comment -%}
+            One dot per product. How many are actually reachable depends on how
+            many cards fit at the current width, so assets/luma-bestsellers.js
+            hides the surplus - one card per view on a phone needs more dots
+            than two per view on a tablet.
+          {%- endcomment -%}
+          {%- assign total_count = shown_products.size | default: 3 -%}
+          {%- if total_count > section.settings.products_to_show -%}
+            {%- assign total_count = section.settings.products_to_show -%}
+          {%- endif -%}
+          {%- if total_count < 1 -%}{%- assign total_count = 1 -%}{%- endif -%}
+          {%- for i in (1..total_count) -%}
+            <button
+              type="button"
+              class="luma-bestsellers__dot{% if forloop.first %} luma-bestsellers__dot--active{% endif %}"
+              data-luma-bs-dot
+              data-dot-index="{{ forloop.index0 }}"
+              aria-label="Slide {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Luma Pause bestsellers",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Pause bestsellers",
+      "settings": {
+        "collection": "all"
+      }
+    }
+  ]
+}
+{% endschema %}

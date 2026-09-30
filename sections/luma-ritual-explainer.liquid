@@ -1,0 +1,441 @@
+{{ 'section-luma-ritual-explainer.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  The scroll-through: .luma-ritual__scroll is a tall spacer whose height grows
+  with the step count, and .luma-ritual__stage sticks inside it. Scroll
+  progress through the spacer selects the active step - see
+  assets/luma-ritual-explainer.js. With JS or GSAP absent the spacer collapses
+  to auto height and every step renders open (see the .luma-ritual--live
+  guard in the stylesheet), so the section degrades to a readable list.
+{%- endcomment -%}
+
+<section
+  class="luma-ritual color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+  data-luma-ritual
+>
+  <div class="luma-ritual__scroll" data-luma-ritual-scroll style="--luma-ritual-steps: {{ section.blocks.size }}">
+    <div class="luma-ritual__stage" data-luma-ritual-stage>
+      <div class="luma-ritual__container">
+        {%- if section.settings.eyebrow != blank
+          or section.settings.heading != blank
+          or section.settings.subheading != blank
+        -%}
+          <div class="luma-ritual__header">
+            {%- if section.settings.eyebrow != blank -%}
+              <p class="luma-ritual__eyebrow">
+                <span class="luma-ritual__eyebrow-dot" aria-hidden="true"></span>
+                {{ section.settings.eyebrow | escape }}
+              </p>
+            {%- endif -%}
+
+            {%- if section.settings.heading != blank -%}
+              <h2 class="luma-ritual__heading">{{ section.settings.heading }}</h2>
+            {%- endif -%}
+
+            {%- if section.settings.subheading != blank -%}
+              <div class="luma-ritual__subheading">{{ section.settings.subheading }}</div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <ol class="luma-ritual__steps" data-luma-ritual-steps>
+          {%- comment -%}
+            One continuous rail behind the rows; the fill and marker are moved
+            to the active row's node by JS.
+          {%- endcomment -%}
+          {%- if section.settings.show_connectors and section.blocks.size > 1 -%}
+            <span class="luma-ritual__rail" aria-hidden="true">
+              <span class="luma-ritual__rail-track"></span>
+              <span class="luma-ritual__rail-fill" data-luma-ritual-fill></span>
+              <span class="luma-ritual__rail-marker" data-luma-ritual-marker></span>
+            </span>
+          {%- endif -%}
+
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign step_display_num = block.settings.step_number | default: forloop.index
+              assign viz = block.settings.viz
+              if viz == 'auto' or viz == blank
+                case forloop.index
+                  when 1
+                    assign viz = 'reset'
+                  when 2
+                    assign viz = 'support'
+                  when 3
+                    assign viz = 'repair'
+                  else
+                    assign viz = 'none'
+                endcase
+              endif
+              assign panel_id = 'LumaRitualPanel-' | append: section.id | append: '-' | append: forloop.index
+            -%}
+            <li
+              class="luma-ritual__step{% if forloop.first %} is-active{% endif %}"
+              data-luma-ritual-step
+              data-index="{{ forloop.index0 }}"
+              {{ block.shopify_attributes }}
+            >
+              <button
+                class="luma-ritual__step-head"
+                type="button"
+                data-luma-ritual-trigger
+                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="{{ panel_id }}"
+              >
+                <span class="luma-ritual__step-index">
+                  {{- step_display_num | prepend: '0' | slice: -2, 2 -}}
+                </span>
+                <span class="luma-ritual__step-node" data-luma-ritual-node aria-hidden="true"></span>
+                <span class="luma-ritual__step-title">{{ block.settings.title | escape }}</span>
+              </button>
+
+              <div class="luma-ritual__step-panel" id="{{ panel_id }}" data-luma-ritual-panel>
+                <div class="luma-ritual__step-inner">
+                  <div class="luma-ritual__step-copy">
+                    {%- if block.settings.tagline != blank -%}
+                      <p class="luma-ritual__step-tagline">{{ block.settings.tagline | escape }}</p>
+                    {%- endif -%}
+
+                    {%- if block.settings.description != blank -%}
+                      <p class="luma-ritual__step-description">{{ block.settings.description | escape }}</p>
+                    {%- endif -%}
+
+                    {%- if block.settings.product_role != blank -%}
+                      <p class="luma-ritual__step-product">{{ block.settings.product_role | escape }}</p>
+                    {%- endif -%}
+
+                    {%- if block.settings.key_actives != blank -%}
+                      <div class="luma-ritual__actives">
+                        <span class="luma-ritual__actives-label">{{ 'Key actives' }}</span>
+                        <span class="luma-ritual__actives-text">{{ block.settings.key_actives | escape }}</span>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+                      <div class="luma-ritual__step-action">
+                        <a href="{{ block.settings.button_link }}" class="luma-ritual__step-cta">
+                          <span>{{ block.settings.button_label | escape }}</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- comment -%}
+                    Custom media wins over the built-in diagram, in order:
+                    uploaded video, then a raw file (animated WebP/SVG/GIF
+                    served untransformed), then an image, else the SVG.
+                  {%- endcomment -%}
+                  {%- liquid
+                    assign media_src = ''
+                    if block.settings.media_file != blank
+                      if block.settings.media_file contains '//'
+                        assign media_src = block.settings.media_file
+                      else
+                        assign media_src = block.settings.media_file | file_url
+                      endif
+                    endif
+                  -%}
+
+                  {%- if block.settings.video != blank -%}
+                    <div class="luma-ritual__step-viz luma-ritual__step-viz--media" aria-hidden="true">
+                      {%- comment -%}
+                        Hand-rolled rather than video_tag: inline autoplay on
+                        iOS needs both `muted` and `playsinline`, and
+                        video_tag does not take a playsinline argument.
+                      {%- endcomment -%}
+                      <video
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="metadata"
+                        {% if block.settings.video.preview_image %}
+                          poster="{{ block.settings.video.preview_image | image_url: width: 900 }}"
+                        {% endif %}
+                      >
+                        {%- for source in block.settings.video.sources -%}
+                          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                        {%- endfor -%}
+                      </video>
+                    </div>
+                  {%- elsif media_src != blank -%}
+                    <div class="luma-ritual__step-viz luma-ritual__step-viz--media">
+                      {%- comment -%}
+                        file_url serves the original bytes, so animation in a
+                        WebP/SVG/GIF survives - the image CDN can re-encode an
+                        animated file down to a single frame.
+
+                        No width/height: media_file is a free-text filename, not
+                        an image_picker, so there is no image object to read
+                        intrinsic dimensions off. Guessing a pair would reserve
+                        the wrong box and make CLS worse rather than better -
+                        CSS sizes this to `width: 100%; height: auto` regardless.
+                        The image_picker branch below does pass real dimensions.
+                      {%- endcomment -%}
+                      {% # theme-check-disable ImgWidthAndHeight %}
+                      <img src="{{ media_src }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+                      {% # theme-check-enable ImgWidthAndHeight %}
+                    </div>
+                  {%- elsif block.settings.image != blank -%}
+                    <div class="luma-ritual__step-viz luma-ritual__step-viz--media">
+                      <img
+                        src="{{ block.settings.image | image_url: width: block.settings.image.width }}"
+                        alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                        width="{{ block.settings.image.width }}"
+                        height="{{ block.settings.image.height }}"
+                        loading="lazy"
+                      >
+                    </div>
+                  {%- elsif viz != 'none' -%}
+                    <div class="luma-ritual__step-viz" aria-hidden="true">
+                      {%- render 'luma-ritual-viz', viz: viz -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Luma Ritual Explainer",
+  "tag": "section",
+  "class": "section luma-ritual-explainer-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your daily ritual: <em>Balance. Support. Restore.</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_connectors",
+      "label": "Show the progress rail",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-4"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Ritual Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step number (e.g. 1, 2, 3)",
+          "default": "1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title",
+          "default": "BALANCE"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Step Subtitle / Phase",
+          "default": "Phase 01 · Gut Comfort & Digestion"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "10-Second Takeaway / Role Description",
+          "default": "Hormonal shifts can change how your gut feels. A multi-strain probiotic with prebiotic fibre helps support regular digestion and reduce occasional bloating, so your days feel lighter."
+        },
+        {
+          "type": "text",
+          "id": "product_role",
+          "label": "Product Role",
+          "default": "Luma Gut Balance Probiotic"
+        },
+        {
+          "type": "text",
+          "id": "key_actives",
+          "label": "Key Actives",
+          "default": "L. rhamnosus GG · B. lactis BB-12 · L. acidophilus · Inulin (prebiotic fibre)"
+        },
+        {
+          "type": "header",
+          "content": "Step visual"
+        },
+        {
+          "type": "paragraph",
+          "content": "Upload your own to replace the built-in diagram. Order used: video, then file name, then image. MP4 belongs in the video slot. Animated WebP, SVG or GIF belongs in the file name slot, because the image slot can flatten animation to one frame."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video — MP4 / WebM",
+          "info": "Plays inline, muted, on loop."
+        },
+        {
+          "type": "text",
+          "id": "media_file",
+          "label": "Animated file name",
+          "info": "For animated WebP, SVG or GIF. Upload it under Content → Files, then enter the file name here, e.g. reset-loop.webp. A full URL also works."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Still image"
+        },
+        {
+          "type": "select",
+          "id": "viz",
+          "label": "Built-in animated diagram",
+          "info": "Used only when no video or image is set. Auto picks by position: 1st Reset, 2nd Support, 3rd Repair.",
+          "options": [
+            {
+              "value": "auto",
+              "label": "Auto"
+            },
+            {
+              "value": "reset",
+              "label": "Balance — gut settling"
+            },
+            {
+              "value": "support",
+              "label": "Support — nutrients absorbing"
+            },
+            {
+              "value": "repair",
+              "label": "Restore — flora rebalancing"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "header",
+          "content": "Call To Action"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luma Ritual Explainer",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "1",
+            "title": "BALANCE",
+            "tagline": "Phase 01 · Gut Comfort & Digestion",
+            "description": "Hormonal shifts can change how your gut feels. A multi-strain probiotic with prebiotic fibre helps support regular digestion and reduce occasional bloating, so your days feel lighter.",
+            "product_role": "Luma Gut Balance Probiotic",
+            "key_actives": "L. rhamnosus GG · B. lactis BB-12 · L. acidophilus · Inulin (prebiotic fibre)",
+            "viz": "auto",
+            "button_label": "Shop Gut Balance",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "2",
+            "title": "SUPPORT",
+            "tagline": "Phase 02 · Menopause Comfort, Mood & Sleep",
+            "description": "Made for the pause. Targeted strains paired with botanicals to support comfort through hot flushes, restful sleep and a steadier mood — every single day.",
+            "product_role": "Luma Menopause Support Probiotic",
+            "key_actives": "L. gasseri · B. longum · Saffron extract · Magnesium · Vitamin D3",
+            "viz": "auto",
+            "button_label": "Shop Menopause Support",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "3",
+            "title": "RESTORE",
+            "tagline": "Phase 03 · Intimate & Urinary Flora",
+            "description": "Lower oestrogen can change your natural flora. Women-specific lactobacilli with cranberry help support intimate comfort and a healthy urinary tract.",
+            "product_role": "Luma Intimate Flora Probiotic",
+            "key_actives": "L. crispatus · L. reuteri RC-14 · L. rhamnosus GR-1 · Cranberry PACs",
+            "viz": "auto",
+            "button_label": "Shop Intimate Flora",
+            "button_link": "shopify://collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

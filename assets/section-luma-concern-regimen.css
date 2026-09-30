@@ -1,0 +1,524 @@
+/* Luma Pause — Concern Regimen.
+
+   Same house language as the Routine Builder it replaces: Geist headings with
+   tight tracking, Geist Mono uppercase labels, rose-dot eyebrow, olive
+   pill CTA, rose border for the selected state. Brand colours come from
+   luma-brand-tokens.css. No `overflow` on the section (see the note in
+   section-luma-routine-builder.css); the glow is an inset: 0 child. */
+
+.luma-regimen {
+  --rg-mono: 'Geist Mono', ui-monospace, monospace;
+  --rg-sans: 'Geist', system-ui, sans-serif;
+  --rg-thumb: 250, 246, 240;
+
+  position: relative;
+  isolation: isolate;
+}
+
+.luma-regimen [hidden] {
+  display: none !important;
+}
+
+.luma-regimen__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(40rem 32rem at 50% 72%, rgba(var(--luma-rose), 0.08), transparent 70%);
+}
+
+/* ---- header ------------------------------------------------------------- */
+
+.luma-regimen__header {
+  text-align: center;
+  max-width: 64ch;
+  margin: 0 auto 3.2rem;
+}
+
+.luma-regimen__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--rg-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-rose));
+  background: rgba(var(--luma-rose), 0.08);
+  border: 1px solid rgba(var(--luma-rose), 0.22);
+  padding: 0.35rem 1.1rem;
+  border-radius: 100px;
+  margin-bottom: 1.4rem;
+}
+
+.luma-regimen__eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgb(var(--luma-rose));
+}
+
+.luma-regimen__heading {
+  font-family: var(--rg-sans);
+  font-size: clamp(2.6rem, 3.4vw, 4rem);
+  font-weight: 500;
+  color: rgb(var(--luma-ink));
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.luma-regimen__heading strong {
+  font-weight: 700;
+}
+
+.luma-regimen__text {
+  font-family: var(--rg-sans);
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: rgb(var(--luma-sage));
+  margin: 1.2rem 0 0;
+}
+
+/* ---- tabs --------------------------------------------------------------- */
+
+.luma-regimen__tabs {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 1rem;
+  max-width: 1080px;
+  margin: 0 auto 2.4rem;
+}
+
+.luma-regimen__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-width: 0;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  background: rgba(var(--luma-cream), 0.6);
+  color: rgb(var(--luma-ink));
+  border: 1px solid rgba(var(--luma-sage), 0.22);
+  border-radius: 1.4rem;
+  padding: 1.4rem 1.6rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.luma-regimen__tab:hover {
+  border-color: rgba(var(--luma-rose), 0.5);
+}
+
+.luma-regimen__tab:focus-visible {
+  outline: 2px solid rgb(var(--luma-rose));
+  outline-offset: 2px;
+}
+
+.luma-regimen__tab[aria-selected='true'] {
+  background: #ffffff;
+  border: 1.5px solid rgb(var(--luma-rose));
+  box-shadow: 0 10px 28px rgba(var(--luma-rose), 0.12);
+}
+
+.luma-regimen__tab-num {
+  font-family: var(--rg-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgb(var(--luma-sage));
+}
+
+.luma-regimen__tab[aria-selected='true'] .luma-regimen__tab-num {
+  color: rgb(var(--luma-rose));
+}
+
+.luma-regimen__tab-label {
+  font-family: var(--rg-sans);
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ---- panel -------------------------------------------------------------- */
+
+.luma-regimen__panel {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid rgba(var(--luma-rose), 0.2);
+  border-radius: 2rem;
+  padding: 2.8rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+.luma-regimen__panel-head {
+  text-align: center;
+  margin-bottom: 2.4rem;
+}
+
+.luma-regimen__concern {
+  font-family: var(--rg-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-rose));
+  margin: 0 0 0.8rem;
+}
+
+.luma-regimen__headline {
+  font-family: var(--rg-sans);
+  font-size: clamp(2.2rem, 2.6vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: rgb(var(--luma-ink));
+  margin: 0;
+}
+
+.luma-regimen__form {
+  margin: 0;
+}
+
+.luma-regimen__products {
+  list-style: none;
+  margin: 0 0 2.4rem;
+  padding: 0;
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 1.6rem;
+}
+
+.luma-regimen__product {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: rgb(var(--rg-thumb));
+  border: 1px solid transparent;
+  border-radius: 1.6rem;
+  padding: 1.6rem;
+}
+
+.luma-regimen__product--primary {
+  border-color: rgba(var(--luma-rose), 0.35);
+}
+
+.luma-regimen__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  margin-bottom: 1.4rem;
+}
+
+.luma-regimen__media img,
+.luma-regimen__placeholder {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.luma-regimen__product:hover .luma-regimen__media img {
+  transform: scale(1.04);
+}
+
+.luma-regimen__product-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.luma-regimen__role {
+  font-family: var(--rg-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-sage));
+}
+
+.luma-regimen__product--primary .luma-regimen__role {
+  color: rgb(var(--luma-rose));
+}
+
+.luma-regimen__title {
+  font-family: var(--rg-sans);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: rgb(var(--luma-ink));
+  margin: 0;
+}
+
+.luma-regimen__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.luma-regimen__title a:hover {
+  color: rgb(var(--luma-rose));
+}
+
+.luma-regimen__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.luma-regimen__freq {
+  display: inline-block;
+  font-family: var(--rg-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgb(var(--luma-rose));
+  background: rgba(var(--luma-rose), 0.1);
+  border: 1px solid rgba(var(--luma-rose), 0.25);
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.luma-regimen__price {
+  font-family: var(--rg-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgb(var(--luma-ink));
+}
+
+/* ---- footer ------------------------------------------------------------- */
+
+.luma-regimen__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(var(--luma-sage), 0.3);
+}
+
+.luma-regimen__total {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.luma-regimen__total-label {
+  font-family: var(--rg-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-sage));
+}
+
+.luma-regimen__total-price {
+  font-family: var(--rg-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(var(--luma-ink));
+}
+
+.luma-regimen__compare {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: rgb(var(--luma-sage));
+  margin-left: 0.8rem;
+}
+
+.luma-regimen__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.3rem 2.8rem;
+  background: rgb(var(--luma-ink));
+  color: rgb(var(--luma-cream));
+  border: none;
+  border-radius: 100px;
+  font-family: var(--rg-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.luma-regimen__submit:hover:not(:disabled) {
+  background: rgb(var(--luma-rose));
+}
+
+.luma-regimen__submit:focus-visible {
+  outline: 2px solid rgb(var(--luma-rose));
+  outline-offset: 3px;
+}
+
+.luma-regimen__submit[data-added] {
+  background: rgb(var(--luma-rose));
+}
+
+.luma-regimen__submit[aria-busy='true'] {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.luma-regimen__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.luma-regimen__error {
+  font-family: var(--rg-sans);
+  font-size: 1.3rem;
+  color: #b3261e;
+  text-align: right;
+  margin: 1rem 0 0;
+}
+
+.luma-regimen__cross-link {
+  text-align: center;
+  margin: 2.4rem 0 0;
+}
+
+.luma-regimen__cross-link a {
+  font-family: var(--rg-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-ink));
+  text-underline-offset: 0.4rem;
+}
+
+.luma-regimen__cross-link a:hover {
+  color: rgb(var(--luma-rose));
+}
+
+/* ---- mobile ------------------------------------------------------------- */
+
+@media screen and (max-width: 749px) {
+  .luma-regimen__header {
+    margin-bottom: 2rem;
+  }
+
+  .luma-regimen__heading {
+    font-size: 2.4rem;
+  }
+
+  .luma-regimen__tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
+    gap: 0.8rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .luma-regimen__tab {
+    padding: 1.1rem 1.2rem;
+    border-radius: 1.2rem;
+    gap: 0.4rem;
+  }
+
+  .luma-regimen__tab-label {
+    font-size: 1.3rem;
+  }
+
+  .luma-regimen__panel {
+    padding: 1.8rem 1.4rem;
+    border-radius: 1.4rem;
+  }
+
+  .luma-regimen__panel-head {
+    margin-bottom: 1.6rem;
+  }
+
+  .luma-regimen__headline {
+    font-size: 2.1rem;
+  }
+
+  .luma-regimen__products {
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    gap: 0.8rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .luma-regimen__product {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+    border-radius: 1.2rem;
+  }
+
+  .luma-regimen__media {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .luma-regimen__product-body {
+    flex: 1 1 auto;
+    gap: 0.4rem;
+  }
+
+  .luma-regimen__title {
+    font-size: 1.35rem;
+  }
+
+  .luma-regimen__freq {
+    font-size: 0.95rem;
+    padding: 0.25rem 0.7rem;
+  }
+
+  .luma-regimen__price {
+    font-size: 1.25rem;
+  }
+
+  .luma-regimen__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+    padding-top: 1.4rem;
+  }
+
+  .luma-regimen__total {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .luma-regimen__total-price {
+    font-size: 1.7rem;
+  }
+
+  .luma-regimen__submit {
+    width: 100%;
+    padding: 1.2rem 1.6rem;
+    font-size: 1.15rem;
+  }
+
+  .luma-regimen__error {
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-regimen__tab,
+  .luma-regimen__media img,
+  .luma-regimen__submit {
+    transition: none;
+  }
+}

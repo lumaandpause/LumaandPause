@@ -1,0 +1,668 @@
+/* Luma Pause — Ritual Explainer: a scroll-through phase walkthrough.
+
+   Layout: .luma-ritual__scroll is a tall spacer, .luma-ritual__stage sticks
+   inside it, and scroll progress through the spacer selects the active step
+   (assets/luma-ritual-explainer.js). Colours come from the section's Shopify
+   colour scheme, with Dusty Rose as the fixed accent.
+
+   Everything scroll-driven is gated behind `.luma-ritual--live`, which the JS
+   adds only once it is actually running. Without it the spacer collapses, the
+   stage stops sticking and every panel is open, so the section degrades to a
+   plain readable list when JS or GSAP is unavailable. */
+
+.luma-ritual {
+  position: relative;
+  /* Deliberately no `overflow` here. Any overflow value other than visible
+     makes this element the scrollport for the sticky stage inside it, which
+     stops the stage sticking to the viewport at all - the same trap noted in
+     layout/theme.liquid about .color-scheme-* wrappers breaking sticky. */
+}
+
+.luma-ritual__container {
+  width: 100%;
+  max-width: 120rem;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-through scaffolding
+   -------------------------------------------------------------------------- */
+.luma-ritual--live .luma-ritual__scroll {
+  /* One extra viewport-ish run of scroll per step. */
+  height: calc(100vh + (var(--luma-ritual-steps, 3) * 46vh));
+}
+
+.luma-ritual--live .luma-ritual__stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.luma-ritual__header {
+  max-width: 62rem;
+  margin-bottom: 4.8rem;
+}
+
+.luma-ritual__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 1.6rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-rose));
+}
+
+.luma-ritual__eyebrow-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: rgb(var(--luma-rose));
+}
+
+.luma-ritual__heading {
+  margin: 0;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: clamp(2.8rem, 4.4vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: rgb(var(--color-foreground));
+}
+
+.luma-ritual__heading em {
+  font-style: normal;
+  color: rgb(var(--luma-rose));
+}
+
+.luma-ritual__subheading {
+  margin-top: 1.6rem;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: rgba(var(--color-foreground), 0.62);
+}
+
+.luma-ritual__subheading > p {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Steps + progress rail
+   -------------------------------------------------------------------------- */
+.luma-ritual__steps {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.luma-ritual__rail {
+  position: absolute;
+  top: 1.8rem;
+  bottom: 1.8rem;
+  /* `left` is written by the JS from the first node's real centre, then
+     centred with the translate below. Hand-tuned rem offsets drifted out of
+     alignment with the node column whenever the grid, font size or zoom
+     changed. */
+  left: 0;
+  transform: translateX(-50%);
+  width: 0.2rem;
+  pointer-events: none;
+}
+
+.luma-ritual__rail-track,
+.luma-ritual__rail-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 1px;
+}
+
+.luma-ritual__rail-track {
+  height: 100%;
+  background-color: rgba(var(--color-foreground), 0.16);
+}
+
+.luma-ritual__rail-fill {
+  height: 0;
+  background-color: rgb(var(--luma-rose));
+}
+
+/* A ring that encircles the active node, rather than a second dot sitting on
+   top of it. */
+.luma-ritual__rail-marker {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-left: -1.1rem;
+  margin-top: -1.1rem;
+  border: 0.15rem solid rgba(var(--luma-rose), 0.5);
+  border-radius: 50%;
+}
+
+.luma-ritual__step {
+  position: relative;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.12);
+}
+
+.luma-ritual__step:last-child {
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.12);
+}
+
+/* The head is a real button for keyboard/tap access; it just doesn't look
+   like one. */
+.luma-ritual__step-head {
+  display: grid;
+  grid-template-columns: 3.4rem 2.4rem 1fr;
+  align-items: center;
+  gap: 0 1.2rem;
+  width: 100%;
+  padding: 1.8rem 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.luma-ritual__step-index {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(var(--color-foreground), 0.45);
+  transition: color 0.4s ease;
+}
+
+.luma-ritual__step-node {
+  position: relative;
+  justify-self: center;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background-color: rgba(var(--color-foreground), 0.28);
+  transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.luma-ritual__step-title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: rgba(var(--color-foreground), 0.3);
+  transition: color 0.45s ease;
+}
+
+.luma-ritual__step.is-active .luma-ritual__step-index {
+  color: rgb(var(--luma-rose));
+}
+
+.luma-ritual__step.is-active .luma-ritual__step-node {
+  background-color: rgb(var(--luma-rose));
+  transform: scale(1.35);
+}
+
+.luma-ritual__step.is-active .luma-ritual__step-title {
+  color: rgb(var(--color-foreground));
+}
+
+.luma-ritual__step-head:hover .luma-ritual__step-title,
+.luma-ritual__step-head:focus-visible .luma-ritual__step-title {
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.luma-ritual__step.is-active .luma-ritual__step-head:hover .luma-ritual__step-title {
+  color: rgb(var(--color-foreground));
+}
+
+/* --------------------------------------------------------------------------
+   Expanding panel
+   -------------------------------------------------------------------------- */
+.luma-ritual--live .luma-ritual__step-panel {
+  height: 0;
+  overflow: hidden;
+}
+
+.luma-ritual__step-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.4rem;
+  padding: 0 0 3.2rem;
+  /* Aligns the copy under the title rather than the index column. */
+  padding-inline-start: 7rem;
+}
+
+@media screen and (min-width: 990px) {
+  .luma-ritual__step-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: 4rem;
+  }
+}
+
+.luma-ritual__step-tagline {
+  margin: 0 0 1.2rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--luma-rose));
+}
+
+.luma-ritual__step-description {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1.6rem;
+  line-height: 1.62;
+  color: rgba(var(--color-foreground), 0.72);
+}
+
+.luma-ritual__step-product {
+  margin: 1.8rem 0 0;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--color-foreground));
+}
+
+.luma-ritual__actives {
+  margin-top: 1.6rem;
+  padding-top: 1.6rem;
+  border-top: 0.1rem solid rgba(var(--luma-sage), 0.28);
+}
+
+.luma-ritual__actives-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.45);
+}
+
+.luma-ritual__actives-text {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: rgba(var(--color-foreground), 0.8);
+}
+
+.luma-ritual__step-action {
+  margin-top: 2.2rem;
+}
+
+.luma-ritual__step-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.95rem 2.2rem;
+  border-radius: 9999px;
+  background-color: rgb(var(--luma-rose));
+  color: #ffffff !important;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(var(--luma-rose), 0.28);
+}
+
+.luma-ritual__step-cta:hover {
+  background-color: #9A5963;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--luma-rose), 0.38);
+}
+
+.luma-ritual__step-cta svg {
+  transition: transform 0.2s ease;
+}
+
+.luma-ritual__step-cta:hover svg {
+  transform: translateX(3px);
+}
+
+
+/* --------------------------------------------------------------------------
+   Animated diagrams
+   -------------------------------------------------------------------------- */
+.luma-ritual__step-viz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.6rem;
+  border: 0.1rem solid rgba(var(--luma-rose), 0.22);
+  border-radius: 1.6rem;
+  background-color: rgba(var(--luma-rose), 0.05);
+}
+
+.luma-viz {
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+  color: rgb(var(--luma-rose));
+}
+
+/* Merchant-uploaded video/image/GIF: the frame just holds it, no rose wash
+   tinting someone's artwork. */
+.luma-ritual__step-viz--media {
+  padding: 0;
+  overflow: hidden;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.luma-ritual__step-viz--media img,
+.luma-ritual__step-viz--media video,
+.luma-ritual__step-viz--media .video-wrapper,
+.luma-ritual__step-viz--media deferred-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+/* Motion only runs for the open step, so each diagram replays on open. */
+
+/* Balance — particles break off and drift away, then a calm sweep runs the stem. */
+.luma-viz__strand {
+  opacity: 0.55;
+}
+
+.luma-viz__rinse {
+  stroke-dasharray: 40 400;
+  stroke-dashoffset: 60;
+  opacity: 0;
+}
+
+.luma-viz__crystal {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.luma-ritual__step.is-active .luma-viz__rinse {
+  animation: luma-viz-rinse 3.2s ease-in-out infinite;
+}
+
+.luma-ritual__step.is-active .luma-viz__crystal {
+  animation: luma-viz-crystal 3.2s ease-in-out infinite;
+}
+
+.luma-ritual__step.is-active .luma-viz__crystal:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.luma-ritual__step.is-active .luma-viz__crystal:nth-child(3) {
+  animation-delay: 0.36s;
+}
+.luma-ritual__step.is-active .luma-viz__crystal:nth-child(4) {
+  animation-delay: 0.54s;
+}
+.luma-ritual__step.is-active .luma-viz__crystal:nth-child(5) {
+  animation-delay: 0.72s;
+}
+
+@keyframes luma-viz-rinse {
+  0%,
+  20% {
+    stroke-dashoffset: 60;
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  75% {
+    stroke-dashoffset: -340;
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: -340;
+    opacity: 0;
+  }
+}
+
+@keyframes luma-viz-crystal {
+  0%,
+  22% {
+    opacity: 0.85;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  60% {
+    opacity: 0;
+    transform: translate(6px, 26px) scale(0.4) rotate(28deg);
+  }
+  92% {
+    opacity: 0;
+    transform: translate(6px, 26px) scale(0.4) rotate(28deg);
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+}
+
+/* Support — nutrients converge on the core, microbiome pulses outward. */
+.luma-viz__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.luma-viz__nutrient {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.luma-ritual__step.is-active .luma-viz__ring {
+  animation: luma-viz-ring 3s ease-out infinite;
+}
+
+.luma-ritual__step.is-active .luma-viz__ring:nth-child(2) {
+  animation-delay: 1s;
+}
+.luma-ritual__step.is-active .luma-viz__ring:nth-child(3) {
+  animation-delay: 2s;
+}
+
+.luma-ritual__step.is-active .luma-viz__nutrient {
+  animation: luma-viz-nutrient 2.8s ease-in-out infinite;
+}
+
+.luma-ritual__step.is-active .luma-viz__nutrient:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.luma-ritual__step.is-active .luma-viz__nutrient:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.luma-ritual__step.is-active .luma-viz__nutrient:nth-child(4) {
+  animation-delay: 0.9s;
+}
+.luma-ritual__step.is-active .luma-viz__nutrient:nth-child(5) {
+  animation-delay: 1.2s;
+}
+.luma-ritual__step.is-active .luma-viz__nutrient:nth-child(6) {
+  animation-delay: 1.5s;
+}
+
+@keyframes luma-viz-ring {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@keyframes luma-viz-nutrient {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    /* Pulled toward the core at the centre of the artboard. */
+    transform: translate(calc((150px - var(--luma-viz-x, 150px)) * 0.82), calc((70px - var(--luma-viz-y, 70px)) * 0.82))
+      scale(0.4);
+  }
+}
+
+/* Repair — lifted scales settle flat, then a seal sweeps across. */
+.luma-viz__scale {
+  transform-box: fill-box;
+  transform-origin: bottom left;
+}
+
+.luma-viz__seal {
+  stroke-dasharray: 248;
+  stroke-dashoffset: 248;
+  opacity: 0;
+}
+
+.luma-ritual__step.is-active .luma-viz__scale {
+  animation: luma-viz-scale 3.4s ease-in-out infinite;
+}
+
+.luma-ritual__step.is-active .luma-viz__scale:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.luma-ritual__step.is-active .luma-viz__scale:nth-child(3) {
+  animation-delay: 0.24s;
+}
+.luma-ritual__step.is-active .luma-viz__scale:nth-child(4) {
+  animation-delay: 0.36s;
+}
+.luma-ritual__step.is-active .luma-viz__scale:nth-child(5) {
+  animation-delay: 0.48s;
+}
+
+.luma-ritual__step.is-active .luma-viz__seal {
+  animation: luma-viz-seal 3.4s ease-in-out infinite;
+}
+
+@keyframes luma-viz-scale {
+  0% {
+    transform: rotate(-24deg);
+    opacity: 0.5;
+  }
+  40%,
+  80% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-24deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes luma-viz-seal {
+  0%,
+  40% {
+    stroke-dashoffset: 248;
+    opacity: 0;
+  }
+  55% {
+    opacity: 0.85;
+  }
+  85% {
+    stroke-dashoffset: 0;
+    opacity: 0.85;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Narrow screens: no sticky scroll-through, just a tap accordion.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .luma-ritual--live .luma-ritual__scroll {
+    height: auto;
+  }
+
+  .luma-ritual--live .luma-ritual__stage {
+    position: static;
+    min-height: 0;
+  }
+
+  .luma-ritual__header {
+    margin-bottom: 3.2rem;
+  }
+
+  /* Tighter index/node columns than desktop, so the gutter the panel has to
+     clear stays small on a narrow screen. The rail's x is measured from the
+     node in JS, so it follows these widths automatically. */
+  .luma-ritual__step-head {
+    grid-template-columns: 2.2rem 1.2rem 1fr;
+    gap: 0 0.6rem;
+    padding: 1.4rem 0;
+  }
+
+  .luma-ritual__rail-marker {
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-left: -0.9rem;
+    margin-top: -0.9rem;
+  }
+
+  /* Indented to sit past the rail and line up under the title. Without this
+     the full-height rail draws straight through the copy and the diagram. */
+  .luma-ritual__step-inner {
+    padding-inline-start: 5.2rem;
+    padding-bottom: 2.4rem;
+  }
+
+  .luma-ritual__step-viz {
+    padding: 1.4rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-ritual__step-index,
+  .luma-ritual__step-node,
+  .luma-ritual__step-title {
+    transition: none;
+  }
+
+  .luma-ritual__step.is-active .luma-viz__crystal,
+  .luma-ritual__step.is-active .luma-viz__rinse,
+  .luma-ritual__step.is-active .luma-viz__ring,
+  .luma-ritual__step.is-active .luma-viz__nutrient,
+  .luma-ritual__step.is-active .luma-viz__scale,
+  .luma-ritual__step.is-active .luma-viz__seal {
+    animation: none;
+  }
+
+  .luma-viz__rinse,
+  .luma-viz__seal,
+  .luma-viz__ring {
+    opacity: 0.6;
+    stroke-dashoffset: 0;
+  }
+}
