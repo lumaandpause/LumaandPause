@@ -111,7 +111,7 @@
         "image": "shopify://shop_images/Luma_Pause_Botanical_Skincare_Collection.png",
         "image_mobile": "shopify://shop_images/Luma_Pause_Skincare_Collection_in_Warm_Tones.png",
         "height": "large",
-        "mobile_height": "large",
+        "mobile_height": "small",
         "overlay_opacity": 35,
         "overlay_style": "gradient",
         "color_scheme": "scheme-4",
