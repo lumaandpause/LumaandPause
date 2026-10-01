@@ -128,14 +128,6 @@
                       assign display_tagline = luma_claim | default: highlight
                     -%}
 
-                    {%- if luma_system_role != blank -%}
-                      <div class="luma-card-role-row">
-                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase | replace: 'cleanse', 'support' | replace: 'nourish', 'balance' | replace: 'hydrate', 'restore' }}">
-                          <span class="luma-role-pill__dot" aria-hidden="true"></span>
-                          {{ luma_system_role }}
-                        </span>
-                      </div>
-                    {%- endif -%}
 
                     <h3 class="luma-card-title">
                       <a href="{{ product.url }}">{{ product.title }}</a>
@@ -147,14 +139,7 @@
                       </div>
                     {%- endif -%}
 
-                    <div class="luma-card-price-stack">
-                      <span class="luma-card-final-price">{{ product.price | money }}</span>
-                      {%- if product.compare_at_price > product.price -%}
-                        {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
-                        <s class="luma-card-mrp">{{ product.compare_at_price | money }}</s>
-                        <span class="luma-card-save-pill">-{{ savings }}%</span>
-                      {%- endif -%}
-                    </div>
+                    {%- render 'luma-card-price', product: product -%}
 
                     <div class="luma-card-actions">
                       <product-form class="luma-bestsellers__form" data-hide-errors="true">
@@ -181,7 +166,7 @@
                               {%- if product.selected_or_first_available_variant.available == false -%}
                                 {{ 'products.product.sold_out' | t }}
                               {%- else -%}
-                                {{ luma_cta_label | upcase }}
+                                {{ 'products.product.add_to_cart' | t }}
                               {%- endif -%}
                             </span>
                             {%- render 'loading-spinner' -%}

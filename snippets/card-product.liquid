@@ -110,14 +110,6 @@
       </a>
 
       <div class="luma-card-info">
-        {%- if luma_system_role != blank -%}
-          <div class="luma-card-role-row">
-            <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase | replace: 'cleanse', 'support' | replace: 'nourish', 'balance' | replace: 'hydrate', 'restore' }}">
-              <span class="luma-role-pill__dot" aria-hidden="true"></span>
-              {{ luma_system_role }}
-            </span>
-          </div>
-        {%- endif -%}
 
         <h3 class="luma-card-title">
           <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
@@ -130,14 +122,7 @@
           </div>
         {%- endif -%}
 
-        <div class="luma-card-price-stack">
-          <span class="luma-card-final-price">{{ card_product.price | money }}</span>
-          {%- if card_product.compare_at_price > card_product.price -%}
-            {%- assign savings = card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round -%}
-            <s class="luma-card-mrp">{{ card_product.compare_at_price | money }}</s>
-            <span class="luma-card-save-pill">-{{ savings }}%</span>
-          {%- endif -%}
-        </div>
+        {%- render 'luma-card-price', product: card_product -%}
 
         <div class="luma-card-actions">
           <product-form data-section-id="{{ section.id }}">
@@ -170,7 +155,7 @@
               >
                 <span>
                   {%- if card_product.selected_or_first_available_variant.available -%}
-                    {{ luma_cta_label | upcase }}
+                    {{ 'products.product.add_to_cart' | t }}
                   {%- else -%}
                     {{ 'products.product.sold_out' | t }}
                   {%- endif -%}
@@ -192,7 +177,7 @@
     <div class="luma-card-info">
       <h3 class="luma-card-title">{{ 'onboarding.product_title' | t }}</h3>
       <div class="luma-card-price-stack">
-        <div class="luma-card-final-price">{{ 1999 | money }}</div>
+        <div class="luma-card-final-price">{{ 1999 | money | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' | replace: 'Rs ', '₹' }}</div>
       </div>
     </div>
   </div>

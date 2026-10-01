@@ -1466,5 +1466,54 @@
         "label": "t:settings_schema.customer_accounts.settings.customer_account_menu.label"
       }
     ]
+  },
+  {
+    "name": "Product card pricing",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The MRP is each product's Compare-at price (Shopify admin → Products → Pricing). The save badge is worked out from it automatically and only shows when the MRP is higher than the price."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_mrp",
+        "label": "Show MRP on product cards",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "card_mrp_label",
+        "label": "MRP label",
+        "default": "MRP"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_save",
+        "label": "Show save badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "card_save_label",
+        "label": "Save badge label",
+        "default": "Save"
+      },
+      {
+        "type": "select",
+        "id": "card_save_style",
+        "label": "Show savings as",
+        "options": [
+          {
+            "value": "percent",
+            "label": "Percentage (Save 20%)"
+          },
+          {
+            "value": "amount",
+            "label": "Amount (Save ₹100)"
+          }
+        ],
+        "default": "percent"
+      }
+    ]
   }
 ]

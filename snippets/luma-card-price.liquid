@@ -1,0 +1,43 @@
+{% comment %}
+  Product card price: optional MRP + save badge row, then the selling price.
+
+  The MRP is the product's Compare-at price (Shopify admin → Products).
+  Wording and visibility come from Theme settings → Product card pricing.
+
+  Accepts:
+  - product: {Object}
+{% endcomment %}
+
+{%- liquid
+  assign price = product.price
+  assign mrp = product.compare_at_price
+  assign show_mrp = settings.card_show_mrp
+  if show_mrp == nil
+    assign show_mrp = true
+  endif
+-%}
+
+<div class="luma-card-price-stack">
+  {%- if show_mrp and mrp > price -%}
+    {%- liquid
+      if settings.card_save_style == 'amount'
+        assign save_value = mrp | minus: price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' | replace: 'Rs ', '₹'
+      else
+        assign save_value = mrp | minus: price | times: 100.0 | divided_by: mrp | round | append: '%'
+      endif
+    -%}
+    <div class="luma-card-price-top">
+      <span class="luma-card-mrp">
+        {%- if settings.card_mrp_label != blank -%}{{ settings.card_mrp_label | escape }} {% endif -%}
+        <s>{{ mrp | money | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' | replace: 'Rs ', '₹' }}</s>
+      </span>
+      {%- if settings.card_show_save != false -%}
+        <span class="luma-card-save-pill">
+          {%- if settings.card_save_label != blank -%}{{ settings.card_save_label | escape }} {% endif -%}
+          {{- save_value -}}
+        </span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  <div class="luma-card-final-price">{{ price | money | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' | replace: 'Rs ', '₹' }}</div>
+</div>
