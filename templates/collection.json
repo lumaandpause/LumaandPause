@@ -7,4 +7,88 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{"sections":{"banner":{"type":"luma-collection-hero","settings":{"image":"shopify://shop_images/Gemini_Generated_Image_sh0zwqsh0zwqsh0z.png","image_mobile":"","layout_type":"full_width","height":"medium","mobile_height":"medium","overlay_opacity":35,"overlay_style":"gradient","color_scheme":"scheme-5","eyebrow":"Probiotic care · Doctor formulated","heading":"Hair, scalp & skin essentials","subheading":"<p>Gentle, doctor-formulated care that feeds, restores and strengthens — every day.</p>","position_mode":"grid","canvas_pos_x":50,"canvas_pos_y":50,"canvas_max_width":660,"mobile_canvas_pos_x":50,"mobile_canvas_pos_y":85,"mobile_canvas_max_width":420,"content_position":"center","mobile_content_position":"bottom","mobile_content_alignment":"center","show_content":true,"heading_size":"medium","promo_code":"","show_button_1":true,"button_label_1":"Shop now","button_link_1":"shopify://collections/all","button_style_1":"pill-black","button_custom_bg":"","button_custom_text":"","show_button_2":false,"button_label_2":"","button_link_2":"","button_style_2":"outline","show_promo_badge":false,"promo_prefix":"FLAT","promo_discount":"25%","promo_suffix":"OFF","promo_tag":"USE CODE | PAYDAY","promo_badge_position":"right","show_ticker":false,"ticker_text":"DOCTOR FORMULATED · SULFATE-FREE · MADE IN INDIA","ticker_speed":22,"ticker_bg_color":"#B66F75","ticker_text_color":"#FFFFFF","show_breadcrumb":true}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":16,"columns_desktop":3,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":true,"show_free_shipping_tag":true,"quick_add":"standard","enable_filtering":false,"filter_type":"drawer","enable_sorting":false,"show_header":true,"header_eyebrow":"Cleanse · Nourish · Hydrate","header_heading":"Our Collection","header_subheading":"<p>Sulfate-free shampoo, lightweight serum, refreshing mists and a daily moisturiser — made for all hair and skin types.</p>","header_alignment":"center","padding_top":24,"padding_bottom":36}}},"order":["banner","product-grid"]}
+{
+  "sections": {
+    "banner": {
+      "type": "luma-collection-hero",
+      "settings": {
+        "image": "shopify://shop_images/Luma_Pause_Botanical_Skincare_Collection.png",
+        "image_mobile": "shopify://shop_images/Luma_Pause_Skincare_Collection_in_Warm_Tones.png",
+        "layout_type": "full_width",
+        "height": "medium",
+        "mobile_height": "medium",
+        "overlay_opacity": 35,
+        "overlay_style": "gradient",
+        "color_scheme": "scheme-5",
+        "position_mode": "grid",
+        "canvas_pos_x": 50,
+        "canvas_pos_y": 50,
+        "canvas_max_width": 660,
+        "mobile_canvas_pos_x": 50,
+        "mobile_canvas_pos_y": 85,
+        "mobile_canvas_max_width": 420,
+        "content_position": "center",
+        "mobile_content_position": "bottom",
+        "mobile_content_alignment": "center",
+        "show_content": true,
+        "eyebrow": "Probiotic care · Doctor formulated",
+        "heading": "Hair, scalp & skin essentials",
+        "heading_size": "medium",
+        "subheading": "<p>Gentle, doctor-formulated care that feeds, restores and strengthens — every day.</p>",
+        "promo_code": "",
+        "show_button_1": true,
+        "button_label_1": "Shop now",
+        "button_link_1": "shopify://collections/all",
+        "button_style_1": "pill-black",
+        "button_custom_bg": "",
+        "button_custom_text": "",
+        "show_button_2": false,
+        "button_label_2": "",
+        "button_link_2": "",
+        "button_style_2": "outline",
+        "show_promo_badge": false,
+        "promo_prefix": "FLAT",
+        "promo_discount": "25%",
+        "promo_suffix": "OFF",
+        "promo_tag": "USE CODE | PAYDAY",
+        "promo_badge_position": "right",
+        "show_ticker": false,
+        "ticker_text": "DOCTOR FORMULATED · SULFATE-FREE · MADE IN INDIA",
+        "ticker_speed": 22,
+        "ticker_bg_color": "#b66f75",
+        "ticker_text_color": "#ffffff",
+        "show_breadcrumb": true
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 3,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_header": true,
+        "header_eyebrow": "Cleanse · Nourish · Hydrate",
+        "header_heading": "Our Collection",
+        "header_subheading": "<p>Sulfate-free shampoo, lightweight serum, refreshing mists and a daily moisturiser — made for all hair and skin types.</p>",
+        "header_alignment": "center",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": true,
+        "show_free_shipping_tag": true,
+        "quick_add": "standard",
+        "enable_filtering": false,
+        "filter_type": "drawer",
+        "enable_sorting": false,
+        "padding_top": 24,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid"
+  ]
+}
