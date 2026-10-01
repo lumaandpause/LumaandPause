@@ -257,9 +257,9 @@
         "intensity": "medium",
         "rotate": true,
         "color_scheme": "scheme-1",
-        "background": "linear-gradient(180deg, #F9F7F2 0%, #DCEEF8 14%, #CFE7F4 50%, #DCEEF8 86%, #F9F7F2 100%)",
-        "padding_top": 96,
-        "padding_bottom": 96
+        "background": "linear-gradient(180deg, rgba(249, 247, 242, 1), rgba(220, 238, 248, 1) 14%, rgba(207, 231, 244, 1) 50%, rgba(220, 238, 248, 1) 86%, rgba(249, 247, 242, 1) 100%)",
+        "padding_top": 48,
+        "padding_bottom": 0
       }
     },
     "bestsellers": {
