@@ -371,3 +371,68 @@ html.luma-fill-ready .luma-bestsellers__slide .button--luma-add-to-cart:focus-vi
 .luma-bestsellers__slide .button--luma-add-to-cart .luma-fill {
   background-color: rgb(var(--luma-rose));
 }
+
+/* ==========================================================================
+   Product grid — 3 per row on tablet/desktop, 2 per row on mobile.
+   Overrides the carousel above; every product shows, no scrolling or dots.
+   ========================================================================== */
+.luma-bestsellers__track {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.luma-bestsellers__slide {
+  flex: initial;
+  width: auto;
+  min-width: 0;
+}
+
+.luma-bestsellers__dots {
+  display: none !important;
+}
+
+@media screen and (min-width: 750px) {
+  .luma-bestsellers__track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.4rem;
+  }
+}
+
+/* Tighter card on 2-up mobile so price and button fit */
+@media screen and (max-width: 749px) {
+  .luma-bestsellers__panel {
+    padding: 1.2rem 1rem 1.4rem;
+  }
+
+  .luma-bestsellers__slide .luma-card-info {
+    padding: 1rem 0.8rem 1.2rem;
+  }
+
+  .luma-bestsellers__slide .luma-card-title,
+  .luma-bestsellers__slide .luma-card__title {
+    font-size: 1.4rem;
+  }
+
+  .luma-bestsellers__slide .luma-card-tagline {
+    font-size: 1.15rem;
+  }
+
+  .luma-bestsellers__slide .luma-card-final-price {
+    font-size: 1.5rem;
+  }
+
+  .luma-bestsellers__slide .button--luma-add-to-cart {
+    font-size: 1.1rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    min-height: 3.8rem;
+    letter-spacing: 0.04em;
+  }
+
+  .luma-bestsellers__slide .luma-badge-bestseller {
+    font-size: 0.9rem;
+  }
+}
