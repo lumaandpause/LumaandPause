@@ -23,7 +23,7 @@
             "show_desktop": true,
             "show_mobile": true,
             "x": 0,
-            "y": 30,
+            "y": 28,
             "width": 560,
             "text_align": "left",
             "font_size": 0,
@@ -172,55 +172,6 @@
         "padding_bottom": 48
       }
     },
-    "trust": {
-      "type": "luma-trust-badges",
-      "blocks": {
-        "b1": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "doctor",
-            "label": "Doctor Formulated",
-            "text": "Developed with dermatology expertise"
-          }
-        },
-        "b2": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "droplet",
-            "label": "Lightweight & Non-Sticky",
-            "text": "Absorbs fast, never feels heavy"
-          }
-        },
-        "b3": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "recycle",
-            "label": "Recyclable Packaging",
-            "text": "Kinder to the planet"
-          }
-        },
-        "b4": {
-          "type": "badge",
-          "settings": {
-            "icon_type": "india",
-            "label": "Made in India",
-            "text": "Proudly formulated & made here"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4"
-      ],
-      "settings": {
-        "heading": "",
-        "color_scheme": "scheme-1",
-        "padding_top": 12,
-        "padding_bottom": 0
-      }
-    },
     "ritual_explainer": {
       "type": "luma-ritual-explainer",
       "blocks": {
@@ -283,6 +234,55 @@
         "color_scheme": "scheme-4",
         "padding_top": 64,
         "padding_bottom": 64
+      }
+    },
+    "trust": {
+      "type": "luma-trust-badges",
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "doctor",
+            "label": "Doctor Formulated",
+            "text": "Developed with dermatology expertise"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "droplet",
+            "label": "Lightweight & Non-Sticky",
+            "text": "Absorbs fast, never feels heavy"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "recycle",
+            "label": "Recyclable Packaging",
+            "text": "Kinder to the planet"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "india",
+            "label": "Made in India",
+            "text": "Proudly formulated & made here"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {
+        "heading": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 12,
+        "padding_bottom": 0
       }
     },
     "philosophy": {
