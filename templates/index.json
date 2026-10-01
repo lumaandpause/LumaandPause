@@ -159,6 +159,19 @@
         "press_heading": ""
       }
     },
+    "bestsellers": {
+      "type": "luma-bestsellers",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 7,
+        "eyebrow": "",
+        "heading": "<strong>Our Products</strong>",
+        "description": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 48
+      }
+    },
     "trust": {
       "type": "luma-trust-badges",
       "blocks": {
@@ -206,19 +219,6 @@
         "color_scheme": "scheme-1",
         "padding_top": 12,
         "padding_bottom": 0
-      }
-    },
-    "bestsellers": {
-      "type": "luma-bestsellers",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 7,
-        "eyebrow": "",
-        "heading": "<strong>Our Products</strong>",
-        "description": "",
-        "color_scheme": "scheme-1",
-        "padding_top": 12,
-        "padding_bottom": 48
       }
     },
     "ritual_explainer": {
@@ -287,6 +287,7 @@
     },
     "philosophy": {
       "type": "luma-philosophy",
+      "disabled": true,
       "settings": {
         "eyebrow": "Our philosophy",
         "heading": "Care that <em>works with</em> you, not against you.",
@@ -301,9 +302,9 @@
   },
   "order": [
     "hero",
-    "trust",
     "bestsellers",
     "ritual_explainer",
+    "trust",
     "philosophy"
   ]
 }
