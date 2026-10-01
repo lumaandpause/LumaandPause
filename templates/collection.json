@@ -21,7 +21,7 @@
         "overlay_style": "gradient",
         "color_scheme": "scheme-4",
         "position_mode": "canvas",
-        "canvas_pos_x": 0,
+        "canvas_pos_x": 3,
         "canvas_pos_y": 50,
         "canvas_max_width": 580,
         "mobile_canvas_pos_x": 32,
