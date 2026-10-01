@@ -1,1 +1,158 @@
-{"sections":{"main":{"type":"main-product","blocks":{"title":{"type":"title","settings":{}},"descriptor":{"type":"descriptor","settings":{"text":"Doctor Formulated · Probiotic Care"}},"price":{"type":"price","settings":{}},"rating":{"type":"rating","settings":{}},"benefit_line":{"type":"benefit_line","settings":{"text":"Doctor Formulated • Lightweight & Gentle • Made in India"}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","swatch_shape":"circle"}},"quantity_selector":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":false,"show_gift_card_recipient":false}},"tab_description":{"type":"collapsible_tab","settings":{"open_by_default":true,"use_product_description":true,"heading":"About the product","icon":"none","content":""}},"tab_benefits":{"type":"collapsible_tab","settings":{"open_by_default":false,"use_product_description":false,"heading":"Why you'll love it","icon":"none","content":"<ul><li>Doctor-formulated care for hair, scalp and skin.</li><li>Gentle, lightweight and non-sticky textures for everyday use.</li><li>Designed to support your natural balance — cleanse, nourish, hydrate.</li><li>Recyclable packaging. Made in India.</li></ul>"}},"tab_patch_safety":{"type":"collapsible_tab","settings":{"open_by_default":false,"use_product_description":false,"heading":"Caution & storage","icon":"none","content":"<p><strong>Caution:</strong> For external use only. Avoid contact with eyes. If contact occurs, rinse thoroughly with water. Discontinue use if irritation occurs. Keep out of reach of children. Do a patch test before first use.</p><p><strong>Storage:</strong> Store in a cool, dry place away from direct sunlight. Close the cap tightly after use.</p>"}},"tab_returns_policy":{"type":"collapsible_tab","settings":{"open_by_default":false,"use_product_description":false,"heading":"Returns & replacements","icon":"none","content":"<p><strong>48-Hour Free Replacement:</strong> In the rare case of transit damage, leakage or a broken seal, email our care team with an unboxing photo within 48 hours and we will send a fresh pack.</p>"}},"tab_risk_faqs":{"type":"collapsible_tab","settings":{"open_by_default":false,"use_product_description":false,"heading":"Common questions","icon":"none","content":"<p><strong>Q: Is it suitable for all hair and skin types?</strong><br>A: Yes. Our formulas are gentle and made for everyday use across hair and skin types. If you have very sensitive skin, patch test first.</p><p><strong>Q: How soon will I see results?</strong><br>A: Your scalp and skin need time. Most people notice a fresher, more comfortable feel straight away; use consistently for 6–8 weeks for visible results.</p><p><strong>Q: Can I use the products together?</strong><br>A: Yes. For hair, cleanse with the Shampoo, then use the Serum or Scalp Mist. For skin, mist with the Face Mist and follow with the Daily Glow Moisturiser.</p>"}}},"block_order":["title","descriptor","price","rating","benefit_line","variant_picker","quantity_selector","buy_buttons","tab_description","tab_benefits","tab_patch_safety","tab_returns_policy","tab_risk_faqs"],"settings":{"enable_sticky_info":true,"color_scheme":"scheme-1","media_size":"medium","constrain_to_viewport":true,"media_fit":"contain","gallery_layout":"thumbnail","mobile_thumbnails":"show","media_position":"left","image_zoom":"lightbox","hide_variants":true,"enable_video_looping":false,"padding_top":36,"padding_bottom":12}},"cross_sell":{"type":"related-products","settings":{"heading":"Complete your routine","products_to_show":4,"columns_desktop":4,"color_scheme":"scheme-1","image_ratio":"square","show_vendor":false,"show_rating":false,"padding_top":36,"padding_bottom":36}}},"order":["main","cross_sell"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "descriptor": {
+          "type": "descriptor",
+          "settings": {
+            "text": "Doctor Formulated · Probiotic Care"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
+        "benefit_line": {
+          "type": "benefit_line",
+          "settings": {
+            "text": "Doctor Formulated • Lightweight & Gentle • Made in India"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
+          }
+        },
+        "tab_description": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open_by_default": true,
+            "use_product_description": true,
+            "heading": "About the product",
+            "icon": "none",
+            "content": ""
+          }
+        },
+        "tab_benefits": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open_by_default": false,
+            "use_product_description": false,
+            "heading": "Why you'll love it",
+            "icon": "none",
+            "content": "<ul><li>Doctor-formulated care for hair, scalp and skin.</li><li>Gentle, lightweight and non-sticky textures for everyday use.</li><li>Designed to support your natural balance — cleanse, nourish, hydrate.</li><li>Recyclable packaging. Made in India.</li></ul>"
+          }
+        },
+        "tab_patch_safety": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open_by_default": false,
+            "use_product_description": false,
+            "heading": "Caution & storage",
+            "icon": "none",
+            "content": "<p><strong>Caution:</strong> For external use only. Avoid contact with eyes. If contact occurs, rinse thoroughly with water. Discontinue use if irritation occurs. Keep out of reach of children. Do a patch test before first use.</p><p><strong>Storage:</strong> Store in a cool, dry place away from direct sunlight. Close the cap tightly after use.</p>"
+          }
+        },
+        "tab_returns_policy": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open_by_default": false,
+            "use_product_description": false,
+            "heading": "Returns & replacements",
+            "icon": "none",
+            "content": "<p><strong>48-Hour Free Replacement:</strong> In the rare case of transit damage, leakage or a broken seal, email our care team with an unboxing photo within 48 hours and we will send a fresh pack.</p>"
+          }
+        },
+        "tab_risk_faqs": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open_by_default": false,
+            "use_product_description": false,
+            "heading": "Common questions",
+            "icon": "none",
+            "content": "<p><strong>Q: Is it suitable for all hair and skin types?</strong><br>A: Yes. Our formulas are gentle and made for everyday use across hair and skin types. If you have very sensitive skin, patch test first.</p><p><strong>Q: How soon will I see results?</strong><br>A: Your scalp and skin need time. Most people notice a fresher, more comfortable feel straight away; use consistently for 6–8 weeks for visible results.</p><p><strong>Q: Can I use the products together?</strong><br>A: Yes. For hair, cleanse with the Shampoo, then use the Serum or Scalp Mist. For skin, mist with the Face Mist and follow with the Daily Glow Moisturiser.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "descriptor",
+        "price",
+        "rating",
+        "benefit_line",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "tab_description",
+        "tab_benefits",
+        "tab_patch_safety",
+        "tab_returns_policy",
+        "tab_risk_faqs"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail",
+        "mobile_thumbnails": "show",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "cross_sell": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Complete your routine",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cross_sell"
+  ]
+}
