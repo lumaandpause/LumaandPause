@@ -1,0 +1,313 @@
+{{ 'section-luma-product-float.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'luma-product-float.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #LumaFloat-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+    {%- if section.settings.background != blank %}
+      background: {{ section.settings.background }};
+    {%- endif %}
+  }
+  @media screen and (min-width: 750px) {
+    #LumaFloat-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  id="LumaFloat-{{ section.id }}"
+  class="luma-float color-{{ section.settings.color_scheme }}{% if section.settings.background == blank %} gradient{% endif %}"
+  data-luma-float
+  data-intensity="{{ section.settings.intensity }}"
+  data-rotate="{{ section.settings.rotate }}"
+>
+  <div class="page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.text != blank -%}
+      <header class="luma-float__intro">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="luma-float__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="luma-float__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="luma-float__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="luma-float__rows">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign img = block.settings.image | default: p.featured_media.preview_image
+
+          assign side = block.settings.side
+          if side == 'auto'
+            assign mod = forloop.index0 | modulo: 2
+            if mod == 0
+              assign side = 'left'
+            else
+              assign side = 'right'
+            endif
+          endif
+
+          assign title = block.settings.title | default: p.title
+          assign link = p.url | default: block.settings.link
+        -%}
+
+        <article
+          class="luma-float__row luma-float__row--{{ side }} luma-float__row--{{ block.settings.size }}"
+          style="--tilt: {{ block.settings.tilt }}deg;"
+          data-speed="{{ block.settings.speed }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="luma-float__media" data-float-media>
+            {%- if img != blank -%}
+              <div class="luma-float__img-wrap" data-float-img>
+                {{
+                  img
+                  | image_url: width: 1400
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800, 1000, 1200, 1400',
+                    sizes: '(min-width: 990px) 50vw, 85vw',
+                    class: 'luma-float__img',
+                    alt: title
+                }}
+              </div>
+            {%- else -%}
+              <div class="luma-float__img-wrap luma-float__img-wrap--empty" data-float-img>
+                {{ 'product-apparel-1' | placeholder_svg_tag: 'luma-float__img placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="luma-float__callout" data-float-callout>
+            {%- if block.settings.badge != blank -%}
+              <span class="luma-float__badge">{{ block.settings.badge | escape }}</span>
+            {%- endif -%}
+            {%- if title != blank -%}
+              <h3 class="luma-float__title">
+                {%- if link != blank -%}<a href="{{ link }}">{{ title | escape }}</a>{%- else -%}{{ title | escape }}{%- endif -%}
+              </h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="luma-float__desc">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.show_price and p != blank -%}
+              <p class="luma-float__price">
+                {{- p.price | money | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' | replace: 'Rs ', '₹' -}}
+              </p>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank and link != blank -%}
+              <a href="{{ link }}" class="luma-float__link">
+                {{- block.settings.button_label | escape -}}
+                <span aria-hidden="true">→</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Floating product showcase",
+  "tag": "div",
+  "class": "section luma-float-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The ritual"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made for every <em>step</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text"
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "intensity",
+      "label": "Scroll motion",
+      "options": [
+        { "value": "subtle", "label": "Subtle" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "strong", "label": "Strong" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "rotate",
+      "label": "Rotate images while scrolling",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_background",
+      "id": "background",
+      "label": "Custom background (optional)",
+      "info": "Overrides the colour scheme background. Gradients work too.",
+      "default": "linear-gradient(180deg, #F9F7F2 0%, #DCEEF8 14%, #CFE7F4 50%, #DCEEF8 86%, #F9F7F2 100%)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_row",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override",
+          "info": "Optional. Use a transparent PNG. Defaults to the product's main image."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "New"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title override",
+          "info": "Leave blank to use the product name."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Short description",
+          "default": "A short line about what makes this product special."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Link label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (if no product selected)"
+        },
+        {
+          "type": "header",
+          "content": "Placement"
+        },
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Image side",
+          "options": [
+            { "value": "auto", "label": "Auto (alternate)" },
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Image size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "range",
+          "id": "tilt",
+          "min": -20,
+          "max": 20,
+          "step": 1,
+          "unit": "°",
+          "label": "Tilt",
+          "default": -8
+        },
+        {
+          "type": "range",
+          "id": "speed",
+          "min": -3,
+          "max": 3,
+          "step": 1,
+          "label": "Parallax speed",
+          "info": "Negative drifts up faster, positive drifts slower.",
+          "default": 1
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Floating product showcase",
+      "blocks": [
+        { "type": "product_row", "settings": { "tilt": -10, "speed": 1 } },
+        { "type": "product_row", "settings": { "tilt": 8, "speed": -1 } },
+        { "type": "product_row", "settings": { "tilt": -6, "speed": 2 } }
+      ]
+    }
+  ]
+}
+{% endschema %}
