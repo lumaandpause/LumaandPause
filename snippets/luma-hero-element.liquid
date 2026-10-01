@@ -1,0 +1,76 @@
+{% comment %}
+  Renders one freely positioned hero element (text, button or badge).
+  Used by luma-hero and luma-collection-hero in "Individual elements" mode.
+
+  Accepts:
+  - block: {Object} element block
+  - prefix: {String} BEM prefix of the parent section, e.g. 'luma-hero'
+  - badge_class: {String} class used for the coupon/code badge
+  - fallback_heading: {String} optional text used when a heading block is empty
+{% endcomment %}
+
+{%- liquid
+  assign s = block.settings
+  assign el_classes = 'luma-el'
+  unless s.show_desktop
+    assign el_classes = el_classes | append: ' luma-el--hide-desktop'
+  endunless
+  unless s.show_mobile
+    assign el_classes = el_classes | append: ' luma-el--hide-mobile'
+  endunless
+  if s.font_size > 0
+    assign el_classes = el_classes | append: ' luma-el--fs'
+  endif
+  if s.mobile_font_size > 0
+    assign el_classes = el_classes | append: ' luma-el--mfs'
+  endif
+  if s.color != blank
+    assign el_classes = el_classes | append: ' luma-el--color'
+  endif
+-%}
+
+<div
+  class="{{ el_classes }}"
+  style="--el-x: {{ s.x }}; --el-y: {{ s.y }}; --el-w: {{ s.width }}px; --el-align: {{ s.text_align }}; --el-mx: {{ s.mobile_x }}; --el-my: {{ s.mobile_y }}; --el-mw: {{ s.mobile_width }}%; --el-malign: {{ s.mobile_text_align }};{% if s.font_size > 0 %} --el-fs: {{ s.font_size }}px;{% endif %}{% if s.mobile_font_size > 0 %} --el-mfs: {{ s.mobile_font_size }}px;{% endif %}{% if s.color != blank %} --el-color: {{ s.color }};{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {%- case block.type -%}
+    {%- when 'text_element' -%}
+      {%- case s.style -%}
+        {%- when 'eyebrow' -%}
+          <p class="{{ prefix }}__eyebrow">{{ s.text | strip_html | escape }}</p>
+        {%- when 'heading' -%}
+          {%- assign heading_text = s.text | remove: '<p>' | remove: '</p>' -%}
+          {%- if heading_text == blank -%}
+            {%- assign heading_text = fallback_heading -%}
+          {%- endif -%}
+          <{{ s.heading_tag }} class="{{ prefix }}__heading {{ prefix }}__heading--{{ s.heading_size }}">
+            {{- heading_text -}}
+          </{{ s.heading_tag }}>
+        {%- else -%}
+          <div class="{{ prefix }}__subheading rte">{{ s.text }}</div>
+      {%- endcase -%}
+    {%- when 'button_element' -%}
+      {%- if s.label != blank -%}
+        <a
+          {% if s.link == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ s.link }}"
+          {% endif %}
+          class="button button--hero button--hero-{{ s.button_style }}"
+          {% if s.button_bg != blank or s.button_text != blank %}
+            style="{% if s.button_bg != blank %}background: {{ s.button_bg }} !important;{% endif %}{% if s.button_text != blank %} color: {{ s.button_text }} !important;{% endif %}"
+          {% endif %}
+        >
+          {{- s.label | escape -}}
+        </a>
+      {%- endif -%}
+    {%- when 'badge_element' -%}
+      {%- if s.text != blank -%}
+        <div class="{{ badge_class }}">
+          <span>{{ s.text | escape }}</span>
+        </div>
+      {%- endif -%}
+  {%- endcase -%}
+</div>

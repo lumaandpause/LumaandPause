@@ -157,6 +157,14 @@
   align-items: flex-start;
 }
 
+.luma-collection-hero__content--pos-left .luma-collection-hero__eyebrow,
+.luma-collection-hero__content--pos-left .luma-collection-hero__heading,
+.luma-collection-hero__content--pos-left .luma-collection-hero__subheading,
+.luma-collection-hero__content--pos-left .luma-collection-hero__subheading p {
+  text-align: left;
+  margin-left: 0;
+}
+
 .luma-collection-hero__content--pos-right {
   margin-inline: auto 0;
   text-align: right;
@@ -584,6 +592,8 @@
   padding-bottom: 1.4rem;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  text-align: left;
   gap: 0.8rem;
   font-family: inherit;
   font-size: 1.2rem;
@@ -643,12 +653,22 @@
     width: 100% !important;
   }
 
-  .luma-collection-hero__content--mob-align-left {
+  .luma-collection-hero__content--mob-align-left,
+  .luma-collection-hero__content--mob-align-left .luma-collection-hero__eyebrow,
+  .luma-collection-hero__content--mob-align-left .luma-collection-hero__heading,
+  .luma-collection-hero__content--mob-align-left .luma-collection-hero__subheading,
+  .luma-collection-hero__content--mob-align-left .luma-collection-hero__subheading p {
     text-align: left !important;
     align-items: flex-start !important;
+    margin-left: 0 !important;
   }
   .luma-collection-hero__content--mob-align-left .luma-collection-hero__buttons {
     justify-content: flex-start !important;
+  }
+
+  .luma-collection-hero__breadcrumb {
+    justify-content: flex-start !important;
+    text-align: left !important;
   }
 
   .luma-collection-hero__content--mob-align-center {

@@ -1,0 +1,78 @@
+/* --------------------------------------------------------------------------
+   Individual elements mode — each text / button / badge is placed on its own
+   X/Y coordinates, separately for desktop and mobile.
+   Shared by section-luma-hero and section-luma-collection-hero.
+   -------------------------------------------------------------------------- */
+.luma-el-layer {
+  --el-gutter: 4rem;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.luma-el {
+  position: absolute;
+  /* 0 hugs the left/top safe edge, 100 the right/bottom safe edge */
+  left: calc(var(--el-gutter) + (100% - 2 * var(--el-gutter)) * var(--el-x) / 100);
+  top: calc(var(--el-gutter) + (100% - 2 * var(--el-gutter)) * var(--el-y) / 100);
+  transform: translate(calc(var(--el-x) * -1%), calc(var(--el-y) * -1%));
+  width: min(var(--el-w), calc(100% - 2 * var(--el-gutter)));
+  text-align: var(--el-align);
+  pointer-events: auto;
+}
+
+.luma-el > * {
+  margin: 0 !important;
+  max-width: none !important;
+  text-align: inherit !important;
+}
+
+.luma-el .rte p {
+  margin: 0;
+  text-align: inherit !important;
+}
+
+.luma-el--fs > *,
+.luma-el--fs > * p {
+  font-size: var(--el-fs) !important;
+}
+
+.luma-el--color > *,
+.luma-el--color > * p {
+  color: var(--el-color) !important;
+}
+
+.luma-el:has(> .button) {
+  width: auto;
+  max-width: calc(100% - 2 * var(--el-gutter));
+}
+
+@media screen and (min-width: 750px) {
+  .luma-el--hide-desktop {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .luma-el-layer {
+    --el-gutter: 1.6rem;
+  }
+
+  .luma-el {
+    left: calc(var(--el-gutter) + (100% - 2 * var(--el-gutter)) * var(--el-mx) / 100);
+    top: calc(var(--el-gutter) + (100% - 2 * var(--el-gutter)) * var(--el-my) / 100);
+    transform: translate(calc(var(--el-mx) * -1%), calc(var(--el-my) * -1%));
+    width: min(var(--el-mw), calc(100% - 2 * var(--el-gutter)));
+    text-align: var(--el-malign);
+  }
+
+  .luma-el--mfs > *,
+  .luma-el--mfs > * p {
+    font-size: var(--el-mfs) !important;
+  }
+
+  .luma-el--hide-mobile {
+    display: none !important;
+  }
+}

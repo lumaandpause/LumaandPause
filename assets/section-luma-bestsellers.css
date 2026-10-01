@@ -52,8 +52,8 @@
   font-size: 1.45rem;
   line-height: 1.55;
   color: rgba(140, 148, 121, 0.7);
-  max-width: 34ch;
-  margin: 0;
+  max-width: 46ch;
+  margin: 0 auto;
 }
 
 /* --------------------------------------------------------------------------

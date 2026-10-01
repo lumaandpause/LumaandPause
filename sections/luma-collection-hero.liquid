@@ -2,6 +2,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 {{ 'section-luma-collection-hero.css' | asset_url | stylesheet_tag }}
+{{ 'luma-hero-elements.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   #LumaCollectionHero-{{ section.id }} {
@@ -21,9 +22,17 @@
       background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.85) 100%);
     {%- elsif section.settings.overlay_style == 'light-gradient' -%}
       background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 100%);
+    {%- elsif section.settings.overlay_style == 'soft-left' -%}
+      background: linear-gradient(90deg, rgba(20, 15, 16, 0.45) 0%, rgba(20, 15, 16, 0.15) 55%, rgba(0, 0, 0, 0) 100%);
+    {%- elsif section.settings.overlay_style == 'none' -%}
+      background: transparent;
     {%- else -%}
       background: linear-gradient(180deg, rgba(20, 20, 20, 0.2) 0%, rgba(15, 15, 18, 0.82) 100%);
     {%- endif -%}
+  }
+
+  #LumaCollectionHero-{{ section.id }} .luma-collection-hero__image {
+    object-position: {{ section.settings.image_position | default: 'right center' }};
   }
 
   {%- if section.settings.show_ticker and section.settings.ticker_text != blank -%}
@@ -55,13 +64,21 @@
 
 {%- liquid
   assign desktop_img = section.settings.image
-  if desktop_img == blank and collection.image != blank
+  assign desktop_asset = section.settings.image_asset
+
+  if desktop_img == blank and desktop_asset == blank and collection.image != blank
     assign desktop_img = collection.image
   endif
 
+  if desktop_img == blank and desktop_asset == blank
+    assign desktop_asset = 'luma-collection-hero-bg.jpg'
+  endif
+
   assign mobile_img = section.settings.image_mobile
-  if mobile_img == blank
+  assign mobile_asset = section.settings.image_mobile_asset
+  if mobile_img == blank and mobile_asset == blank
     assign mobile_img = desktop_img
+    assign mobile_asset = desktop_asset
   endif
 
   assign hero_heading = section.settings.heading
@@ -99,7 +116,7 @@
   class="luma-collection-hero luma-collection-hero--desk-{{ section.settings.height }} luma-collection-hero--mob-{{ section.settings.mobile_height }} luma-collection-hero--layout-{{ section.settings.layout_type }} luma-collection-hero--mode-{{ section.settings.position_mode | default: 'grid' }} luma-collection-hero--mob-pos-{{ section.settings.mobile_content_position | default: 'bottom' }} color-{{ section.settings.color_scheme }}"
 >
   <div class="luma-collection-hero__visual">
-    {%- if desktop_img != blank or mobile_img != blank -%}
+    {%- if desktop_img != blank or mobile_img != blank or desktop_asset != blank -%}
       <div class="luma-collection-hero__media">
         <picture class="luma-collection-hero__picture">
           {%- if section.settings.image_mobile != blank -%}
@@ -111,6 +128,12 @@
                 {{ section.settings.image_mobile | image_url: width: 750 }} 750w,
                 {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w
               "
+              sizes="100vw"
+            >
+          {%- elsif mobile_asset != blank and mobile_asset != desktop_asset -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ mobile_asset | asset_url }}"
               sizes="100vw"
             >
           {%- endif -%}
@@ -126,6 +149,16 @@
                 class: 'luma-collection-hero__image',
                 loading: 'eager'
             }}
+          {%- elsif desktop_asset != blank -%}
+            <img
+              src="{{ desktop_asset | asset_url }}"
+              alt="{{ hero_heading | default: collection.title | escape }}"
+              class="luma-collection-hero__image"
+              loading="eager"
+              fetchpriority="{{ fetch_priority }}"
+              width="2400"
+              height="1350"
+            >
           {%- elsif mobile_img != blank -%}
             {{
               mobile_img
@@ -141,8 +174,18 @@
       </div>
     {%- endif -%}
 
+    {%- if section.settings.position_mode == 'elements' -%}
+      <div class="luma-el-layer">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'text_element' or block.type == 'button_element' or block.type == 'badge_element' -%}
+            {%- render 'luma-hero-element', block: block, prefix: 'luma-collection-hero', badge_class: 'luma-collection-hero__code-badge', fallback_heading: collection.title -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
     <div class="luma-collection-hero__container page-width">
-      {%- if show_content -%}
+      {%- if show_content and section.settings.position_mode != 'elements' -%}
         {%- if section.settings.eyebrow != blank or hero_heading != blank or hero_subheading != blank or section.settings.promo_code != blank or btn_label_1 != blank or section.settings.button_label_2 != blank -%}
           <div class="luma-collection-hero__content luma-collection-hero__content--pos-{{ section.settings.content_position }} luma-collection-hero__content--mob-align-{{ section.settings.mobile_content_alignment }}">
             {%- if section.settings.eyebrow != blank -%}
@@ -265,13 +308,45 @@
       "type": "image_picker",
       "id": "image",
       "label": "Desktop background image",
-      "info": "Optional. Recommended: 2400 x 900px. If blank, collection image will be used."
+      "info": "Optional. Recommended: 2400 x 900px. If blank, collection image or asset will be used."
+    },
+    {
+      "type": "text",
+      "id": "image_asset",
+      "label": "Desktop asset image filename (fallback)",
+      "info": "Image filename in assets/ (e.g. luma-collection-hero-bg.jpg) if no image is uploaded."
     },
     {
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Mobile background image",
-      "info": "Optional. Recommended: 800 x 1000px. If blank, desktop/collection image will be used."
+      "info": "Optional. Recommended: 800 x 1000px. If blank, desktop image will be used."
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_asset",
+      "label": "Mobile asset image filename (fallback)",
+      "info": "Mobile image filename in assets/ if no mobile image is uploaded."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image focal position",
+      "options": [
+        {
+          "value": "right center",
+          "label": "Right (focus on products)"
+        },
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        }
+      ],
+      "default": "right center"
     },
     {
       "type": "select",
@@ -357,6 +432,10 @@
       "label": "Overlay style",
       "options": [
         {
+          "value": "soft-left",
+          "label": "Soft left vignette (ideal for left-aligned text)"
+        },
+        {
           "value": "gradient",
           "label": "Dark smooth gradient"
         },
@@ -371,6 +450,10 @@
         {
           "value": "light-gradient",
           "label": "Light soft gradient"
+        },
+        {
+          "value": "none",
+          "label": "None (pure image)"
         }
       ],
       "default": "gradient"
@@ -397,9 +480,14 @@
         {
           "value": "canvas",
           "label": "Freeform Canvas Coordinates (X/Y %)"
+        },
+        {
+          "value": "elements",
+          "label": "Individual elements (place each separately)"
         }
       ],
-      "default": "grid"
+      "default": "grid",
+      "info": "Individual elements: add Text / Button / Badge blocks and position each one for desktop and mobile."
     },
     {
       "type": "header",
@@ -797,6 +885,594 @@
     {
       "name": "Luma collection hero"
     }
-  ]
+  ],
+  "blocks": [
+    {
+      "type": "text_element",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "eyebrow",
+              "label": "Eyebrow / tagline"
+            },
+            {
+              "value": "heading",
+              "label": "Heading"
+            },
+            {
+              "value": "subheading",
+              "label": "Subheading / paragraph"
+            }
+          ],
+          "default": "subheading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add your text here</p>"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Xlarge"
+            }
+          ],
+          "default": "large",
+          "info": "Used when style is Heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_tag",
+          "label": "Heading tag (SEO)",
+          "options": [
+            {
+              "value": "h1",
+              "label": "H1"
+            },
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            },
+            {
+              "value": "p",
+              "label": "P"
+            }
+          ],
+          "default": "h2",
+          "info": "Use H1 once per page"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text colour (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_desktop",
+          "label": "Show on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_mobile",
+          "label": "Show on mobile",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Desktop placement"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 10,
+          "info": "0% = left edge, 50% = centre, 100% = right edge"
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 40,
+          "info": "0% = top edge, 50% = middle, 100% = bottom edge"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Max width",
+          "min": 100,
+          "max": 1100,
+          "step": 10,
+          "unit": "px",
+          "default": 640
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile placement"
+        },
+        {
+          "type": "range",
+          "id": "mobile_x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 70
+        },
+        {
+          "type": "range",
+          "id": "mobile_width",
+          "label": "Max width",
+          "min": 20,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 92
+        },
+        {
+          "type": "select",
+          "id": "mobile_text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "button_element",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "pill-black",
+              "label": "Pill dark"
+            },
+            {
+              "value": "pill-primary",
+              "label": "Pill accent"
+            },
+            {
+              "value": "pill-white",
+              "label": "Pill white"
+            },
+            {
+              "value": "solid-primary",
+              "label": "Solid primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            }
+          ],
+          "default": "pill-black"
+        },
+        {
+          "type": "color",
+          "id": "button_bg",
+          "label": "Custom background (optional)"
+        },
+        {
+          "type": "color",
+          "id": "button_text",
+          "label": "Custom text colour (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_desktop",
+          "label": "Show on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_mobile",
+          "label": "Show on mobile",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Desktop placement"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 10,
+          "info": "0% = left edge, 50% = centre, 100% = right edge"
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 80,
+          "info": "0% = top edge, 50% = middle, 100% = bottom edge"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Max width",
+          "min": 100,
+          "max": 1100,
+          "step": 10,
+          "unit": "px",
+          "default": 300
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile placement"
+        },
+        {
+          "type": "range",
+          "id": "mobile_x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 90
+        },
+        {
+          "type": "range",
+          "id": "mobile_width",
+          "label": "Max width",
+          "min": 20,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 92
+        },
+        {
+          "type": "select",
+          "id": "mobile_text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "badge_element",
+      "name": "Badge / coupon",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Badge text",
+          "default": "Use code: LUMA15"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text colour (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_desktop",
+          "label": "Show on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_mobile",
+          "label": "Show on mobile",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Desktop placement"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 10,
+          "info": "0% = left edge, 50% = centre, 100% = right edge"
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 90,
+          "info": "0% = top edge, 50% = middle, 100% = bottom edge"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Max width",
+          "min": 100,
+          "max": 1100,
+          "step": 10,
+          "unit": "px",
+          "default": 300
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile placement"
+        },
+        {
+          "type": "range",
+          "id": "mobile_x",
+          "label": "X position (left → right)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "mobile_y",
+          "label": "Y position (top → bottom)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 95
+        },
+        {
+          "type": "range",
+          "id": "mobile_width",
+          "label": "Max width",
+          "min": 20,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 92
+        },
+        {
+          "type": "select",
+          "id": "mobile_text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "mobile_font_size",
+          "label": "Font size (0 = default)",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24
 }
 {% endschema %}
