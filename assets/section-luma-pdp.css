@@ -1464,3 +1464,76 @@
   color: #2F3A24;
 }
 
+
+/* ==========================================================================
+   Title block — role pill + product name
+   The pill styles live in component-luma-card.css, which the product page
+   does not load, so they are repeated here.
+   ========================================================================== */
+.luma-pdp-role-wrap {
+  margin: 0 0 1.2rem !important;
+  line-height: 1;
+}
+
+.product__title .luma-role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-style: normal;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  background-color: rgba(182, 111, 117, 0.1);
+  border: 1px solid rgba(182, 111, 117, 0.35);
+  color: #8A4E57;
+}
+
+.product__title .luma-role-pill__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: #B66F75;
+}
+
+.product__title .luma-role-pill--balance {
+  background-color: rgba(73, 85, 56, 0.08);
+  border-color: rgba(73, 85, 56, 0.3);
+  color: #495538;
+}
+.product__title .luma-role-pill--balance .luma-role-pill__dot {
+  background-color: #6B7A4F;
+}
+
+.product__title .luma-role-pill--restore {
+  background-color: rgba(205, 160, 165, 0.14);
+  border-color: rgba(205, 160, 165, 0.5);
+  color: #9A5963;
+}
+.product__title .luma-role-pill--restore .luma-role-pill__dot {
+  background-color: #CDA0A5;
+}
+
+.luma-pdp-info .product__title h1.luma-pdp-title-text,
+.product__title h1.luma-pdp-title-text {
+  font-family: 'Instrument Serif', Georgia, serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: clamp(3rem, 3.2vw, 4rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em !important;
+  color: #2F3A24;
+  margin: 0 0 0.8rem !important;
+  text-wrap: balance;
+}
+
+@media screen and (max-width: 749px) {
+  .luma-pdp-info .product__title h1.luma-pdp-title-text,
+  .product__title h1.luma-pdp-title-text {
+    font-size: 2.8rem !important;
+  }
+}

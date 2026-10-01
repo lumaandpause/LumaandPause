@@ -55,9 +55,6 @@
             {%- for product in shown_products limit: section.settings.products_to_show -%}
               <div class="luma-bestsellers__slide" data-luma-bs-slide data-slide-index="{{ forloop.index0 }}">
                 <div class="luma-product-card">
-                  <div class="luma-card-badges-stack">
-                    <span class="luma-badge-bestseller">BEST SELLER</span>
-                  </div>
                   <a href="{{ product.url }}" class="luma-card-media-wrapper" data-luma-bs-media>
                     {%- if product.featured_image != blank -%}
                       {{

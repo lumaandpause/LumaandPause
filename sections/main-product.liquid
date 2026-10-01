@@ -9,6 +9,8 @@
     data-zoom-on-hover
   {% endif %}
 >
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap" rel="stylesheet">
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -163,8 +165,10 @@
                         assign default_benefit = 'Stronger, healthier-looking hair.'
                       elsif prod_handle_lower contains 'face' or prod_title_lower contains 'face' or prod_title_lower contains 'moistur'
                         assign default_benefit = 'Fresh, hydrated, comfortable skin.'
-                      else
+                      elsif prod_title_lower contains 'shampoo'
                         assign default_benefit = 'A clean, balanced scalp.'
+                      else
+                        assign default_benefit = 'Doctor formulated for everyday care.'
                       endif
                     endif
                     assign benefit_text = product.metafields.custom.website_claim | default: default_benefit

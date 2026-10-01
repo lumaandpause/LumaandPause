@@ -92,11 +92,6 @@
 
   <product-component view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}" class="luma-product-card-component">
     <div class="luma-product-card">
-      {%- if is_bestseller -%}
-        <div class="luma-card-badges-stack">
-          <span class="luma-badge-bestseller">BEST SELLER</span>
-        </div>
-      {%- endif -%}
 
       <a href="{{ card_product.url }}" class="luma-card-media-wrapper">
         {%- if card_product.featured_media -%}
