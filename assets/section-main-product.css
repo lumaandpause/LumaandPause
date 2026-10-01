@@ -1902,3 +1902,10 @@ a.product__text {
 .luma-pdp-sticky-bar__add:hover {
   background-color: #B66F75 !important;
 }
+
+/* Sticky add-to-cart: drop Dawn's square ::before/::after button outline */
+.luma-pdp-sticky-bar__add.button::before,
+.luma-pdp-sticky-bar__add.button::after {
+  display: none !important;
+  box-shadow: none !important;
+}
