@@ -7,4 +7,408 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{"sections":{"hero":{"type":"luma-hero","blocks":{"el_1":{"type":"text_element","settings":{"style":"eyebrow","text":"<p>Probiotic care · Doctor formulated</p>","heading_size":"large","heading_tag":"h2","color":"","show_desktop":true,"show_mobile":true,"x":0,"y":28,"width":560,"text_align":"left","font_size":0,"mobile_x":0,"mobile_y":0,"mobile_width":92,"mobile_text_align":"left","mobile_font_size":0}},"el_2":{"type":"text_element","settings":{"style":"heading","text":"<p>Your skin is a living ecosystem.</p>","heading_size":"large","heading_tag":"h1","color":"","show_desktop":true,"show_mobile":true,"x":0,"y":46,"width":640,"text_align":"left","font_size":0,"mobile_x":0,"mobile_y":8,"mobile_width":92,"mobile_text_align":"left","mobile_font_size":0}},"el_3":{"type":"text_element","settings":{"style":"subheading","text":"<p>It doesn't need rushing, it needs time. Feed it, restore it, strengthen it — with gentle, doctor-formulated hair and skin care.</p>","heading_size":"large","heading_tag":"h2","color":"","show_desktop":true,"show_mobile":false,"x":0,"y":80,"width":460,"text_align":"left","font_size":0,"mobile_x":0,"mobile_y":26,"mobile_width":92,"mobile_text_align":"left","mobile_font_size":0}},"el_4":{"type":"button_element","settings":{"label":"Shop the range","link":"shopify://collections/all","button_style":"pill-black","button_bg":"","button_text":"","show_desktop":true,"show_mobile":false,"x":13,"y":92,"width":300,"text_align":"left","font_size":0,"mobile_x":0,"mobile_y":44,"mobile_width":92,"mobile_text_align":"left","mobile_font_size":0}}},"block_order":["el_1","el_2","el_3","el_4"],"settings":{"image":"shopify://shop_images/Luma_Pause_Botanical_Skincare_Collection.png","image_mobile":"shopify://shop_images/Luma_Pause_Skincare_Collection_in_Warm_Tones.png","height":"medium","mobile_height":"small","overlay_opacity":35,"overlay_style":"gradient","color_scheme":"scheme-4","position_mode":"elements","canvas_pos_x":15,"canvas_pos_y":75,"canvas_max_width":640,"mobile_canvas_pos_x":50,"mobile_canvas_pos_y":85,"mobile_canvas_max_width":420,"content_position":"bottom-left","mobile_content_position":"bottom","mobile_content_alignment":"left","offset_x":0,"offset_y":0,"show_content":true,"eyebrow":"Probiotic care · Doctor formulated","heading":"Your skin is a living ecosystem.","heading_size":"large","subheading":"<p>It doesn't need rushing, it needs time. Feed it, restore it, strengthen it — with gentle, doctor-formulated hair and skin care.</p>","coupon_code":"","show_button_1":true,"button_label_1":"Shop the range","button_link_1":"shopify://collections/all","button_style_1":"pill-black","button_custom_bg":"","button_custom_text":"","show_button_2":false,"button_label_2":"View ingredients","button_link_2":"","button_style_2":"outline","show_promo_badge":false,"promo_prefix":"FLAT","promo_discount":"25%","promo_suffix":"OFF","promo_tag":"USE CODE | PAYDAY","promo_badge_position":"right","show_bottom_bar":true,"bottom_bar_mode":"ticker","ticker_text":"DOCTOR FORMULATED · SULFATE-FREE SHAMPOO · LIGHTWEIGHT & NON-STICKY · MADE IN INDIA","ticker_speed":22,"ticker_style":"glass","ticker_bg_color":"#b66f75","ticker_text_color":"#ffffff","press_heading":""}},"bestsellers":{"type":"luma-bestsellers","settings":{"collection":"all","products_to_show":7,"eyebrow":"","heading":"<strong>Our Products</strong>","description":"","color_scheme":"scheme-1","padding_top":20,"padding_bottom":48}},"ritual_explainer":{"type":"luma-ritual-explainer","blocks":{"step-cleanse":{"type":"step","settings":{"step_number":"1","title":"CLEANSE","tagline":"Step 01 · Scalp & Hair","description":"A gentle, sulfate-free cleanse that lifts dirt, excess oil and build-up without stripping — the clean, balanced base every healthy scalp starts from.","product_role":"Hair Growth Shampoo","key_actives":"Sulfate-free · Gentle lather · All hair types","media_file":"","viz":"auto","button_label":"Shop Shampoo","button_link":"shopify://collections/all"}},"step-nourish":{"type":"step","settings":{"step_number":"2","title":"NOURISH","tagline":"Step 02 · Roots & Scalp","description":"A lightweight serum and a refreshing scalp mist that hydrate, soothe and nourish the scalp to support stronger, thicker, healthier-looking hair.","product_role":"Hair Growth Serum · Scalp Mist","key_actives":"Panthenol · Aloe Barbadensis Leaf Extract · Glycerin · Menthol","media_file":"","viz":"auto","button_label":"Shop Hair Care","button_link":"shopify://collections/all"}},"step-hydrate":{"type":"step","settings":{"step_number":"3","title":"HYDRATE","tagline":"Step 03 · Face & Skin Barrier","description":"A hydrating face mist and the Daily Glow Moisturiser keep skin fresh, comfortable and supported — for a soft, smooth, healthy-looking glow.","product_role":"Face Mist · Daily Glow Moisturiser","key_actives":"Barrier support · Lasting hydration · Non-sticky","media_file":"","viz":"auto","button_label":"Shop Skin Care","button_link":"shopify://collections/all"}}},"block_order":["step-cleanse","step-nourish","step-hydrate"],"settings":{"eyebrow":"","heading":"Your daily ritual: <em>Cleanse. Nourish. Hydrate.</em>","subheading":"","show_connectors":true,"color_scheme":"scheme-4","padding_top":64,"padding_bottom":64}},"trust":{"type":"luma-trust-badges","blocks":{"b1":{"type":"badge","settings":{"icon_type":"doctor","label":"Doctor Formulated","text":"Developed with dermatology expertise"}},"b2":{"type":"badge","settings":{"icon_type":"droplet","label":"Lightweight & Non-Sticky","text":"Absorbs fast, never feels heavy"}},"b3":{"type":"badge","settings":{"icon_type":"recycle","label":"Recyclable Packaging","text":"Kinder to the planet"}},"b4":{"type":"badge","settings":{"icon_type":"india","label":"Made in India","text":"Proudly formulated & made here"}}},"block_order":["b1","b2","b3","b4"],"settings":{"heading":"","color_scheme":"scheme-1","padding_top":12,"padding_bottom":0}},"philosophy":{"type":"luma-philosophy","disabled":true,"settings":{"eyebrow":"Our philosophy","heading":"Care that <em>works with</em> you, not against you.","text":"<p>Your hair and skin are living ecosystems. At Luma & Pause we create gentle, doctor-formulated care that cleanses without stripping, hydrates without heaviness and supports your natural balance — so results come steadily, the way they last.</p>","button_label":"Our story","button_link":"shopify://pages/about-us","color_scheme":"scheme-4","padding_top":64,"padding_bottom":64}},"product_float":{"type":"luma-product-float","blocks":{"row_1":{"type":"product_row","settings":{"product":"luma-pause-hair-growth-shampoo-probiotic-care","badge":"Sulfate-free","title":"","text":"Gently cleanses scalp and hair, lifting oil and build-up without stripping.","show_price":true,"button_label":"Shop now","side":"auto","size":"large","tilt":-10,"speed":1}},"row_2":{"type":"product_row","settings":{"product":"luma-pause-hair-growth-serum-advanced-hair-scalp-care","badge":"Doctor formulated","title":"","text":"Lightweight serum that nourishes the scalp for stronger, thicker-looking hair.","show_price":true,"button_label":"Shop now","side":"auto","size":"medium","tilt":9,"speed":-1}},"row_3":{"type":"product_row","settings":{"product":"luma-pause-scalp-mist-refreshing-scalp-care-100-ml","badge":"Refreshing","title":"","text":"Hydrates, soothes and refreshes the scalp — keeps it clean and balanced all day.","show_price":true,"button_label":"Shop now","side":"auto","size":"medium","tilt":-7,"speed":2}},"row_4":{"type":"product_row","settings":{"product":"luma-pause-face-mist-hydrating-face-care","badge":"Hydrating","title":"","text":"A fine mist that refreshes skin and supports a healthy barrier, any time of day.","show_price":true,"button_label":"Shop now","side":"auto","size":"medium","tilt":8,"speed":-2}},"row_5":{"type":"product_row","settings":{"product":"luma-pause-daily-glow-moisturiser-barrier-support-hydration","badge":"Daily glow","title":"","text":"Barrier support and lasting hydration for soft, smooth, healthy-looking skin.","show_price":true,"button_label":"Shop now","side":"auto","size":"large","tilt":-6,"speed":1}}},"block_order":["row_1","row_2","row_3","row_4","row_5"],"settings":{"eyebrow":"The ritual","heading":"Made for every <em>step</em>","text":"","intensity":"medium","rotate":true,"color_scheme":"scheme-1","padding_top":96,"padding_bottom":96,"background":"linear-gradient(180deg, #F9F7F2 0%, #DCEEF8 14%, #CFE7F4 50%, #DCEEF8 86%, #F9F7F2 100%)"}}},"order":["hero","bestsellers","product_float","ritual_explainer","trust","philosophy"]}
+{
+  "sections": {
+    "hero": {
+      "type": "luma-hero",
+      "blocks": {
+        "el_1": {
+          "type": "text_element",
+          "settings": {
+            "style": "eyebrow",
+            "text": "<p>Probiotic care · Doctor formulated</p>",
+            "heading_size": "large",
+            "heading_tag": "h2",
+            "color": "",
+            "show_desktop": true,
+            "show_mobile": true,
+            "x": 0,
+            "y": 28,
+            "width": 560,
+            "text_align": "left",
+            "font_size": 0,
+            "mobile_x": 0,
+            "mobile_y": 0,
+            "mobile_width": 92,
+            "mobile_text_align": "left",
+            "mobile_font_size": 0
+          }
+        },
+        "el_2": {
+          "type": "text_element",
+          "settings": {
+            "style": "heading",
+            "text": "<p>Your skin is a living ecosystem.</p>",
+            "heading_size": "large",
+            "heading_tag": "h1",
+            "color": "",
+            "show_desktop": true,
+            "show_mobile": true,
+            "x": 0,
+            "y": 46,
+            "width": 640,
+            "text_align": "left",
+            "font_size": 0,
+            "mobile_x": 0,
+            "mobile_y": 8,
+            "mobile_width": 92,
+            "mobile_text_align": "left",
+            "mobile_font_size": 0
+          }
+        },
+        "el_3": {
+          "type": "text_element",
+          "settings": {
+            "style": "subheading",
+            "text": "<p>It doesn't need rushing, it needs time. Feed it, restore it, strengthen it — with gentle, doctor-formulated hair and skin care.</p>",
+            "heading_size": "large",
+            "heading_tag": "h2",
+            "color": "",
+            "show_desktop": true,
+            "show_mobile": false,
+            "x": 0,
+            "y": 80,
+            "width": 460,
+            "text_align": "left",
+            "font_size": 0,
+            "mobile_x": 0,
+            "mobile_y": 26,
+            "mobile_width": 92,
+            "mobile_text_align": "left",
+            "mobile_font_size": 0
+          }
+        },
+        "el_4": {
+          "type": "button_element",
+          "settings": {
+            "label": "Shop the range",
+            "link": "shopify://collections/all",
+            "button_style": "pill-black",
+            "button_bg": "",
+            "button_text": "",
+            "show_desktop": true,
+            "show_mobile": false,
+            "x": 13,
+            "y": 92,
+            "width": 300,
+            "text_align": "left",
+            "font_size": 0,
+            "mobile_x": 0,
+            "mobile_y": 44,
+            "mobile_width": 92,
+            "mobile_text_align": "left",
+            "mobile_font_size": 0
+          }
+        }
+      },
+      "block_order": [
+        "el_1",
+        "el_2",
+        "el_3",
+        "el_4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Luma_Pause_Botanical_Skincare_Collection.png",
+        "image_mobile": "shopify://shop_images/Luma_Pause_Skincare_Collection_in_Warm_Tones.png",
+        "height": "medium",
+        "mobile_height": "small",
+        "overlay_opacity": 35,
+        "overlay_style": "gradient",
+        "color_scheme": "scheme-4",
+        "position_mode": "elements",
+        "canvas_pos_x": 15,
+        "canvas_pos_y": 75,
+        "canvas_max_width": 640,
+        "mobile_canvas_pos_x": 50,
+        "mobile_canvas_pos_y": 85,
+        "mobile_canvas_max_width": 420,
+        "content_position": "bottom-left",
+        "mobile_content_position": "bottom",
+        "mobile_content_alignment": "left",
+        "offset_x": 0,
+        "offset_y": 0,
+        "show_content": true,
+        "eyebrow": "Probiotic care · Doctor formulated",
+        "heading": "Your skin is a living ecosystem.",
+        "heading_size": "large",
+        "subheading": "<p>It doesn't need rushing, it needs time. Feed it, restore it, strengthen it — with gentle, doctor-formulated hair and skin care.</p>",
+        "coupon_code": "",
+        "show_button_1": true,
+        "button_label_1": "Shop the range",
+        "button_link_1": "shopify://collections/all",
+        "button_style_1": "pill-black",
+        "button_custom_bg": "",
+        "button_custom_text": "",
+        "show_button_2": false,
+        "button_label_2": "View ingredients",
+        "button_link_2": "",
+        "button_style_2": "outline",
+        "show_promo_badge": false,
+        "promo_prefix": "FLAT",
+        "promo_discount": "25%",
+        "promo_suffix": "OFF",
+        "promo_tag": "USE CODE | PAYDAY",
+        "promo_badge_position": "right",
+        "show_bottom_bar": true,
+        "bottom_bar_mode": "ticker",
+        "ticker_text": "DOCTOR FORMULATED · SULFATE-FREE SHAMPOO · LIGHTWEIGHT & NON-STICKY · MADE IN INDIA",
+        "ticker_speed": 22,
+        "ticker_style": "glass",
+        "ticker_bg_color": "#b66f75",
+        "ticker_text_color": "#ffffff",
+        "press_heading": ""
+      }
+    },
+    "product_float": {
+      "type": "luma-product-float",
+      "blocks": {
+        "row_1": {
+          "type": "product_row",
+          "settings": {
+            "product": "luma-pause-hair-growth-shampoo-probiotic-care",
+            "badge": "Sulfate-free",
+            "title": "",
+            "text": "Gently cleanses scalp and hair, lifting oil and build-up without stripping.",
+            "show_price": true,
+            "button_label": "Shop now",
+            "link": "",
+            "side": "auto",
+            "size": "large",
+            "tilt": -10,
+            "speed": 1
+          }
+        },
+        "row_2": {
+          "type": "product_row",
+          "settings": {
+            "product": "luma-pause-hair-growth-serum-advanced-hair-scalp-care",
+            "badge": "Doctor formulated",
+            "title": "",
+            "text": "Lightweight serum that nourishes the scalp for stronger, thicker-looking hair.",
+            "show_price": true,
+            "button_label": "Shop now",
+            "link": "",
+            "side": "auto",
+            "size": "medium",
+            "tilt": 9,
+            "speed": -1
+          }
+        },
+        "row_3": {
+          "type": "product_row",
+          "settings": {
+            "product": "luma-pause-scalp-mist-refreshing-scalp-care-100-ml",
+            "badge": "Refreshing",
+            "title": "",
+            "text": "Hydrates, soothes and refreshes the scalp — keeps it clean and balanced all day.",
+            "show_price": true,
+            "button_label": "Shop now",
+            "link": "",
+            "side": "auto",
+            "size": "medium",
+            "tilt": -7,
+            "speed": 2
+          }
+        },
+        "row_4": {
+          "type": "product_row",
+          "settings": {
+            "product": "luma-pause-face-mist-hydrating-face-care",
+            "badge": "Hydrating",
+            "title": "",
+            "text": "A fine mist that refreshes skin and supports a healthy barrier, any time of day.",
+            "show_price": true,
+            "button_label": "Shop now",
+            "link": "",
+            "side": "auto",
+            "size": "medium",
+            "tilt": 8,
+            "speed": -2
+          }
+        },
+        "row_5": {
+          "type": "product_row",
+          "settings": {
+            "product": "luma-pause-daily-glow-moisturiser-barrier-support-hydration",
+            "badge": "Daily glow",
+            "title": "",
+            "text": "Barrier support and lasting hydration for soft, smooth, healthy-looking skin.",
+            "show_price": true,
+            "button_label": "Shop now",
+            "link": "",
+            "side": "auto",
+            "size": "large",
+            "tilt": -6,
+            "speed": 1
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ],
+      "settings": {
+        "eyebrow": "The ritual",
+        "heading": "Made for every <em>step</em>",
+        "text": "",
+        "intensity": "medium",
+        "rotate": true,
+        "color_scheme": "scheme-1",
+        "background": "linear-gradient(180deg, #F9F7F2 0%, #DCEEF8 14%, #CFE7F4 50%, #DCEEF8 86%, #F9F7F2 100%)",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "bestsellers": {
+      "type": "luma-bestsellers",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 7,
+        "eyebrow": "",
+        "heading": "<strong>Our Products</strong>",
+        "description": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 48
+      }
+    },
+    "ritual_explainer": {
+      "type": "luma-ritual-explainer",
+      "blocks": {
+        "step-cleanse": {
+          "type": "step",
+          "settings": {
+            "step_number": "1",
+            "title": "CLEANSE",
+            "tagline": "Step 01 · Scalp & Hair",
+            "description": "A gentle, sulfate-free cleanse that lifts dirt, excess oil and build-up without stripping — the clean, balanced base every healthy scalp starts from.",
+            "product_role": "Hair Growth Shampoo",
+            "key_actives": "Sulfate-free · Gentle lather · All hair types",
+            "media_file": "",
+            "viz": "auto",
+            "button_label": "Shop Shampoo",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        "step-nourish": {
+          "type": "step",
+          "settings": {
+            "step_number": "2",
+            "title": "NOURISH",
+            "tagline": "Step 02 · Roots & Scalp",
+            "description": "A lightweight serum and a refreshing scalp mist that hydrate, soothe and nourish the scalp to support stronger, thicker, healthier-looking hair.",
+            "product_role": "Hair Growth Serum · Scalp Mist",
+            "key_actives": "Panthenol · Aloe Barbadensis Leaf Extract · Glycerin · Menthol",
+            "media_file": "",
+            "viz": "auto",
+            "button_label": "Shop Hair Care",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        "step-hydrate": {
+          "type": "step",
+          "settings": {
+            "step_number": "3",
+            "title": "HYDRATE",
+            "tagline": "Step 03 · Face & Skin Barrier",
+            "description": "A hydrating face mist and the Daily Glow Moisturiser keep skin fresh, comfortable and supported — for a soft, smooth, healthy-looking glow.",
+            "product_role": "Face Mist · Daily Glow Moisturiser",
+            "key_actives": "Barrier support · Lasting hydration · Non-sticky",
+            "media_file": "",
+            "viz": "auto",
+            "button_label": "Shop Skin Care",
+            "button_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "step-cleanse",
+        "step-nourish",
+        "step-hydrate"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Your daily ritual: <em>Cleanse. Nourish. Hydrate.</em>",
+        "subheading": "",
+        "show_connectors": true,
+        "color_scheme": "scheme-4",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "trust": {
+      "type": "luma-trust-badges",
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "doctor",
+            "label": "Doctor Formulated",
+            "text": "Developed with dermatology expertise"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "droplet",
+            "label": "Lightweight & Non-Sticky",
+            "text": "Absorbs fast, never feels heavy"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "recycle",
+            "label": "Recyclable Packaging",
+            "text": "Kinder to the planet"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "icon_type": "india",
+            "label": "Made in India",
+            "text": "Proudly formulated & made here"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {
+        "heading": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 12,
+        "padding_bottom": 0
+      }
+    },
+    "philosophy": {
+      "type": "luma-philosophy",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Our philosophy",
+        "heading": "Care that <em>works with</em> you, not against you.",
+        "text": "<p>Your hair and skin are living ecosystems. At Luma & Pause we create gentle, doctor-formulated care that cleanses without stripping, hydrates without heaviness and supports your natural balance — so results come steadily, the way they last.</p>",
+        "button_label": "Our story",
+        "button_link": "shopify://pages/about-us",
+        "color_scheme": "scheme-4",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "product_float",
+    "bestsellers",
+    "ritual_explainer",
+    "trust",
+    "philosophy"
+  ]
+}
