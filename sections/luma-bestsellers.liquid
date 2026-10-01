@@ -147,32 +147,13 @@
                       </div>
                     {%- endif -%}
 
-                    {%- if review_cnt > 0 -%}
-
-                    <div class="luma-card-rating-row">
-                      <div class="luma-card-rating-stars" aria-hidden="true">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span class="star-dim">★</span>
-                      </div>
-                      <span class="luma-card-rating-divider">|</span>
-                      <span class="luma-card-review-count">{{ review_cnt }} REVIEWS</span>
-                    </div>
-{%- endif -%}
-
                     <div class="luma-card-price-stack">
+                      <span class="luma-card-final-price">{{ product.price | money }}</span>
                       {%- if product.compare_at_price > product.price -%}
-                        <div class="luma-card-price-top">
-                          <span class="luma-card-mrp">MRP {{ product.compare_at_price | money }}</span>
-                          {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
-                          <span class="luma-card-save-pill">SAVE {{ savings }}%</span>
-                        </div>
-                      {%- else -%}
-                        {%- assign fake_mrp = product.price | times: 1.33 | round -%}
-                        <div class="luma-card-price-top">
-                          <span class="luma-card-mrp">MRP {{ fake_mrp | money }}</span>
-                          <span class="luma-card-save-pill">SAVE 25%</span>
-                        </div>
+                        {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+                        <s class="luma-card-mrp">{{ product.compare_at_price | money }}</s>
+                        <span class="luma-card-save-pill">-{{ savings }}%</span>
                       {%- endif -%}
-                      <div class="luma-card-final-price">{{ product.price | money }}</div>
                     </div>
 
                     <div class="luma-card-actions">
