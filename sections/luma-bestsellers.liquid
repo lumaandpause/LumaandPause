@@ -77,36 +77,36 @@
 
                       assign luma_system_role = product.metafields.custom.system_role
                       if luma_system_role == blank
-                        if prod_handle_lower contains 'menopause' or prod_title_lower contains 'menopause' or prod_title_lower contains 'support'
-                          assign luma_system_role = 'SUPPORT'
-                        elsif prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
-                          assign luma_system_role = 'BALANCE'
-                        elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
-                          assign luma_system_role = 'RESTORE'
+                        if prod_title_lower contains 'shampoo'
+                          assign luma_system_role = 'CLEANSE'
+                        elsif prod_handle_lower contains 'serum' or prod_title_lower contains 'serum' or prod_title_lower contains 'scalp'
+                          assign luma_system_role = 'NOURISH'
+                        elsif prod_handle_lower contains 'face' or prod_title_lower contains 'face' or prod_title_lower contains 'moistur'
+                          assign luma_system_role = 'HYDRATE'
                         endif
                       endif
 
                       assign luma_claim = product.metafields.custom.website_claim
                       if luma_claim == blank
                         case luma_system_role
-                          when 'BALANCE'
-                            assign luma_claim = 'A calmer gut, every day.'
-                          when 'SUPPORT'
-                            assign luma_claim = 'Made for the pause.'
-                          when 'RESTORE'
-                            assign luma_claim = 'Comfort starts with your flora.'
+                          when 'NOURISH'
+                            assign luma_claim = 'Stronger, healthier-looking hair.'
+                          when 'CLEANSE'
+                            assign luma_claim = 'A clean, balanced scalp.'
+                          when 'HYDRATE'
+                            assign luma_claim = 'Fresh, hydrated, comfortable skin.'
                         endcase
                       endif
 
                       assign luma_cta_label = product.metafields.custom.cta_label
                       if luma_cta_label == blank
                         case luma_system_role
-                          when 'BALANCE'
-                            assign luma_cta_label = 'Shop Gut Balance'
-                          when 'SUPPORT'
-                            assign luma_cta_label = 'Shop Menopause Support'
-                          when 'RESTORE'
-                            assign luma_cta_label = 'Shop Intimate Flora'
+                          when 'NOURISH'
+                            assign luma_cta_label = 'Shop Hair Care'
+                          when 'CLEANSE'
+                            assign luma_cta_label = 'Shop Shampoo'
+                          when 'HYDRATE'
+                            assign luma_cta_label = 'Shop Skin Care'
                           else
                             assign luma_cta_label = 'Add to Cart'
                         endcase
@@ -125,12 +125,8 @@
                       endif
 
                       assign review_cnt = product.metafields.reviews.rating_count
-                      if review_cnt == blank or review_cnt == 0
-                        if product.title contains 'Menopause'
-                          assign review_cnt = 474
-                        else
-                          assign review_cnt = 226
-                        endif
+                      if review_cnt == blank
+                        assign review_cnt = 0
                       endif
 
                       assign display_tagline = luma_claim | default: highlight
@@ -138,7 +134,7 @@
 
                     {%- if luma_system_role != blank -%}
                       <div class="luma-card-role-row">
-                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase }}">
+                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase | replace: 'cleanse', 'support' | replace: 'nourish', 'balance' | replace: 'hydrate', 'restore' }}">
                           <span class="luma-role-pill__dot" aria-hidden="true"></span>
                           {{ luma_system_role }}
                         </span>
@@ -155,6 +151,8 @@
                       </div>
                     {%- endif -%}
 
+                    {%- if review_cnt > 0 -%}
+
                     <div class="luma-card-rating-row">
                       <div class="luma-card-rating-stars" aria-hidden="true">
                         <span>★</span><span>★</span><span>★</span><span>★</span><span class="star-dim">★</span>
@@ -162,6 +160,7 @@
                       <span class="luma-card-rating-divider">|</span>
                       <span class="luma-card-review-count">{{ review_cnt }} REVIEWS</span>
                     </div>
+{%- endif -%}
 
                     <div class="luma-card-price-stack">
                       {%- if product.compare_at_price > product.price -%}

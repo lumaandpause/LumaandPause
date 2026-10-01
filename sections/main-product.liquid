@@ -113,18 +113,18 @@
 
                       assign luma_system_role = product.metafields.custom.system_role
                       if luma_system_role == blank
-                        if prod_handle_lower contains 'menopause' or prod_title_lower contains 'menopause' or prod_title_lower contains 'support'
-                          assign luma_system_role = 'SUPPORT'
-                        elsif prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
-                          assign luma_system_role = 'BALANCE'
-                        elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
-                          assign luma_system_role = 'RESTORE'
+                        if prod_title_lower contains 'shampoo'
+                          assign luma_system_role = 'CLEANSE'
+                        elsif prod_handle_lower contains 'serum' or prod_title_lower contains 'serum' or prod_title_lower contains 'scalp'
+                          assign luma_system_role = 'NOURISH'
+                        elsif prod_handle_lower contains 'face' or prod_title_lower contains 'face' or prod_title_lower contains 'moistur'
+                          assign luma_system_role = 'HYDRATE'
                         endif
                       endif
                     -%}
                     {%- if luma_system_role != blank -%}
                       <div class="luma-pdp-role-wrap" style="margin-bottom: 0.8rem;">
-                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase }}">
+                        <span class="luma-role-pill luma-role-pill--{{ luma_system_role | downcase | replace: 'cleanse', 'support' | replace: 'nourish', 'balance' | replace: 'hydrate', 'restore' }}">
                           <span class="luma-role-pill__dot" aria-hidden="true"></span>
                           {{ luma_system_role }}
                         </span>
@@ -136,14 +136,14 @@
                   {%- liquid
                     assign prod_title_lower = product.title | downcase
                     assign prod_handle_lower = product.handle | downcase
-                    assign default_descriptor = 'Multi-Strain Probiotic for Menopause Comfort, Gut & Mood'
-                    if prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
-                      assign default_descriptor = 'Daily Probiotic + Prebiotic for Gut Comfort & Digestion'
-                    elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
-                      assign default_descriptor = 'Women-Specific Probiotic for Intimate & Urinary Flora'
+                    assign default_descriptor = 'Doctor Formulated · Probiotic Care'
+                    if prod_handle_lower contains 'serum' or prod_title_lower contains 'serum' or prod_title_lower contains 'scalp'
+                      assign default_descriptor = 'Lightweight Hair & Scalp Care'
+                    elsif prod_handle_lower contains 'face' or prod_title_lower contains 'face' or prod_title_lower contains 'moistur'
+                      assign default_descriptor = 'Hydrating Face & Skin Care'
                     endif
                     assign descriptor_text = product.metafields.descriptors.subtitle.value | default: product.metafields.custom.descriptor.value
-                    if descriptor_text == blank and block.settings.text != blank and block.settings.text != 'Multi-Strain Probiotic for Menopause Comfort, Gut & Mood'
+                    if descriptor_text == blank and block.settings.text != blank and block.settings.text != 'Doctor Formulated · Probiotic Care'
                       assign descriptor_text = block.settings.text
                     endif
                     if descriptor_text == blank
@@ -159,12 +159,12 @@
                     assign prod_handle_lower = product.handle | downcase
                     assign default_benefit = product.metafields.custom.website_claim
                     if default_benefit == blank
-                      if prod_handle_lower contains 'gut' or prod_title_lower contains 'gut' or prod_title_lower contains 'balance'
-                        assign default_benefit = 'A calmer gut, every day.'
-                      elsif prod_handle_lower contains 'intimate' or prod_title_lower contains 'intimate' or prod_title_lower contains 'flora'
-                        assign default_benefit = 'Comfort starts with your flora.'
+                      if prod_handle_lower contains 'serum' or prod_title_lower contains 'serum' or prod_title_lower contains 'scalp'
+                        assign default_benefit = 'Stronger, healthier-looking hair.'
+                      elsif prod_handle_lower contains 'face' or prod_title_lower contains 'face' or prod_title_lower contains 'moistur'
+                        assign default_benefit = 'Fresh, hydrated, comfortable skin.'
                       else
-                        assign default_benefit = 'Made for the pause.'
+                        assign default_benefit = 'A clean, balanced scalp.'
                       endif
                     endif
                     assign benefit_text = product.metafields.custom.website_claim | default: default_benefit
@@ -591,6 +591,7 @@
                     show_pickup_availability: true
                   -%}
                 {%- when 'rating' -%}
+                  {%- if product.metafields.reviews.rating_count != blank and product.metafields.reviews.rating_count > 0 -%}
                   <div class="luma-pdp-rating-strip" {{ block.shopify_attributes }}>
                     <div class="luma-pdp-rating-link">
                       <span class="luma-pdp-stars" aria-hidden="true">★★★★★</span>
@@ -612,6 +613,7 @@
                       </span>
                     </div>
                   </div>
+                  {%- endif -%}
                 {%- when 'complementary' -%}
                   <product-recommendations
                     class="complementary-products quick-add-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"

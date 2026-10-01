@@ -9,7 +9,7 @@
   --luma-rose: 182, 111, 117;        /* #B66F75 Dusty Rose — accent (logo dot) */
   --luma-rose-dark: 154, 89, 99;     /* #9A5963 — darker rose, hover/active */
   --luma-sage: 140, 148, 121;        /* #8C9479 Sage — muted text, borders */
-  --luma-sky: 140, 200, 232;         /* #8CC8E8 Sky Blue — secondary accent */
-  --luma-sky-light: 227, 242, 250;   /* #E3F2FA Light Sky — soft section backgrounds */
-  --luma-sky-deep: 63, 127, 163;     /* #3F7FA3 Deep Sky — readable sky text/icons */
+  --luma-sky: 205, 160, 165;         /* #CDA0A5 Soft Rose (was sky blue) — secondary accent */
+  --luma-sky-light: 245, 234, 235;   /* #F5EAEB Blush (was light sky) — soft section backgrounds */
+  --luma-sky-deep: 154, 89, 99;      /* #9A5963 Deep Rose (was deep sky) — readable sky text/icons */
 }
